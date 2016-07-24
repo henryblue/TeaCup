@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">TeaCup</string>
+    <string name="user_name">Hathaway</string>
+    <string name="search">搜索</string>
+    <string name="share">分享</string>
+    <string name="settings">设置</string>
+    <string name="drawer_open">打开</string>
+    <string name="drawer_close">关闭</string>
+    <string name="item_book">读书</string>
+    <string name="item_package">我的收藏</string>
+    <string name="item_weather">天气</string>
+    <string name="item_about">关于</string>
+
+    <string-array name="tab_name">
+        <item>推荐</item>
+        <item>读书</item>
+        <item>发现</item>
+    </string-array>
 </resources>

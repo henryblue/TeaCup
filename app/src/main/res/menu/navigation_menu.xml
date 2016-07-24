@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_book"
+            android:icon="@drawable/book"
+            android:title="@string/item_book" />
+        <item
+            android:id="@+id/navigation_item_store"
+            android:icon="@drawable/store"
+            android:title="@string/item_package" />
+
+        <item
+            android:id="@+id/navigation_item_weather"
+            android:icon="@drawable/weather"
+            android:title="@string/item_weather" />
+
+        <item
+            android:id="@+id/navigation_item_about"
+            android:icon="@drawable/about"
+            android:title="@string/item_about" />
+    </group>
+
+</menu>

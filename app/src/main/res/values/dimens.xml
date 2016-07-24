@@ -2,4 +2,12 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="navigation_header_layout_padding">16dp</dimen>
+    <dimen name="navigation_header_circleImageView_width">82dp</dimen>
+    <dimen name="navigation_header_circleImageView_height">82dp</dimen>
+    <dimen name="navigation_header_circleImageView_marginTop">30dp</dimen>
+    <dimen name="navigation_header_circleImageView_borderWidth">2dp</dimen>
+    <dimen name="navigation_header_textView_marginTop">10dp</dimen>
+    <dimen name="navigation_header_textView_textSize">18sp</dimen>
 </resources>
