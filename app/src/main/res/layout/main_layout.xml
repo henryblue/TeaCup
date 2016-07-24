@@ -15,7 +15,7 @@
         android:background="@color/colorPrimary"
         app:tabIndicatorColor="@color/yellow"
         app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/gray"
+        app:tabTextColor="@color/alpha_white"
         tools:ignore="MissingPrefix" />
 
     <android.support.v4.view.ViewPager

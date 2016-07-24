@@ -10,6 +10,13 @@
     <string name="item_package">我的收藏</string>
     <string name="item_weather">天气</string>
     <string name="item_about">关于</string>
+    <string name="input_hint">请输入需要添加的书名</string>
+    <string name="add_book">添加</string>
+    <string name="ok">确定</string>
+    <string name="transition_book_img">transition_book_img</string>
+    <string name="book_content_detail">内容简介</string>
+    <string name="book_author_detail">作者简介</string>
+    <string name="book_table">目录</string>
 
     <string-array name="tab_name">
         <item>推荐</item>
