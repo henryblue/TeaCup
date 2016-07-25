@@ -18,21 +18,29 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.app.adapter.FindRecycleAdapter;
+import com.app.bean.BookInfo;
 import com.app.bean.FindBookInfo;
 import com.app.teacup.BookDetailActivity;
 import com.app.teacup.R;
+import com.app.util.HttpUtils;
+import com.app.util.JsonUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    private static final int REFRESH_START = 0;
     private static final int REFRESH_FINISH = 1;
+    private static final int LOAD_DATA = 2;
 
     private ArrayList<FindBookInfo> mDatas;
     private LinearLayoutManager mLayoutManager;
@@ -40,14 +48,28 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private SwipeRefreshLayout mRefreshLayout;
     private FindRecycleAdapter mAdapter;
 
+    private int mLoadIndex = 0;
+
+    int[] ids = new int[] {1003078, 26733854, 26340138, 1919201,
+            2340100, 22372723, 26768309, 25862578, 10763902, 1770782,
+            26776393, 3056906, 1474773, 7060185, 3369793, 26613052,
+            4207781, 26791998, 1001885, 6126821};
+
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
+                case REFRESH_START:
+                    initData();
+                    break;
                 case REFRESH_FINISH:
                     mRefreshLayout.setRefreshing(false);
                     mAdapter.notifyDataSetChanged();
+                    break;
+                case LOAD_DATA:
+                    mLoadIndex++;
+                    initData();
                     break;
                 default:
                     break;
@@ -62,24 +84,68 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void initData() {
-        String title = "一个人的朝圣";
-        String content = "作者: 凯文\n" +
-                "标题: 文学\n" +
-                "页数: 305\n" +
-                "定价: 45\n" +
-                "出版时间: 2013-06-12\n";
-        for (int i = 0; i < 15; i++) {
-            FindBookInfo info = new FindBookInfo();
-            info.setmBookTitle(title);
-            info.setmBookContent(content);
-            mDatas.add(info);
+        if (((mLoadIndex + 1) % 5) != 0 && mLoadIndex < ids.length) {
+            String url = getString(R.string.url_address) + ids[mLoadIndex];
+            HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
+                @Override
+                public void onFinish(String response) {
+                    parseDataFromJson(response);
+                    sendParseDataMessage();
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    sendParseDataMessage();
+                }
+            });
+        } else {
+            Message msg = Message.obtain();
+            msg.what = REFRESH_FINISH;
+            mHandler.sendMessage(msg);
         }
+    }
+
+    public void sendParseDataMessage() {
+        Message msg = Message.obtain();
+        msg.what = LOAD_DATA;
+        mHandler.sendMessage(msg);
+    }
+
+    private void parseDataFromJson(String response) {
+        BookInfo bookInfo = JsonUtils.parseJsonData(response);
+        Log.i("bookInfo", "======bookInfo===" + bookInfo.getTitle());
+
+        FindBookInfo info = new FindBookInfo();
+        info.setmBookTitle(bookInfo.getTitle());
+        info.setmImgUrl(bookInfo.getImage());
+        info.setmSummary(bookInfo.getSummary());
+        info.setmAuthor(bookInfo.getAuthor_intro());
+
+        List<String> authors = bookInfo.getAuthor();
+        String authorArr = "";
+        for (int i = 0; i < authors.size(); i++) {
+            authorArr += authors.get(i) + " ";
+        }
+        String page = bookInfo.getPages();
+        String price = bookInfo.getPrice();
+        String pubdate = bookInfo.getPubdate();
+        BookInfo.rating rating = bookInfo.getRating();
+        String average = rating.getAverage();
+        List<BookInfo.tags> tags = bookInfo.getTags();
+        String type = tags.get(1).getName();
+        String content = "作者: " + authorArr + "\n" +
+                "类型: " + type + "\n" +
+                "豆瓣评分: " + average + "\n" +
+                "页数: " + page + "\n" +
+                "价格: " + price + "\n" +
+                "出版日期: " + pubdate;
+        info.setmBookContent(content);
+        mDatas.add(info);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        mAddBtn.setTranslationY(120 * 2);
     }
 
     @Override
@@ -87,9 +153,9 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.find_fragment, container, false);
 
-        setupRefreshLayout(view);
         setupRecycleView(view);
         setupFAB(view);
+        setupRefreshLayout(view);
         return view;
     }
 
@@ -99,6 +165,10 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
         mRefreshLayout.setProgressViewEndTarget(true, 100);
         mRefreshLayout.setOnRefreshListener(this);
+        StartRefreshPage();
+    }
+
+    private void StartRefreshPage() {
         mRefreshLayout.post(new Runnable(){
             @Override
             public void run() {
@@ -137,6 +207,20 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         });
 
         recyclerView.setAdapter(mAdapter);
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLoadIndex + 1 == mAdapter.getItemCount()) {
+                    StartRefreshPage();
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
     }
 
     private void setupFAB(View view) {
@@ -176,11 +260,9 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mDatas.clear();
-                initData();
                 Message msg = Message.obtain();
-                msg.what = REFRESH_FINISH;
-                mHandler.sendMessageDelayed(msg, 1000);
+                msg.what = REFRESH_START;
+                mHandler.sendMessage(msg);
             }
         }).start();
     }
