@@ -28,7 +28,6 @@ import com.app.bean.FindBookInfo;
 import com.app.teacup.BookDetailActivity;
 import com.app.teacup.R;
 
-
 import java.util.ArrayList;
 
 public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {

@@ -1,10 +1,10 @@
-package com.app;
+package com.app.util;
 
 
 import android.content.Context;
 import android.util.DisplayMetrics;
 
-public class Utils {
+public class ToolUtils {
 
     public static int getScreenHeight(Context context) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();

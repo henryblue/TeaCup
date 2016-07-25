@@ -9,7 +9,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.app.Utils;
+import com.app.util.ToolUtils;
 import com.app.bean.FindBookInfo;
 import com.app.teacup.R;
 
@@ -91,7 +91,7 @@ public class FindRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (position > lastAnimatedPosition) {
             lastAnimatedPosition = position;
 
-            view.setTranslationY(Utils.getScreenHeight(mContext));
+            view.setTranslationY(ToolUtils.getScreenHeight(mContext));
             view.animate()
                     .translationY(0)
                     .setStartDelay(400)
