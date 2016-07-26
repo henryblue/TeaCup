@@ -8,9 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class HttpUtils {
-
     private static final int CONNECT_SUCCESS = 200;
-
     public static void sendHttpRequest(final String address,
                                        final HttpCallBackListener listener) {
         new Thread(new Runnable() {

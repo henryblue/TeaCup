@@ -11,8 +11,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
+
 import com.app.bean.FindBookInfo;
 import com.app.fragment.DetailFragment;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,11 +59,8 @@ public class BookDetailActivity extends AppCompatActivity {
             collapsingToolbar.setTitle(mBookInfo.getmBookTitle());
         }
 
-//        ImageView ivImage = (ImageView) findViewById(R.id.ivImage);
-//        Glide.with(ivImage.getContext())
-//                .load(mBook.getImages().getLarge())
-//                .fitCenter()
-//                .into(ivImage);
+        ImageView ivImage = (ImageView) findViewById(R.id.iv_book_image);
+        Picasso.with(this).load(mBookInfo.getmImgUrl()).into(ivImage);
 
         mViewPager = (ViewPager) findViewById(R.id.book_viewpager);
         setupViewPager(mViewPager);
