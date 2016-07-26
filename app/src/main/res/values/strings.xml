@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">TeaCup</string>
     <string name="user_name">Hathaway</string>
-    <string name="url_address">https://api.douban.com/v2/book/search?q=三生三世&amp;fields=all</string>
+    <string name="url_address">https://api.douban.com/v2/book/search?q=三生&amp;fields=all</string>
     <string name="url_scheme">https://api.douban.com/v2/book/</string>
     <string name="search">搜索</string>
     <string name="share">分享</string>

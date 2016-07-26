@@ -34,6 +34,12 @@ import com.app.teacup.R;
 import com.app.util.HttpUtils;
 import com.app.util.JsonUtils;
 
+import org.apache.http.util.EncodingUtils;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +48,7 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private static final int REFRESH_START = 0;
     private static final int REFRESH_FINISH = 1;
     private static final int LOAD_DATA_ERROR = 3;
+    private static final String filename = "findBook.json";
 
     private ArrayList<FindBookInfo> mDatas;
     private LinearLayoutManager mLayoutManager;
@@ -63,7 +70,10 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     break;
                 case LOAD_DATA_ERROR:
                     mRefreshLayout.setRefreshing(false);
-                    Toast.makeText(getContext(), "加载数据出错", Toast.LENGTH_SHORT).show();
+                    if (mDatas.size() <= 0) {
+                        readDataFromFile();
+                        Toast.makeText(getContext(), "刷新失败", Toast.LENGTH_SHORT).show();
+                    }
                     mAdapter.reSetData(mDatas);
                     break;
                 default:
@@ -92,6 +102,7 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             @Override
             public void onFinish(String response) {
                 parseDataFromJson(response);
+                writeDataToFile(response);
                 sendParseDataMessage(REFRESH_FINISH);
             }
 
@@ -136,6 +147,36 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             info.setmTable(bookInfo.getCatalog());
             mDatas.add(info);
         }
+    }
+
+    private void writeDataToFile(String data) {
+        FileOutputStream outputStream;
+        try {
+            outputStream = getContext().openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream.write(data.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readDataFromFile() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    FileInputStream fis;
+                    fis = getContext().openFileInput(filename);
+                    byte[] buffer = new byte[fis.available()];
+                    fis.read(buffer);
+                    fis.close();
+                    String fileContent = EncodingUtils.getString(buffer, "UTF-8");
+                    parseDataFromJson(fileContent);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override
