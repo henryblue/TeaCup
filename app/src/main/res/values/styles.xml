@@ -15,4 +15,8 @@
         <item name="android:dropDownVerticalOffset">0dip</item>
     </style>
 
+    <style name="FlashTheme" parent="android:Theme.Translucent.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@null</item>
+    </style>
+
 </resources>
