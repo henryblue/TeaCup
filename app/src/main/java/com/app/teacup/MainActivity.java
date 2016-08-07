@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
         mFragmentLists.add(mFindFragment);
 
         mViewPager = (ViewPager) findViewById(R.id.main_view_pager);
-        mPagerAdapter = new PagerAdapter(getSupportFragmentManager(), MainActivity.this,
-                mFragmentLists);
+        mPagerAdapter = new PagerAdapter(getSupportFragmentManager(),
+                mFragmentLists, getResources().getStringArray(R.array.tab_name));
 
         if (mViewPager != null) {
             mViewPager.setAdapter(mPagerAdapter);
@@ -90,9 +90,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
-                            case R.id.navigation_item_book:
+                            case R.id.navigation_item_main:
                                 break;
-                            case R.id.navigation_item_store:
+                            case R.id.navigation_item_photo:
+                                enterOtherActivity(PhotoActivity.class);
                                 break;
                             case R.id.navigation_item_weather:
                                 enterOtherActivity(WeatherActivity.class);
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void enterOtherActivity(Class<WeatherActivity> activityClass) {
+    private void enterOtherActivity(Class<?> activityClass) {
         Intent intent = new Intent(MainActivity.this, activityClass);
         startActivity(intent);
     }

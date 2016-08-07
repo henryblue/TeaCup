@@ -1,26 +1,22 @@
 package com.app.adapter;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.app.teacup.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
     private String[] tabTitles;
-    private Context mContext;
-    private ArrayList<Fragment> mFragmentArrayList;
+    private List<Fragment> mFragmentArrayList;
 
-    public PagerAdapter(FragmentManager fm, Context context, ArrayList<Fragment> lists) {
+    public PagerAdapter(FragmentManager fm, List<Fragment> lists, String[] titles) {
         super(fm);
-        mContext = context;
         mFragmentArrayList = lists;
-        tabTitles = mContext.getResources().getStringArray(R.array.tab_name);
+        tabTitles = titles;
     }
 
 

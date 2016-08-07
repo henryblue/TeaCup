@@ -23,6 +23,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".BookDetailActivity" />
         <activity android:name=".WeatherActivity" />
+        <activity android:name=".PhotoActivity" />
         <service android:name="com.app.service.LocationService" />
     </application>
 
