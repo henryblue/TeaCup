@@ -1,5 +1,6 @@
 package com.app.teacup;
 
+import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.navigation_item_store:
                                 break;
                             case R.id.navigation_item_weather:
+                                enterOtherActivity(WeatherActivity.class);
                                 break;
                             case R.id.navigation_item_about:
                                 break;
@@ -103,6 +105,11 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+    }
+
+    private void enterOtherActivity(Class<WeatherActivity> activityClass) {
+        Intent intent = new Intent(MainActivity.this, activityClass);
+        startActivity(intent);
     }
 
     @Override

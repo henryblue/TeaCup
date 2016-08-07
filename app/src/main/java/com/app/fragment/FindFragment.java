@@ -33,6 +33,8 @@ import com.app.teacup.BookDetailActivity;
 import com.app.teacup.R;
 import com.app.util.HttpUtils;
 import com.app.util.JsonUtils;
+import com.app.util.OkHttpUtils;
+import com.squareup.okhttp.Request;
 
 import org.apache.http.util.EncodingUtils;
 
@@ -48,6 +50,7 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private static final int REFRESH_START = 0;
     private static final int REFRESH_FINISH = 1;
     private static final int LOAD_DATA_ERROR = 3;
+    private static final int READ_DATA_FROM_FILE_FINISH = 4;
     private static final String filename = "findBook.json";
 
     private ArrayList<FindBookInfo> mDatas;
@@ -72,8 +75,12 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     mRefreshLayout.setRefreshing(false);
                     if (mDatas.size() <= 0) {
                         readDataFromFile();
-                        Toast.makeText(getContext(), "刷新失败", Toast.LENGTH_SHORT).show();
+                    } else {
+                        mAdapter.reSetData(mDatas);
                     }
+                    break;
+                case READ_DATA_FROM_FILE_FINISH:
+                    Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
                     mAdapter.reSetData(mDatas);
                     break;
                 default:
@@ -128,15 +135,22 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             info.setmImgUrl(bookInfo.getImages().getLarge());
             info.setmSummary(bookInfo.getSummary());
             info.setmAuthor(bookInfo.getAuthor_intro());
-
-            String authorArr = bookInfo.getAuthor().get(0);
+            String authorArr = null;
+            if (bookInfo.getAuthor().size() > 0) {
+                authorArr = bookInfo.getAuthor().get(0);
+            }
             String page = bookInfo.getPages();
             String price = bookInfo.getPrice();
             String pubdate = bookInfo.getPubdate();
             BookInfo.rating rating = bookInfo.getRating();
             String average = rating.getAverage();
             List<BookInfo.tags> tags = bookInfo.getTags();
-            String type = tags.get(1).getName();
+            String type = null;
+            if (tags.size() > 1) {
+                type = tags.get(1).getName();
+            } else if (tags.size() > 0) {
+                type = tags.get(0).getName();
+            }
             String content = "作者: " + authorArr + "\n" +
                     "类型: " + type + "\n" +
                     "豆瓣评分: " + average + "\n" +
@@ -172,6 +186,7 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     fis.close();
                     String fileContent = EncodingUtils.getString(buffer, "UTF-8");
                     parseDataFromJson(fileContent);
+                    sendParseDataMessage(READ_DATA_FROM_FILE_FINISH);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

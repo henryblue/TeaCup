@@ -12,9 +12,9 @@
             android:id="@+id/tvInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="@dimen/fragment_detail_textview_padding"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="@dimen/fragment_detail_textview_textsize" />
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

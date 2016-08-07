@@ -9,7 +9,7 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="256dp"
+        android:layout_height="@dimen/layout_book_detail_AppBarLayout_height"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" >
 
@@ -19,8 +19,8 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="@color/colorPrimary"
-            app:expandedTitleMarginEnd="64dp"
-            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="@dimen/layout_book_detail_CollapsingToolbarLayout_MarginEnd"
+            app:expandedTitleMarginStart="@dimen/layout_book_detail_CollapsingToolbarLayout_MarginStart"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
 

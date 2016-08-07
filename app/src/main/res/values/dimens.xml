@@ -1,5 +1,4 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
@@ -10,4 +9,48 @@
     <dimen name="navigation_header_circleImageView_borderWidth">2dp</dimen>
     <dimen name="navigation_header_textView_marginTop">10dp</dimen>
     <dimen name="navigation_header_textView_textSize">18sp</dimen>
+
+    <dimen name="item_weather_padding">4dp</dimen>
+    <dimen name="item_weather_tv_date_marginbottom">12dp</dimen>
+    <dimen name="item_weather_image_width">80dp</dimen>
+    <dimen name="item_weather_image_height">80dp</dimen>
+
+    <dimen name="activity_weather_tip_margintop">90dp</dimen>
+    <dimen name="activity_weather_tip_textsize">20sp</dimen>
+    <dimen name="activity_weather_content_margintop">16dp</dimen>
+    <dimen name="activity_weather_image_width">80dp</dimen>
+    <dimen name="activity_weather_image_height">80dp</dimen>
+    <dimen name="activity_weather_image_marginleft">60dp</dimen>
+    <dimen name="activity_weather_layout_marginright">60dp</dimen>
+    <dimen name="activity_weather_layout_temp_textsize">20sp</dimen>
+    <dimen name="activity_weather_layout_wind_textsize">16sp</dimen>
+    <dimen name="activity_weather_horizontal_marginbottom">40dp</dimen>
+
+    <dimen name="find_fragment_button_margin_right">16dp</dimen>
+    <dimen name="find_fragment_button_margin_bottom">24dp</dimen>
+    <dimen name="find_fragment_button_elevation">4dp</dimen>
+    <dimen name="find_fragment_button_pressed">16dp</dimen>
+
+    <dimen name="fragment_detail_textview_padding">10dp</dimen>
+    <dimen name="fragment_detail_textview_textsize">16sp</dimen>
+
+    <dimen name="item_find_fragment_cardCornerRadius">10dp</dimen>
+    <dimen name="item_find_fragment_cardElevation">10dp</dimen>
+    <dimen name="item_find_fragment_marginleft">24dp</dimen>
+    <dimen name="item_find_fragment_marginright">24dp</dimen>
+    <dimen name="item_find_fragment_margintop">10dp</dimen>
+    <dimen name="item_find_fragment_marginbottom">16dp</dimen>
+    <dimen name="item_find_fragment_imageview_width">125dp</dimen>
+    <dimen name="item_find_fragment_imageview_height">170dp</dimen>
+    <dimen name="item_find_fragment_imageview_margin">10dp</dimen>
+    <dimen name="item_find_fragment_layout_margin">10dp</dimen>
+    <dimen name="item_find_fragment_book_title_textsize">18sp</dimen>
+    <dimen name="item_find_fragment_book_content_margintop">5dp</dimen>
+    <dimen name="item_find_fragment_lineSpacingExtra">5dp</dimen>
+    <dimen name="item_find_fragment_book_content_textsize">16sp</dimen>
+
+    <dimen name="layout_book_detail_AppBarLayout_height">256dp</dimen>
+    <dimen name="layout_book_detail_CollapsingToolbarLayout_MarginEnd">64dp</dimen>
+    <dimen name="layout_book_detail_CollapsingToolbarLayout_MarginStart">48dp</dimen>
+
 </resources>

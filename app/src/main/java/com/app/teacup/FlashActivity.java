@@ -7,6 +7,7 @@ import android.os.Handler;
 
 
 public class FlashActivity extends Activity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,10 +21,14 @@ public class FlashActivity extends Activity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(FlashActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                enterMainPage();
             }
         }, 2000);
+    }
+
+    private void enterMainPage() {
+        Intent intent = new Intent(FlashActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

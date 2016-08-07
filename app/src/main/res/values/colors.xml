@@ -3,7 +3,7 @@
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796b</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="white">#ffffff</color>
+    <color name="white">#ffffffff</color>
     <color name="black">#000000</color>
     <color name="gray">#727272</color>
     <color name="alpha_white">#99ffffff</color>
@@ -11,4 +11,5 @@
     <color name="blue">#303f9f</color>
     <color name="yellow">#ffc107</color>
     <color name="deepYellow">#F57C00</color>
+    <color name="green_blue">#03A9F4</color>
 </resources>
