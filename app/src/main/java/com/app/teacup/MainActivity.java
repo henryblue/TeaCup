@@ -26,16 +26,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
-    private NavigationView mNavigationView;
-
-    private ViewPager mViewPager;
-    private TabLayout mTabLayout;
-    private PagerAdapter mPagerAdapter;
-
-    private FindFragment mFindFragment;
-    private ReadBookFragment mReadBookFragment;
-    private HostFragment mHostFragment;
-    private ArrayList<Fragment> mFragmentLists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,25 +49,25 @@ public class MainActivity extends AppCompatActivity {
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+        NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         setupDrawerContent(mNavigationView);
 
-        mFragmentLists = new ArrayList<>();
-        mFindFragment = new FindFragment();
-        mHostFragment = new HostFragment();
-        mReadBookFragment = new ReadBookFragment();
+        ArrayList<Fragment> mFragmentLists = new ArrayList<>();
+        FindFragment mFindFragment = new FindFragment();
+        HostFragment mHostFragment = new HostFragment();
+        ReadBookFragment mReadBookFragment = new ReadBookFragment();
         mFragmentLists.add(mHostFragment);
         mFragmentLists.add(mReadBookFragment);
         mFragmentLists.add(mFindFragment);
 
-        mViewPager = (ViewPager) findViewById(R.id.main_view_pager);
-        mPagerAdapter = new PagerAdapter(getSupportFragmentManager(),
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.main_view_pager);
+        PagerAdapter mPagerAdapter = new PagerAdapter(getSupportFragmentManager(),
                 mFragmentLists, getResources().getStringArray(R.array.tab_name));
 
         if (mViewPager != null) {
             mViewPager.setAdapter(mPagerAdapter);
         }
-        mTabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
+        TabLayout mTabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
         if (mTabLayout != null) {
             mTabLayout.setupWithViewPager(mViewPager);
             mTabLayout.setTabMode(TabLayout.MODE_FIXED);

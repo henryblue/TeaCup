@@ -11,25 +11,21 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.app.adapter.PhotoRecyAdapter;
+import com.app.adapter.PhotoRecyclerAdapter;
 import com.app.teacup.R;
-import com.app.util.HttpUtils;
+import com.app.util.OkHttpUtils;
+import com.squareup.okhttp.Request;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +49,7 @@ public class GaoxiaoFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     break;
                 case REFRESH_FINISH:
                     mRefreshLayout.setRefreshing(false);
-                    mPhotoRecyAdapter.reSetData(mImgUrl);
+                    mPhotoRecyclerAdapter.reSetData(mImgUrl);
                     break;
                 case LOAD_DATA_ERROR:
                     mRefreshLayout.setRefreshing(false);
@@ -64,7 +60,7 @@ public class GaoxiaoFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
         }
     };
-    private PhotoRecyAdapter mPhotoRecyAdapter;
+    private PhotoRecyclerAdapter mPhotoRecyclerAdapter;
 
     @Override
     public void onAttach(Context context) {
@@ -104,12 +100,12 @@ public class GaoxiaoFragment extends Fragment implements SwipeRefreshLayout.OnRe
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mPhotoRecyAdapter = new PhotoRecyAdapter(getContext(),
+        mPhotoRecyclerAdapter = new PhotoRecyclerAdapter(getContext(),
                 mImgUrl);
-        mRecyclerView.setAdapter(mPhotoRecyAdapter);
+        mRecyclerView.setAdapter(mPhotoRecyclerAdapter);
         SpacesItemDecoration decoration = new SpacesItemDecoration(16);
         mRecyclerView.addItemDecoration(decoration);
-        mPhotoRecyAdapter.setOnItemClickListener(new PhotoRecyAdapter.OnItemClickListener() {
+        mPhotoRecyclerAdapter.setOnItemClickListener(new PhotoRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
@@ -124,17 +120,18 @@ public class GaoxiaoFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     private void startLoadData() {
         mImgUrl.clear();
-        String url = "http://www.xieexiu.net/tag-%E6%80%A7%E6%84%9F%E7%BE%8E%E8%87%80.html";
-        HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
+        String url = "http://www.qiushibaike.com/pic/";
+        OkHttpUtils.getAsyn(url, new OkHttpUtils.ResultCallback<String>() {
+
             @Override
-            public void onFinish(String response) {
-                parsePhotoData(response);
-                sendParseDataMessage(REFRESH_FINISH);
+            public void onError(Request request, Exception e) {
+                sendParseDataMessage(LOAD_DATA_ERROR);
             }
 
             @Override
-            public void onError(Exception e) {
-                sendParseDataMessage(LOAD_DATA_ERROR);
+            public void onResponse(String response) {
+                parsePhotoData(response);
+                sendParseDataMessage(REFRESH_FINISH);
             }
         });
     }
@@ -147,16 +144,21 @@ public class GaoxiaoFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     private void parsePhotoData(String response) {
         Document document = Jsoup.parse(response);
-        Elements aClass = document.getElementsByClass("xiaohua");
-        for (Element e : aClass) {
-            Elements content = e.getElementsByClass("content");
-            for (Element a : content) {
-                Elements img = a.getElementsByTag("img");
-                for (Element src : img) {
-                    String url = src.attr("src");
-                    mImgUrl.add(url);
+        Element content = document.getElementById("content-left");
+        Elements articles = content.getElementsByClass("article");
+        for (Element art : articles) {
+            Elements title = art.getElementsByClass("content");
+            Elements thumbs = art.getElementsByClass("thumb");
+            for (Element thumb : thumbs) {
+                Elements img = thumb.getElementsByTag("img");
+                for (Element e : img) {
+                    String url = e.attr("src");
+                    if (url.contains(".jpg") || url.contains(".gif")) {
+                        mImgUrl.add(url);
+                    }
                 }
             }
+
         }
     }
 

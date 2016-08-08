@@ -2,6 +2,7 @@ package com.app.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,14 +12,15 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.app.adapter.PhotoRecyAdapter;
+import com.app.adapter.PhotoRecyclerAdapter;
 import com.app.teacup.R;
+import com.app.teacup.ShowPhotoActivity;
 import com.app.util.HttpUtils;
 
 import org.jsoup.Jsoup;
@@ -49,7 +51,7 @@ public class DoubanMeiziFragment extends Fragment implements SwipeRefreshLayout.
                     break;
                 case REFRESH_FINISH:
                     mRefreshLayout.setRefreshing(false);
-                    mPhotoRecyAdapter.reSetData(mImgUrl);
+                    mPhotoRecyclerAdapter.reSetData(mImgUrl);
                     break;
                 case LOAD_DATA_ERROR:
                     mRefreshLayout.setRefreshing(false);
@@ -60,7 +62,7 @@ public class DoubanMeiziFragment extends Fragment implements SwipeRefreshLayout.
             }
         }
     };
-    private PhotoRecyAdapter mPhotoRecyAdapter;
+    private PhotoRecyclerAdapter mPhotoRecyclerAdapter;
 
     @Override
     public void onAttach(Context context) {
@@ -100,15 +102,20 @@ public class DoubanMeiziFragment extends Fragment implements SwipeRefreshLayout.
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mPhotoRecyAdapter = new PhotoRecyAdapter(getContext(),
+        mPhotoRecyclerAdapter = new PhotoRecyclerAdapter(getContext(),
                 mImgUrl);
-        mRecyclerView.setAdapter(mPhotoRecyAdapter);
+        mRecyclerView.setAdapter(mPhotoRecyclerAdapter);
         SpacesItemDecoration decoration = new SpacesItemDecoration(16);
         mRecyclerView.addItemDecoration(decoration);
-        mPhotoRecyAdapter.setOnItemClickListener(new PhotoRecyAdapter.OnItemClickListener() {
+        mPhotoRecyclerAdapter.setOnItemClickListener(new PhotoRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                String url = mImgUrl.get(position);
+                if (!TextUtils.isEmpty(url)) {
+                    Intent intent = new Intent(getContext(), ShowPhotoActivity.class);
+                    intent.putExtra("ImageUrl", url);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -120,7 +127,7 @@ public class DoubanMeiziFragment extends Fragment implements SwipeRefreshLayout.
 
     private void startLoadData() {
         mImgUrl.clear();
-        String url = "http://www.dbmeinv.com/dbgroup/rank.htm?pager_offset=2";
+        String url = "http://www.dbmeinv.com/dbgroup/rank.htm";
         HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
@@ -151,7 +158,8 @@ public class DoubanMeiziFragment extends Fragment implements SwipeRefreshLayout.
                 Elements height_min = a.getElementsByClass("height_min");
                 for (Element height : height_min) {
                     String url = height.attr("src");
-                    if (url.contains(".jpg")) {
+                    String title = height.attr("title");
+                    if (url.contains(".jpg") || url.contains(".gif")) {
                         mImgUrl.add(url);
                     }
                 }

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.app.bean.FindBookInfo;
 import com.app.teacup.R;
 import com.app.util.ToolUtils;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -163,7 +163,12 @@ public class FindRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void bindViewHolderItem(FindBookInfo info, MyViewHolder myHolder) {
         myHolder.mBookTitle.setText(info.getmBookTitle());
         myHolder.mBookContent.setText(info.getmBookContent());
-        Picasso.with(mContext).load(info.getmImgUrl()).into(myHolder.mBookImg);
+        Glide.with(mContext).load(info.getmImgUrl())
+                .centerCrop()
+                .error(R.drawable.photo_loaderror)
+                .placeholder(R.drawable.photo_default)
+                .crossFade()
+                .into(myHolder.mBookImg);
     }
 
     @Override

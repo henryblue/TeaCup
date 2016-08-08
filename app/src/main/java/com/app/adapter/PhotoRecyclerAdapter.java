@@ -9,11 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.app.teacup.R;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-public class PhotoRecyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PhotoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<String> mDatas;
@@ -24,7 +24,7 @@ public class PhotoRecyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         void onItemClick(View view,int position);
     }
 
-    public PhotoRecyAdapter(Context context, List<String> datas) {
+    public PhotoRecyclerAdapter(Context context, List<String> datas) {
         mContext = context;
         mDatas = datas;
         mLayoutInflater = LayoutInflater.from(context);
@@ -56,7 +56,16 @@ public class PhotoRecyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
         final PhotoViewHolder myHolder = (PhotoViewHolder) holder;
-        Picasso.with(mContext).load(url).into(myHolder.mPhotoImg);
+        Glide.with(mContext).load(url).asBitmap()
+                .error(R.drawable.photo_loaderror)
+                .placeholder(R.drawable.photo_default)
+                .dontAnimate()
+                .into(myHolder.mPhotoImg);
+        if (url.contains(".gif")) {
+            myHolder.mGif.setVisibility(View.VISIBLE);
+        } else {
+            myHolder.mGif.setVisibility(View.GONE);
+        }
 
         if (mListener != null) {
             myHolder.mPhotoImg.setOnClickListener(new View.OnClickListener() {
@@ -77,10 +86,12 @@ public class PhotoRecyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private class PhotoViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView mPhotoImg;
+        private ImageView mGif;
 
         public PhotoViewHolder(View itemView) {
             super(itemView);
             mPhotoImg = (ImageView) itemView.findViewById(R.id.iv_photo);
+            mGif = (ImageView) itemView.findViewById(R.id.iv_gif);
         }
 
     }

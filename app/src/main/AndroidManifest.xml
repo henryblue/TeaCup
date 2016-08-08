@@ -24,6 +24,9 @@
         <activity android:name=".BookDetailActivity" />
         <activity android:name=".WeatherActivity" />
         <activity android:name=".PhotoActivity" />
+        <activity android:name=".ShowPhotoActivity"
+            android:theme="@style/FlashTheme" />
+
         <service android:name="com.app.service.LocationService" />
     </application>
 
