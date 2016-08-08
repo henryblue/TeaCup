@@ -10,15 +10,18 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.app.adapter.PhotoRecyclerAdapter;
+import com.app.adapter.PhotoSingleRecyclerAdapter;
+import com.app.bean.PhotoInfo;
 import com.app.teacup.R;
 import com.app.teacup.ShowPhotoActivity;
 import com.app.util.HttpUtils;
@@ -37,9 +40,10 @@ public class QiubaiFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private static final int REFRESH_FINISH = 1;
     private static final int LOAD_DATA_ERROR = 3;
 
-    private List<String> mImgUrl;
+    private List<PhotoInfo> mImgUrl;
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
+    private PhotoSingleRecyclerAdapter mPhotoRecyclerAdapter;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -62,7 +66,6 @@ public class QiubaiFragment extends Fragment implements SwipeRefreshLayout.OnRef
             }
         }
     };
-    private PhotoRecyclerAdapter mPhotoRecyclerAdapter;
 
     @Override
     public void onAttach(Context context) {
@@ -99,18 +102,27 @@ public class QiubaiFragment extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
     private void setupRecycleView() {
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mPhotoRecyclerAdapter = new PhotoRecyclerAdapter(getContext(),
+        mPhotoRecyclerAdapter = new PhotoSingleRecyclerAdapter(getContext(),
                 mImgUrl);
         mRecyclerView.setAdapter(mPhotoRecyclerAdapter);
         SpacesItemDecoration decoration = new SpacesItemDecoration(16);
         mRecyclerView.addItemDecoration(decoration);
-        mPhotoRecyclerAdapter.setOnItemClickListener(new PhotoRecyclerAdapter.OnItemClickListener() {
+        mPhotoRecyclerAdapter.setOnItemClickListener(new PhotoSingleRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                String url = mImgUrl.get(position);
+                String url = mImgUrl.get(position).getImgUrl();
+                if (!TextUtils.isEmpty(url)) {
+                    mPhotoRecyclerAdapter.startLoadImage(view, url);
+                }
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+                String url = mImgUrl.get(position).getImgUrl();
                 if (!TextUtils.isEmpty(url)) {
                     Intent intent = new Intent(getContext(), ShowPhotoActivity.class);
                     intent.putExtra("ImageUrl", url);
@@ -154,6 +166,16 @@ public class QiubaiFragment extends Fragment implements SwipeRefreshLayout.OnRef
         for (Element m : mainWrap) {
             Elements panelClearfix = m.getElementsByClass("panel");
             for (Element e : panelClearfix) {
+                PhotoInfo info = new PhotoInfo();
+                Elements tops = e.getElementsByClass("top");
+                for (Element top : tops) {
+                    Elements h2 = top.getElementsByTag("h2");
+                    for (Element h : h2) {
+                        Elements title = h.getElementsByTag("a");
+                        info.setTitle(title.text());
+                    }
+                }
+
                 Elements clearfix = e.getElementsByClass("main");
                 for (Element main : clearfix) {
                     Elements imagebox = main.getElementsByClass("imagebox");
@@ -162,18 +184,20 @@ public class QiubaiFragment extends Fragment implements SwipeRefreshLayout.OnRef
                         for (Element gif : a) {
                             String src = gif.attr("href");
                             if (src.contains(".gif")) {
-                                mImgUrl.add(src);
+                                info.setImgUrl(src);
                             }
                         }
                         Elements img = photo.getElementsByTag("img");
                         for (Element pic : img) {
                             String src = pic.attr("src");
                             if (src.contains(".jpg")) {
-                                mImgUrl.add(src);
+                                info.setImgUrl(src);
                             }
                         }
                     }
                 }
+
+                mImgUrl.add(info);
             }
         }
     }

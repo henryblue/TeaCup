@@ -14,9 +14,12 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.app.adapter.PhotoRecyclerAdapter;
+import com.app.adapter.PhotoSingleRecyclerAdapter;
+import com.app.bean.PhotoInfo;
 import com.app.teacup.R;
 import com.app.util.OkHttpUtils;
 import com.squareup.okhttp.Request;
@@ -35,7 +38,7 @@ public class GaoxiaoFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private static final int REFRESH_FINISH = 1;
     private static final int LOAD_DATA_ERROR = 3;
 
-    private List<String> mImgUrl;
+    private List<PhotoInfo> mImgUrl;
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
 
@@ -60,7 +63,7 @@ public class GaoxiaoFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
         }
     };
-    private PhotoRecyclerAdapter mPhotoRecyclerAdapter;
+    private PhotoSingleRecyclerAdapter mPhotoRecyclerAdapter;
 
     @Override
     public void onAttach(Context context) {
@@ -100,14 +103,18 @@ public class GaoxiaoFragment extends Fragment implements SwipeRefreshLayout.OnRe
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mPhotoRecyclerAdapter = new PhotoRecyclerAdapter(getContext(),
+        mPhotoRecyclerAdapter = new PhotoSingleRecyclerAdapter(getContext(),
                 mImgUrl);
         mRecyclerView.setAdapter(mPhotoRecyclerAdapter);
         SpacesItemDecoration decoration = new SpacesItemDecoration(16);
         mRecyclerView.addItemDecoration(decoration);
-        mPhotoRecyclerAdapter.setOnItemClickListener(new PhotoRecyclerAdapter.OnItemClickListener() {
+        mPhotoRecyclerAdapter.setOnItemClickListener(new PhotoSingleRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
 
             }
         });
@@ -147,18 +154,20 @@ public class GaoxiaoFragment extends Fragment implements SwipeRefreshLayout.OnRe
         Element content = document.getElementById("content-left");
         Elements articles = content.getElementsByClass("article");
         for (Element art : articles) {
+            PhotoInfo info = new PhotoInfo();
             Elements title = art.getElementsByClass("content");
+            info.setContent(title.text());
             Elements thumbs = art.getElementsByClass("thumb");
             for (Element thumb : thumbs) {
                 Elements img = thumb.getElementsByTag("img");
                 for (Element e : img) {
                     String url = e.attr("src");
                     if (url.contains(".jpg") || url.contains(".gif")) {
-                        mImgUrl.add(url);
+                        info.setImgUrl(url);
                     }
                 }
             }
-
+            mImgUrl.add(info);
         }
     }
 

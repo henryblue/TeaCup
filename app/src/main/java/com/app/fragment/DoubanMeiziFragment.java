@@ -16,9 +16,11 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.app.adapter.PhotoRecyclerAdapter;
+import com.app.bean.PhotoInfo;
 import com.app.teacup.R;
 import com.app.teacup.ShowPhotoActivity;
 import com.app.util.HttpUtils;
@@ -158,7 +160,6 @@ public class DoubanMeiziFragment extends Fragment implements SwipeRefreshLayout.
                 Elements height_min = a.getElementsByClass("height_min");
                 for (Element height : height_min) {
                     String url = height.attr("src");
-                    String title = height.attr("title");
                     if (url.contains(".jpg") || url.contains(".gif")) {
                         mImgUrl.add(url);
                     }

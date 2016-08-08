@@ -7,52 +7,58 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.app.bean.PhotoInfo;
 import com.app.teacup.R;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
-public class PhotoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PhotoSingleRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
-    private List<String> mDatas;
+    private List<PhotoInfo> mDatas;
     private OnItemClickListener mListener;
     private LayoutInflater mLayoutInflater;
 
-
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
+        void onItemLongClick(View view, int position);
     }
 
-    public PhotoRecyclerAdapter(Context context, List<String> datas) {
+    public PhotoSingleRecyclerAdapter(Context context, List<PhotoInfo> datas) {
         mContext = context;
         mDatas = datas;
         mLayoutInflater = LayoutInflater.from(context);
     }
 
+    public void startLoadImage(View view, String url) {
+        if (url.contains(".gif")) {
+            ImageView photoImg = (ImageView) view.findViewById(R.id.iv_photo);
+            ImageView gifView = (ImageView) view.findViewById(R.id.iv_gif);
+            Glide.with(mContext).load(url)
+                    .asGif()
+                    .error(R.drawable.photo_loaderror)
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(photoImg);
+            gifView.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new PhotoViewHolder(mLayoutInflater.inflate(R.layout.item_photo_view, parent, false));
+            return new PhotoViewHolder(mLayoutInflater.inflate(R.layout.item_photo_view1, parent, false));
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        onBindItemViewHolder(holder, position);
+            onBindSingleItemViewHolder(holder, position);
     }
 
-    public void reSetData(List<String> list) {
-        mDatas = list;
-        notifyDataSetChanged();
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        mListener = listener;
-    }
-
-    private void onBindItemViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        String url = mDatas.get(position);
+    private void onBindSingleItemViewHolder(final RecyclerView.ViewHolder holder, int position) {
+        String url = mDatas.get(position).getImgUrl();
         if (url == null) {
             return;
         }
@@ -69,6 +75,8 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             myHolder.mGif.setVisibility(View.GONE);
         }
 
+        myHolder.mTitle.setText(mDatas.get(position).getTitle());
+
         if (mListener != null) {
             myHolder.mPhotoImg.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -77,8 +85,27 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                     mListener.onItemClick(myHolder.itemView, pos);
                 }
             });
+
+            myHolder.mPhotoImg.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int pos = myHolder.getLayoutPosition();
+                    mListener.onItemLongClick(myHolder.itemView, pos);
+                    return false;
+                }
+            });
         }
     }
+
+    public void reSetData(List<PhotoInfo> list) {
+        mDatas = list;
+        notifyDataSetChanged();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
+
 
     @Override
     public int getItemCount() {
@@ -87,6 +114,7 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private class PhotoViewHolder extends RecyclerView.ViewHolder {
 
+        private TextView mTitle;
         private ImageView mPhotoImg;
         private ImageView mGif;
 
@@ -94,6 +122,7 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             super(itemView);
             mPhotoImg = (ImageView) itemView.findViewById(R.id.iv_photo);
             mGif = (ImageView) itemView.findViewById(R.id.iv_gif);
+            mTitle = (TextView) itemView.findViewById(R.id.tv_title);
         }
 
     }
