@@ -4,11 +4,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_item_main"
-            android:icon="@drawable/book_bg"
+            android:icon="@drawable/main_bg"
             android:title="@string/item_main" />
         <item
             android:id="@+id/navigation_item_photo"
-            android:icon="@drawable/store"
+            android:icon="@drawable/photo_bg"
             android:title="@string/item_package" />
 
         <item

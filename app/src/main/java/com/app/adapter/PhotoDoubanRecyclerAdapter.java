@@ -7,16 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.app.bean.PhotoInfo;
 import com.app.teacup.R;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-public class PhotoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PhotoDoubanRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
-    private List<String> mDatas;
+    private List<PhotoInfo> mDatas;
     private OnItemClickListener mListener;
     private LayoutInflater mLayoutInflater;
 
@@ -25,7 +27,7 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         void onItemClick(View view, int position);
     }
 
-    public PhotoRecyclerAdapter(Context context, List<String> datas) {
+    public PhotoDoubanRecyclerAdapter(Context context, List<PhotoInfo> datas) {
         mContext = context;
         mDatas = datas;
         mLayoutInflater = LayoutInflater.from(context);
@@ -41,7 +43,7 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         onBindItemViewHolder(holder, position);
     }
 
-    public void reSetData(List<String> list) {
+    public void reSetData(List<PhotoInfo> list) {
         mDatas = list;
         notifyDataSetChanged();
     }
@@ -51,7 +53,7 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     private void onBindItemViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        String url = mDatas.get(position);
+        String url = mDatas.get(position).getImgUrl();
         if (url == null) {
             return;
         }
@@ -62,6 +64,8 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 .placeholder(R.drawable.photo_default)
                 .dontAnimate()
                 .into(myHolder.mPhotoImg);
+
+        myHolder.mTitle.setText(mDatas.get(position).getTitle());
 
         if (mListener != null) {
             myHolder.mPhotoImg.setOnClickListener(new View.OnClickListener() {
@@ -82,10 +86,12 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     private class PhotoViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView mPhotoImg;
+        private TextView mTitle;
 
         public PhotoViewHolder(View itemView) {
             super(itemView);
             mPhotoImg = (ImageView) itemView.findViewById(R.id.iv_photo);
+            mTitle = (TextView) itemView.findViewById(R.id.tv_photo_title);
         }
 
     }

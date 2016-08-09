@@ -3,28 +3,27 @@ package com.app.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.app.adapter.PhotoRecyclerAdapter;
-import com.app.bean.PhotoInfo;
 import com.app.teacup.R;
 import com.app.teacup.ShowPhotoActivity;
 import com.app.util.HttpUtils;
+import com.app.util.OkHttpUtils;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.squareup.okhttp.Request;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -34,15 +33,18 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MeiziFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class JiandanMeiziFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final int REFRESH_START = 0;
     private static final int REFRESH_FINISH = 1;
-    private static final int LOAD_DATA_ERROR = 3;
+    private static final int REFRESH_ERROR = 2;
+    private static final int LOAD_DATA_FINISH = 3;
+    private static final int LOAD_DATA_ERROR = 4;
 
     private List<String> mImgUrl;
     private SwipeRefreshLayout mRefreshLayout;
-    private RecyclerView mRecyclerView;
+    private XRecyclerView mRecyclerView;
+    private int mainPageId = -1;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -50,15 +52,23 @@ public class MeiziFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             super.handleMessage(msg);
             switch (msg.what) {
                 case REFRESH_START:
-                    startLoadData();
+                    startRefreshData();
                     break;
                 case REFRESH_FINISH:
                     mRefreshLayout.setRefreshing(false);
                     mPhotoRecyclerAdapter.reSetData(mImgUrl);
                     break;
-                case LOAD_DATA_ERROR:
+                case REFRESH_ERROR:
                     mRefreshLayout.setRefreshing(false);
                     Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
+                    break;
+                case LOAD_DATA_FINISH:
+                    mRecyclerView.loadMoreComplete();
+                    mPhotoRecyclerAdapter.reSetData(mImgUrl);
+                    break;
+                case LOAD_DATA_ERROR:
+                    Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
+                    mRecyclerView.loadMoreComplete();
                     break;
                 default:
                     break;
@@ -76,7 +86,7 @@ public class MeiziFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.meizi_fragment, container, false);
+        View view = inflater.inflate(R.layout.photo_fragment, container, false);
         initView(view);
         setupRecycleView();
         setupRefreshLayout();
@@ -96,7 +106,7 @@ public class MeiziFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             @Override
             public void run() {
                 mRefreshLayout.setRefreshing(true);
-                startLoadData();
+                startRefreshData();
             }
         });
     }
@@ -104,12 +114,22 @@ public class MeiziFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     private void setupRecycleView() {
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setPullRefreshEnabled(false);
 
+        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+            }
+
+            @Override
+            public void onLoadMore() {
+                startLoadData();
+            }
+        });
         mPhotoRecyclerAdapter = new PhotoRecyclerAdapter(getContext(),
                 mImgUrl);
         mRecyclerView.setAdapter(mPhotoRecyclerAdapter);
-        SpacesItemDecoration decoration = new SpacesItemDecoration(16);
-        mRecyclerView.addItemDecoration(decoration);
+
         mPhotoRecyclerAdapter.setOnItemClickListener(new PhotoRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -125,18 +145,48 @@ public class MeiziFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     private void initView(View view) {
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.base_recycler_view);
+        mRecyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
+    }
+
+    private void startRefreshData() {
+        mImgUrl.clear();
+        String url = "http://jandan.net/ooxx";
+//        HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
+//            @Override
+//            public void onFinish(String response) {
+//                parsePhotoData(response);
+//                sendParseDataMessage(REFRESH_FINISH);
+//            }
+//
+//            @Override
+//            public void onError(Exception e) {
+//                sendParseDataMessage(REFRESH_ERROR);
+//            }
+//        });
+
+        OkHttpUtils.getAsyn(url, new OkHttpUtils.ResultCallback<String>() {
+
+            @Override
+            public void onError(Request request, Exception e) {
+                sendParseDataMessage(REFRESH_ERROR);
+            }
+
+            @Override
+            public void onResponse(String response) {
+                parsePhotoData(response);
+                sendParseDataMessage(REFRESH_FINISH);
+            }
+        });
     }
 
     private void startLoadData() {
-        mImgUrl.clear();
-        String url = "http://jandan.net/ooxx/page-2080#comments";
+        mainPageId--;
+        String url = "http://jandan.net/ooxx/page-/" + mainPageId + "#comments";
         HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
-                Log.i("jiandan", response);
                 parsePhotoData(response);
-                sendParseDataMessage(REFRESH_FINISH);
+                sendParseDataMessage(LOAD_DATA_FINISH);
             }
 
             @Override
@@ -167,31 +217,25 @@ public class MeiziFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 }
             }
         }
+        if (mainPageId == -1) {
+            Elements comments = document.getElementsByClass("comments");
+            for (Element current : comments) {
+                Elements currentPage = current.getElementsByClass("current-comment-page");
+                String text = currentPage.text();
+                if (!TextUtils.isEmpty(text)) {
+                    String subStr = text.substring(1, text.length() - 1);
+                    Log.i("Jiandan", "====subStr===");
+                    mainPageId = Integer.valueOf(subStr);
+                }
+            }
+        }
     }
 
     @Override
     public void onRefresh() {
+        mainPageId = -1;
         Message msg = Message.obtain();
         msg.what = REFRESH_START;
         mHandler.sendMessage(msg);
-    }
-
-    public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
-
-        private int space;
-
-        public SpacesItemDecoration(int space) {
-            this.space = space;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            outRect.left = space;
-            outRect.right = space;
-            outRect.bottom = space;
-            if (parent.getChildAdapterPosition(view) == 0) {
-                outRect.top = space;
-            }
-        }
     }
 }

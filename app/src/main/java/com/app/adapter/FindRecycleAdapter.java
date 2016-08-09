@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.app.bean.FindBookInfo;
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 
 
 public class FindRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private LoadStatus mLoadStatus = LoadStatus.LOAD_OK;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private ArrayList<FindBookInfo> mDatas;
@@ -27,17 +25,10 @@ public class FindRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private boolean animateItems = true;
     private int lastAnimatedPosition = -1;
 
-    private static final int VIEW_TYPE_FOOTER = 0;
-    private static final int VIEW_TYPE_ITEM = 1;
 
     public interface OnItemClickListener {
         void onItemClick(View view,int position);
         void onItemLongClick(View view , int position);
-    }
-
-    public enum LoadStatus {
-        LOAD_OK,
-        LOADING_MORE
     }
 
     public FindRecycleAdapter(Context context, ArrayList<FindBookInfo> datas) {
@@ -57,10 +48,6 @@ public class FindRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyDataSetChanged();
     }
 
-    public void setLoadStatus(LoadStatus loadStatus) {
-        mLoadStatus = loadStatus;
-    }
-
     public void reSetData(ArrayList<FindBookInfo> list) {
         mDatas = list;
         notifyDataSetChanged();
@@ -68,36 +55,16 @@ public class FindRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == VIEW_TYPE_FOOTER) {
-            return onCreateFooterViewHolder(parent, viewType);
-        } else if(viewType == VIEW_TYPE_ITEM) {
             return onCreateItemViewHolder(parent, viewType);
-        }
-        return null;
-
     }
 
     private RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
         return new MyViewHolder(mLayoutInflater.inflate(R.layout.item_find_fragment, parent, false));
     }
 
-    private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent, int viewType) {
-        return new FooterViewHolder(mLayoutInflater.inflate(R.layout.layout_foot_view, parent, false));
-    }
-
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-
-        switch (getItemViewType(position)) {
-            case VIEW_TYPE_ITEM:
                 onBindItemViewHolder(holder, position);
-                break;
-            case VIEW_TYPE_FOOTER:
-                onBindFooterViewHolder(holder, position);
-                break;
-            default:
-                break;
-        }
     }
 
     private void onBindItemViewHolder(final RecyclerView.ViewHolder holder, int position) {
@@ -114,7 +81,7 @@ public class FindRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int pos = myHolder.getLayoutPosition();
+                    int pos = myHolder.getLayoutPosition() - 1;
                     mListener.onItemClick(holder.itemView, pos);
                 }
             });
@@ -122,24 +89,11 @@ public class FindRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    int pos = myHolder.getLayoutPosition();
+                    int pos = myHolder.getLayoutPosition() - 1;
                     mListener.onItemLongClick(holder.itemView, pos);
                     return false;
                 }
             });
-        }
-    }
-
-    private void onBindFooterViewHolder(RecyclerView.ViewHolder holder, int position) {
-        FooterViewHolder viewHolder = (FooterViewHolder) holder;
-
-        switch (mLoadStatus) {
-            case LOAD_OK:
-                viewHolder.mLoadingLayout.setVisibility(View.GONE);
-                break;
-            case LOADING_MORE:
-                viewHolder.mLoadingLayout.setVisibility(View.VISIBLE);
-                break;
         }
     }
 
@@ -173,15 +127,12 @@ public class FindRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        return mDatas.size() + 1;
+        return mDatas.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(position + 1 == getItemCount()) { //the last data to show FooterView
-            return VIEW_TYPE_FOOTER;
-        }
-        return VIEW_TYPE_ITEM;
+        return position;
     }
 
     private class MyViewHolder extends RecyclerView.ViewHolder {
@@ -197,14 +148,5 @@ public class FindRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             mBookContent = (TextView) itemView.findViewById(R.id.tv_book_content);
         }
 
-    }
-
-    public class FooterViewHolder extends RecyclerView.ViewHolder {
-        public RelativeLayout mLoadingLayout;
-
-        public FooterViewHolder(View itemView) {
-            super(itemView);
-            mLoadingLayout = (RelativeLayout) itemView.findViewById(R.id.load_layout);
-        }
     }
 }

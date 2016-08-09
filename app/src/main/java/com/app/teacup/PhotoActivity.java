@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import com.app.adapter.PagerAdapter;
 import com.app.fragment.DoubanMeiziFragment;
 import com.app.fragment.QiubaiFragment;
-import com.app.fragment.MeiziFragment;
+import com.app.fragment.JiandanMeiziFragment;
 import com.app.fragment.GaoxiaoFragment;
 
 
@@ -36,8 +36,8 @@ public class PhotoActivity extends AppCompatActivity {
         TabLayout mTabLayout = (TabLayout) findViewById(R.id.photo_tab_layout);
         ViewPager mViewPager = (ViewPager) findViewById(R.id.photo_view_pager);
 
-        MeiziFragment meiziFragment = new MeiziFragment();
-        mFragmentLists.add(meiziFragment);
+        JiandanMeiziFragment jiandanMeiziFragment = new JiandanMeiziFragment();
+        mFragmentLists.add(jiandanMeiziFragment);
         DoubanMeiziFragment doubanMeiziFragment = new DoubanMeiziFragment();
         mFragmentLists.add(doubanMeiziFragment);
         GaoxiaoFragment gaoxiaoFragment = new GaoxiaoFragment();

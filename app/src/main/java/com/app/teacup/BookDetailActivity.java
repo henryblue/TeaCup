@@ -25,6 +25,7 @@ public class BookDetailActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private FindBookInfo mBookInfo;
+    TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class BookDetailActivity extends AppCompatActivity {
             });
         }
     }
-    TabLayout tabLayout;
+
     private void initView() {
         mBookInfo = (FindBookInfo) getIntent().getSerializableExtra("book");
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -63,7 +64,6 @@ public class BookDetailActivity extends AppCompatActivity {
         ImageView ivImage = (ImageView) findViewById(R.id.iv_book_image);
         Glide.with(this).load(mBookInfo.getmImgUrl())
                 .error(R.drawable.photo_loaderror)
-                .placeholder(R.drawable.photo_default)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade()
                 .into(ivImage);

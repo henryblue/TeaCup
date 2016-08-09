@@ -17,7 +17,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,13 +32,11 @@ import com.app.teacup.BookDetailActivity;
 import com.app.teacup.R;
 import com.app.util.HttpUtils;
 import com.app.util.JsonUtils;
-import com.app.util.OkHttpUtils;
-import com.squareup.okhttp.Request;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import org.apache.http.util.EncodingUtils;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -240,12 +237,14 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void setupRecycleView(View view) {
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.base_recycler_view);
+        XRecyclerView recyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLoadingMoreEnabled(false);
+        recyclerView.setPullRefreshEnabled(false);
 
         mAdapter = new FindRecycleAdapter(getContext(), mDatas);
         mAdapter.setOnItemClickListener(new FindRecycleAdapter.OnItemClickListener() {
