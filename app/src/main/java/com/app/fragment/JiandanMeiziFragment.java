@@ -22,6 +22,7 @@ import com.app.teacup.R;
 import com.app.teacup.ShowPhotoActivity;
 import com.app.util.HttpUtils;
 import com.app.util.OkHttpUtils;
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.squareup.okhttp.Request;
 
@@ -56,10 +57,12 @@ public class JiandanMeiziFragment extends Fragment implements SwipeRefreshLayout
                     break;
                 case REFRESH_FINISH:
                     mRefreshLayout.setRefreshing(false);
+                    mRecyclerView.refreshComplete();
                     mPhotoRecyclerAdapter.reSetData(mImgUrl);
                     break;
                 case REFRESH_ERROR:
                     mRefreshLayout.setRefreshing(false);
+                    mRecyclerView.refreshComplete();
                     Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
                     break;
                 case LOAD_DATA_FINISH:
@@ -114,18 +117,26 @@ public class JiandanMeiziFragment extends Fragment implements SwipeRefreshLayout
     private void setupRecycleView() {
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setPullRefreshEnabled(false);
 
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
+                mainPageId = -1;
+                startRefreshData();
             }
 
             @Override
             public void onLoadMore() {
-                startLoadData();
+                if (mImgUrl.size() <= 0) {
+                 mRecyclerView.loadMoreComplete();
+                } else {
+                    startLoadData();
+                }
             }
         });
+        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallSpinFadeLoader);
+        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+
         mPhotoRecyclerAdapter = new PhotoRecyclerAdapter(getContext(),
                 mImgUrl);
         mRecyclerView.setAdapter(mPhotoRecyclerAdapter);
@@ -151,37 +162,23 @@ public class JiandanMeiziFragment extends Fragment implements SwipeRefreshLayout
     private void startRefreshData() {
         mImgUrl.clear();
         String url = "http://jandan.net/ooxx";
-//        HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
-//            @Override
-//            public void onFinish(String response) {
-//                parsePhotoData(response);
-//                sendParseDataMessage(REFRESH_FINISH);
-//            }
-//
-//            @Override
-//            public void onError(Exception e) {
-//                sendParseDataMessage(REFRESH_ERROR);
-//            }
-//        });
-
-        OkHttpUtils.getAsyn(url, new OkHttpUtils.ResultCallback<String>() {
-
+        HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
             @Override
-            public void onError(Request request, Exception e) {
-                sendParseDataMessage(REFRESH_ERROR);
+            public void onFinish(String response) {
+                parsePhotoData(response);
+                sendParseDataMessage(REFRESH_FINISH);
             }
 
             @Override
-            public void onResponse(String response) {
-                parsePhotoData(response);
-                sendParseDataMessage(REFRESH_FINISH);
+            public void onError(Exception e) {
+                sendParseDataMessage(REFRESH_ERROR);
             }
         });
     }
 
     private void startLoadData() {
         mainPageId--;
-        String url = "http://jandan.net/ooxx/page-/" + mainPageId + "#comments";
+        String url = "http://jandan.net/ooxx/page-" + mainPageId + "#comments";
         HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
@@ -223,8 +220,9 @@ public class JiandanMeiziFragment extends Fragment implements SwipeRefreshLayout
                 Elements currentPage = current.getElementsByClass("current-comment-page");
                 String text = currentPage.text();
                 if (!TextUtils.isEmpty(text)) {
-                    String subStr = text.substring(1, text.length() - 1);
-                    Log.i("Jiandan", "====subStr===");
+                    String[] splits = text.split(" ");
+                    String tit = splits[0];
+                    String subStr = tit.substring(1, tit.length() - 1);
                     mainPageId = Integer.valueOf(subStr);
                 }
             }
@@ -233,7 +231,6 @@ public class JiandanMeiziFragment extends Fragment implements SwipeRefreshLayout
 
     @Override
     public void onRefresh() {
-        mainPageId = -1;
         Message msg = Message.obtain();
         msg.what = REFRESH_START;
         mHandler.sendMessage(msg);

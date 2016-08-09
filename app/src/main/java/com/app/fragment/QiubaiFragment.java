@@ -11,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,11 +56,13 @@ public class QiubaiFragment extends Fragment implements SwipeRefreshLayout.OnRef
                     startRefreshData();
                     break;
                 case REFRESH_FINISH:
+                    mRecyclerView.refreshComplete();
                     mRefreshLayout.setRefreshing(false);
                     mPhotoRecyclerAdapter.reSetData(mImgUrl);
                     break;
                 case REFRESH_ERROR:
                     mRefreshLayout.setRefreshing(false);
+                    mRecyclerView.refreshComplete();
                     Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
                     break;
                 case LOAD_DATA_FINISH:
@@ -115,19 +118,25 @@ public class QiubaiFragment extends Fragment implements SwipeRefreshLayout.OnRef
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setPullRefreshEnabled(false);
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
+                mPageNum = 1;
+                startRefreshData();
             }
 
             @Override
             public void onLoadMore() {
-                startLoadData();
+                if (mImgUrl.size() <= 0) {
+                    mRecyclerView.loadMoreComplete();
+                } else {
+                    startLoadData();
+                }
             }
         });
 
         mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallSpinFadeLoader);
+        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
 
         mPhotoRecyclerAdapter = new PhotoQiubaiRecyclerAdapter(getContext(),
                 mImgUrl);

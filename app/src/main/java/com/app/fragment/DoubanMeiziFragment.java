@@ -21,6 +21,7 @@ import com.app.bean.PhotoInfo;
 import com.app.teacup.R;
 import com.app.teacup.ShowPhotoActivity;
 import com.app.util.HttpUtils;
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import org.jsoup.Jsoup;
@@ -35,8 +36,11 @@ public class DoubanMeiziFragment extends Fragment implements SwipeRefreshLayout.
 
     private static final int REFRESH_START = 0;
     private static final int REFRESH_FINISH = 1;
-    private static final int LOAD_DATA_ERROR = 3;
+    private static final int REFRESH_ERROR = 2;
+    private static final int LOAD_DATA_FINISH = 3;
+    private static final int LOAD_DATA_ERROR = 4;
 
+    private int mPageNum = 1;
     private List<PhotoInfo> mImgUrl;
     private SwipeRefreshLayout mRefreshLayout;
     private XRecyclerView mRecyclerView;
@@ -48,14 +52,24 @@ public class DoubanMeiziFragment extends Fragment implements SwipeRefreshLayout.
             super.handleMessage(msg);
             switch (msg.what) {
                 case REFRESH_START:
-                    startLoadData();
+                    startRefreshData();
                     break;
                 case REFRESH_FINISH:
                     mRefreshLayout.setRefreshing(false);
+                    mRecyclerView.refreshComplete();
+                    mPhotoRecyclerAdapter.reSetData(mImgUrl);
+                    break;
+                case REFRESH_ERROR:
+                    mRecyclerView.refreshComplete();
+                    mRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
+                    break;
+                case LOAD_DATA_FINISH:
+                    mRecyclerView.loadMoreComplete();
                     mPhotoRecyclerAdapter.reSetData(mImgUrl);
                     break;
                 case LOAD_DATA_ERROR:
-                    mRefreshLayout.setRefreshing(false);
+                    mRecyclerView.loadMoreComplete();
                     Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
                     break;
                 default:
@@ -93,7 +107,7 @@ public class DoubanMeiziFragment extends Fragment implements SwipeRefreshLayout.
             @Override
             public void run() {
                 mRefreshLayout.setRefreshing(true);
-                startLoadData();
+                startRefreshData();
             }
         });
     }
@@ -101,12 +115,28 @@ public class DoubanMeiziFragment extends Fragment implements SwipeRefreshLayout.
     private void setupRecycleView() {
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setPullRefreshEnabled(false);
-        mRecyclerView.setLoadingMoreEnabled(false);
 
         mPhotoRecyclerAdapter = new PhotoDoubanRecyclerAdapter(getContext(),
                 mImgUrl);
         mRecyclerView.setAdapter(mPhotoRecyclerAdapter);
+        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                mPageNum = 1;
+                startRefreshData();
+            }
+
+            @Override
+            public void onLoadMore() {
+                if (mImgUrl.size() <= 0) {
+                 mRecyclerView.loadMoreComplete();
+                } else {
+                    startLoadData();
+                }
+            }
+        });
+        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallSpinFadeLoader);
+        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
 
         mPhotoRecyclerAdapter.setOnItemClickListener(new PhotoDoubanRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -126,14 +156,31 @@ public class DoubanMeiziFragment extends Fragment implements SwipeRefreshLayout.
         mRecyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
     }
 
-    private void startLoadData() {
+    private void startRefreshData() {
         mImgUrl.clear();
-        String url = "http://www.dbmeinv.com/dbgroup/rank.htm";
+        String url = "http://www.dbmeinv.com/dbgroup/show.htm?pager_offset=1";
         HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
                 parsePhotoData(response);
                 sendParseDataMessage(REFRESH_FINISH);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                sendParseDataMessage(REFRESH_ERROR);
+            }
+        });
+    }
+
+    private void startLoadData() {
+        mPageNum++;
+        String url = "http://www.dbmeinv.com/dbgroup/show.htm?pager_offset=" + mPageNum;
+        HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
+            @Override
+            public void onFinish(String response) {
+                parsePhotoData(response);
+                sendParseDataMessage(LOAD_DATA_FINISH);
             }
 
             @Override
@@ -154,20 +201,21 @@ public class DoubanMeiziFragment extends Fragment implements SwipeRefreshLayout.
         Element main = document.getElementById("main");
         Elements liElements = main.getElementsByTag("li");
         for (Element element : liElements) {
-            PhotoInfo info = new PhotoInfo();
+
             Elements aElements = element.getElementsByTag("a");
             for (Element a : aElements) {
                 Elements height_min = a.getElementsByClass("height_min");
                 for (Element height : height_min) {
+                    PhotoInfo info = new PhotoInfo();
                     String url = height.attr("src");
                     if (url.contains(".jpg")) {
                         info.setImgUrl(url);
                     }
                     String title = height.attr("title");
                     info.setTitle(title);
+                    mImgUrl.add(info);
                 }
             }
-            mImgUrl.add(info);
         }
     }
 

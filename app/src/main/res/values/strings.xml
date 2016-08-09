@@ -10,7 +10,7 @@
     <string name="drawer_open">打开</string>
     <string name="drawer_close">关闭</string>
     <string name="item_main">主页</string>
-    <string name="item_package">图片</string>
+    <string name="item_package">美图</string>
     <string name="item_weather">天气</string>
     <string name="item_about">关于</string>
     <string name="input_hint">请输入需要添加的书名</string>

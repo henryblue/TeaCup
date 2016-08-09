@@ -49,6 +49,7 @@ public class PhotoActivity extends AppCompatActivity {
                 mFragmentLists, getResources().getStringArray(R.array.tab_photo));
 
         if (mViewPager != null) {
+            mViewPager.setOffscreenPageLimit(3);
             mViewPager.setAdapter(mPagerAdapter);
             if (mTabLayout != null) {
                 mTabLayout.setupWithViewPager(mViewPager);
