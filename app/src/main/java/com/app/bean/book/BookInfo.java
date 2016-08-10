@@ -1,4 +1,4 @@
-package com.app.bean;
+package com.app.bean.book;
 
 
 import java.util.List;

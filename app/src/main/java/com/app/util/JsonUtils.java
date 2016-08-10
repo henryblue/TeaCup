@@ -1,7 +1,7 @@
 package com.app.util;
 
 
-import com.app.bean.Book;
+import com.app.bean.book.Book;
 import com.google.gson.Gson;
 
 public class JsonUtils {

@@ -1,17 +1,14 @@
-package com.app.fragment;
+package com.app.fragment.photo;
 
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +16,7 @@ import android.widget.Toast;
 
 import com.app.adapter.PhotoQiubaiRecyclerAdapter;
 import com.app.bean.PhotoInfo;
+import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
 import com.app.teacup.ShowPhotoActivity;
 import com.app.util.HttpUtils;
@@ -33,51 +31,13 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QiubaiFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-
-    private static final int REFRESH_START = 0;
-    private static final int REFRESH_FINISH = 1;
-    private static final int REFRESH_ERROR = 2;
-    private static final int LOAD_DATA_FINISH = 3;
-    private static final int LOAD_DATA_ERROR = 4;
+public class QiubaiFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private List<PhotoInfo> mImgUrl;
     private SwipeRefreshLayout mRefreshLayout;
     private XRecyclerView mRecyclerView;
     private PhotoQiubaiRecyclerAdapter mPhotoRecyclerAdapter;
     private int mPageNum = 1;
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case REFRESH_START:
-                    startRefreshData();
-                    break;
-                case REFRESH_FINISH:
-                    mRecyclerView.refreshComplete();
-                    mRefreshLayout.setRefreshing(false);
-                    mPhotoRecyclerAdapter.reSetData(mImgUrl);
-                    break;
-                case REFRESH_ERROR:
-                    mRefreshLayout.setRefreshing(false);
-                    mRecyclerView.refreshComplete();
-                    Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
-                    break;
-                case LOAD_DATA_FINISH:
-                    mRecyclerView.loadMoreComplete();
-                    mPhotoRecyclerAdapter.reSetData(mImgUrl);
-                    break;
-                case LOAD_DATA_ERROR:
-                    Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
-                    mRecyclerView.loadMoreComplete();
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
     @Override
     public void onAttach(Context context) {
@@ -267,8 +227,37 @@ public class QiubaiFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     @Override
     public void onRefresh() {
-        Message msg = Message.obtain();
-        msg.what = REFRESH_START;
-        mHandler.sendMessage(msg);
+        sendParseDataMessage(REFRESH_START);
+    }
+
+    @Override
+    protected void onLoadDataError() {
+        Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
+        mRecyclerView.loadMoreComplete();
+    }
+
+    @Override
+    protected void onLoadDataFinish() {
+        mRecyclerView.loadMoreComplete();
+        mPhotoRecyclerAdapter.reSetData(mImgUrl);
+    }
+
+    @Override
+    protected void onRefreshError() {
+        mRefreshLayout.setRefreshing(false);
+        mRecyclerView.refreshComplete();
+        Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onRefreshFinish() {
+        mRecyclerView.refreshComplete();
+        mRefreshLayout.setRefreshing(false);
+        mPhotoRecyclerAdapter.reSetData(mImgUrl);
+    }
+
+    @Override
+    protected void onRefreshStart() {
+        startRefreshData();
     }
 }

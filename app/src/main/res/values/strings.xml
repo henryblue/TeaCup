@@ -17,15 +17,17 @@
     <string name="add_book">添加</string>
     <string name="ok">确定</string>
     <string name="transition_book_img">transition_book_img</string>
+    <string name="transition_music_img">transition_music_img</string>
     <string name="book_content_detail">内容简介</string>
     <string name="book_author_detail">作者简介</string>
     <string name="book_table">目录</string>
     <string name="weather_change">切换</string>
 
     <string-array name="tab_name">
-        <item>推荐</item>
-        <item>读书</item>
-        <item>发现</item>
+        <item>新闻</item>
+        <item>视频</item>
+        <item>音乐</item>
+        <item>搜书</item>
     </string-array>
     <string-array name="tab_photo">
         <item>煎蛋妹子</item>

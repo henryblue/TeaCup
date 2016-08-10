@@ -28,8 +28,7 @@
             android:layout_width="@dimen/activity_weather_image_width"
             android:layout_height="@dimen/activity_weather_image_height"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/activity_weather_image_marginleft"
-            android:src="@drawable/biz_plugin_weather_baoxue" />
+            android:layout_marginLeft="@dimen/activity_weather_image_marginleft" />
 
         <LinearLayout
             android:layout_width="wrap_content"

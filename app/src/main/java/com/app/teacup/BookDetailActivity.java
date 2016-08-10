@@ -13,7 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.app.bean.FindBookInfo;
+import com.app.bean.book.FindBookInfo;
 import com.app.fragment.DetailFragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;

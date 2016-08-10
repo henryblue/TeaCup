@@ -9,7 +9,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.app.bean.FindBookInfo;
+import com.app.bean.book.FindBookInfo;
 import com.app.teacup.R;
 import com.app.util.ToolUtils;
 import com.bumptech.glide.Glide;

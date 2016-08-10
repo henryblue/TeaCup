@@ -1,4 +1,4 @@
-package com.app.fragment;
+package com.app.fragment.mainPage;
 
 
 import android.content.Context;
@@ -25,9 +25,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.app.adapter.FindRecycleAdapter;
-import com.app.bean.Book;
-import com.app.bean.BookInfo;
-import com.app.bean.FindBookInfo;
+import com.app.bean.book.Book;
+import com.app.bean.book.BookInfo;
+import com.app.bean.book.FindBookInfo;
 import com.app.teacup.BookDetailActivity;
 import com.app.teacup.R;
 import com.app.util.HttpUtils;
@@ -42,7 +42,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final int REFRESH_START = 0;
     private static final int REFRESH_FINISH = 1;
@@ -199,7 +199,7 @@ public class FindFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.find_fragment, container, false);
+        View view = inflater.inflate(R.layout.find_book_fragment, container, false);
 
         setupRecycleView(view);
         setupRefreshLayout(view);

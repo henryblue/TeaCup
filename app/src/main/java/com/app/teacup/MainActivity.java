@@ -15,9 +15,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.app.adapter.PagerAdapter;
-import com.app.fragment.FindFragment;
-import com.app.fragment.HostFragment;
-import com.app.fragment.ReadBookFragment;
+import com.app.fragment.mainPage.FindBookFragment;
+import com.app.fragment.mainPage.NewsFragment;
+import com.app.fragment.mainPage.VideoFragment;
+import com.app.fragment.mainPage.MusicFragment;
 
 import java.util.ArrayList;
 
@@ -53,18 +54,21 @@ public class MainActivity extends AppCompatActivity {
         setupDrawerContent(mNavigationView);
 
         ArrayList<Fragment> mFragmentLists = new ArrayList<>();
-        FindFragment mFindFragment = new FindFragment();
-        HostFragment mHostFragment = new HostFragment();
-        ReadBookFragment mReadBookFragment = new ReadBookFragment();
-        mFragmentLists.add(mHostFragment);
-        mFragmentLists.add(mReadBookFragment);
-        mFragmentLists.add(mFindFragment);
+        FindBookFragment mFindBookFragment = new FindBookFragment();
+        VideoFragment mVideoFragment = new VideoFragment();
+        MusicFragment mMusicFragment = new MusicFragment();
+        NewsFragment newsFragment = new NewsFragment();
+        mFragmentLists.add(newsFragment);
+        mFragmentLists.add(mVideoFragment);
+        mFragmentLists.add(mMusicFragment);
+        mFragmentLists.add(mFindBookFragment);
 
         ViewPager mViewPager = (ViewPager) findViewById(R.id.main_view_pager);
         PagerAdapter mPagerAdapter = new PagerAdapter(getSupportFragmentManager(),
                 mFragmentLists, getResources().getStringArray(R.array.tab_name));
 
         if (mViewPager != null) {
+            mViewPager.setOffscreenPageLimit(3);
             mViewPager.setAdapter(mPagerAdapter);
         }
         TabLayout mTabLayout = (TabLayout) findViewById(R.id.main_tab_layout);

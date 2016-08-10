@@ -4,9 +4,6 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="read book page"/>
+    <include layout="@layout/common_recycler_view"/>
+
 </LinearLayout>

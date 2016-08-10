@@ -11,10 +11,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.app.adapter.PagerAdapter;
-import com.app.fragment.DoubanMeiziFragment;
-import com.app.fragment.QiubaiFragment;
-import com.app.fragment.JiandanMeiziFragment;
-import com.app.fragment.GaoxiaoFragment;
+import com.app.fragment.photo.DoubanMeiziFragment;
+import com.app.fragment.photo.QiubaiFragment;
+import com.app.fragment.photo.JiandanMeiziFragment;
+import com.app.fragment.photo.GaoxiaoFragment;
 
 
 import java.util.ArrayList;
