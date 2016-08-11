@@ -1,19 +1,19 @@
 package com.app.teacup;
 
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +44,7 @@ public class MusicDetailActivity extends AppCompatActivity {
     private TextView mMusicType;
     private TextView mMusicContent;
     private LinearLayout mPlayList;
+    private TextView mMusicTotal;
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
@@ -61,6 +62,7 @@ public class MusicDetailActivity extends AppCompatActivity {
             super.handleMessage(msg);
         }
     };
+    private CollapsingToolbarLayout mCollapsingToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,17 @@ public class MusicDetailActivity extends AppCompatActivity {
         initToolBar();
         initView();
         startLoadData();
+    }
+
+    private void startAnimator() {
+        int cx = (mCollapsingToolbar.getLeft() + mCollapsingToolbar.getRight()) / 2;
+        int cy = (mCollapsingToolbar.getTop() + mCollapsingToolbar.getBottom()) / 2;
+
+        int finalRadius = mCollapsingToolbar.getWidth();
+
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(mCollapsingToolbar, cx, cy, 0, finalRadius);
+        anim.start();
     }
 
     private void initToolBar() {
@@ -88,10 +101,10 @@ public class MusicDetailActivity extends AppCompatActivity {
     private void initView() {
         mDetailInfo = new MusicDetailInfo();
         mMusicInfo = (MusicInfo) getIntent().getSerializableExtra("music");
-        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        if (collapsingToolbar != null) {
+        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        if (mCollapsingToolbar != null) {
             String[] split = mMusicInfo.getTitle().split(" ");
-            collapsingToolbar.setTitle(split[1]);
+            mCollapsingToolbar.setTitle(split[1]);
         }
 
         ImageView ivImage = (ImageView) findViewById(R.id.iv_music_image);
@@ -107,15 +120,17 @@ public class MusicDetailActivity extends AppCompatActivity {
         mMusicTitle = (TextView) findViewById(R.id.tv_music_title);
         mMusicType = (TextView) findViewById(R.id.tv_music_type);
         mMusicContent = (TextView) findViewById(R.id.tv_music_content);
+        mMusicTotal = (TextView) findViewById(R.id.tv_music_total);
         mPlayList = (LinearLayout) findViewById(R.id.ll_play_list);
-
     }
 
     private void initData() {
         mMusicTitle.setText(mMusicInfo.getTitle());
         mMusicType.setText(mDetailInfo.getType());
         mMusicContent.setText(mDetailInfo.getContent());
-
+        int total = mDetailInfo.getMusicList().size();
+        String musicTotal = String.format("   %d%s", total, getString(R.string.music_total_end));
+        mMusicTotal.setText(musicTotal);
         initLayout();
     }
 
@@ -137,13 +152,14 @@ public class MusicDetailActivity extends AppCompatActivity {
                     .into(img);
             name.setText(list.get(i).getMusicName());
             user.setText(list.get(i).getMusicPlayer());
+
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO
+                    Intent intent = new Intent(MusicDetailActivity.this, MusicPlayActivity.class);
+                    startActivity(intent);
                 }
             });
-
             mPlayList.addView(view);
         }
     }

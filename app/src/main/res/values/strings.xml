@@ -22,6 +22,7 @@
     <string name="book_author_detail">作者简介</string>
     <string name="book_table">目录</string>
     <string name="weather_change">切换</string>
+    <string name="music_total_end">首</string>
 
     <string-array name="tab_name">
         <item>新闻</item>

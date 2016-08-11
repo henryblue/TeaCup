@@ -157,7 +157,7 @@ public class QiubaiFragment extends BaseFragment implements SwipeRefreshLayout.O
      */
     private void startLoadData() {
         mPageNum++;
-        if (mPageNum > 9) {
+        if (mPageNum > 20) {
             mRecyclerView.loadMoreComplete();
             Toast.makeText(getContext(), "没有更多的数据了...", Toast.LENGTH_SHORT).show();
             return;

@@ -109,7 +109,6 @@ public class MusicFragment extends BaseFragment implements SwipeRefreshLayout.On
         });
     }
 
-
     private void setupRefreshLayout() {
         mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);

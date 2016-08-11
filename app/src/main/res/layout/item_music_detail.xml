@@ -3,6 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="60dp"
+    android:background="?android:attr/selectableItemBackground"
     android:padding="10dp"
     android:orientation="horizontal">
 
@@ -13,7 +14,6 @@
         android:gravity="center"
         android:layout_gravity="center_vertical"
         android:textColor="@color/black"
-        android:text="01"
         android:textSize="15sp"/>
 
     <RelativeLayout
@@ -23,7 +23,6 @@
 
         <ImageView
             android:id="@+id/iv_play_img"
-            android:src="@drawable/photo_icon"
             android:layout_width="40dp"
             android:layout_height="40dp" />
         <TextView
@@ -35,14 +34,12 @@
             android:textColor="@color/black"
             android:singleLine="true"
             android:ellipsize="end"
-            android:text="chafsdfh42512"
             android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/tv_play_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="chafsdfh"
             android:singleLine="true"
             android:ellipsize="end"
             android:textSize="14sp"

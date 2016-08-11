@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,7 +22,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.app.adapter.FindRecycleAdapter;
@@ -33,6 +33,7 @@ import com.app.teacup.R;
 import com.app.util.HttpUtils;
 import com.app.util.JsonUtils;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.apache.http.util.EncodingUtils;
 
@@ -270,8 +271,13 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void showAddDialog() {
-        final EditText editText = new EditText(getContext());
+        final MaterialEditText editText = new MaterialEditText(getContext());
         editText.setHint(R.string.input_hint);
+        editText.setMetTextColor(Color.parseColor("#009688"));
+        editText.setPrimaryColor(Color.parseColor("#009688"));
+        editText.setMaxCharacters(20);
+        editText.setErrorColor(Color.parseColor("#ff0000"));
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.add_book)
                 .setView(editText, 30, 20, 20, 20)
