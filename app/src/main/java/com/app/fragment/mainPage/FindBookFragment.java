@@ -32,6 +32,7 @@ import com.app.teacup.BookDetailActivity;
 import com.app.teacup.R;
 import com.app.util.HttpUtils;
 import com.app.util.JsonUtils;
+import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -98,7 +99,7 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
                 Context.MODE_PRIVATE);
         String url = pref.getString("url", "");
         if (TextUtils.isEmpty(url)) {
-            url = getContext().getResources().getString(R.string.url_address);
+            url = urlUtils.DOUBAN_URL_ADDR;
         } else {
             mDatas.clear();
         }
@@ -292,12 +293,11 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private void doSearch(String bookName) {
         if (!TextUtils.isEmpty(bookName)) {
-            String header = getString(R.string.url_scheme);
-            String url = header + "search?q=" + bookName + "&fields=all";
+            String url = urlUtils.DOUBAN_URL_SEARCH + "search?q=" + bookName + "&fields=all";
             SharedPreferences.Editor edit = getContext().getSharedPreferences("config",
                     Context.MODE_PRIVATE).edit();
             edit.putString("url", url);
-            edit.commit();
+            edit.apply();
             StartRefreshPage();
         }
     }

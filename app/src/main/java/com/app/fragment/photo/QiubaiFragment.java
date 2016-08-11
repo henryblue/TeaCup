@@ -20,6 +20,7 @@ import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
 import com.app.teacup.ShowPhotoActivity;
 import com.app.util.HttpUtils;
+import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -137,8 +138,7 @@ public class QiubaiFragment extends BaseFragment implements SwipeRefreshLayout.O
      */
     private void startRefreshData() {
         mImgUrl.clear();
-        String url = "http://www.qiushibaike18.com/";
-        HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
+        HttpUtils.sendHttpRequest(urlUtils.QIUBAI18_URL, new HttpUtils.HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
                 parsePhotoData(response);
@@ -157,12 +157,13 @@ public class QiubaiFragment extends BaseFragment implements SwipeRefreshLayout.O
      */
     private void startLoadData() {
         mPageNum++;
-        if (mPageNum > 20) {
+        if (mPageNum > 50) {
             mRecyclerView.loadMoreComplete();
-            Toast.makeText(getContext(), "没有更多的数据了...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.not_have_more_data,
+                    Toast.LENGTH_SHORT).show();
             return;
         }
-        String url = "http://www.qiushibaike18.com/page/" + mPageNum + "/";
+        String url = urlUtils.QIUBAI18_NEXT_URL + mPageNum + "/";
         HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
@@ -232,7 +233,8 @@ public class QiubaiFragment extends BaseFragment implements SwipeRefreshLayout.O
 
     @Override
     protected void onLoadDataError() {
-        Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getString(R.string.refresh_net_error),
+                Toast.LENGTH_SHORT).show();
         mRecyclerView.loadMoreComplete();
     }
 
@@ -246,7 +248,8 @@ public class QiubaiFragment extends BaseFragment implements SwipeRefreshLayout.O
     protected void onRefreshError() {
         mRefreshLayout.setRefreshing(false);
         mRecyclerView.refreshComplete();
-        Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getString(R.string.refresh_net_error),
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override

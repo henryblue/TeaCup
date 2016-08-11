@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.app.bean.WeatherInfo;
 import com.app.util.OkHttpUtils;
 import com.app.util.ToolUtils;
+import com.app.util.urlUtils;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Request;
 
@@ -38,7 +39,7 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     private void startLoadData() {
-        String url = getString(R.string.url_weather) + "上海";
+        String url = urlUtils.WEATHER_URL + getString(R.string.default_city);
         OkHttpUtils.getAsyn(url, new OkHttpUtils.ResultCallback<String>() {
 
             @Override

@@ -19,6 +19,7 @@ import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
 import com.app.teacup.ShowPhotoActivity;
 import com.app.util.HttpUtils;
+import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -119,8 +120,7 @@ public class JiandanMeiziFragment extends BaseFragment implements SwipeRefreshLa
 
     private void startRefreshData() {
         mImgUrl.clear();
-        String url = "http://jandan.net/ooxx";
-        HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
+        HttpUtils.sendHttpRequest(urlUtils.JIANDAN_URL, new HttpUtils.HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
                 parsePhotoData(response);
@@ -136,7 +136,7 @@ public class JiandanMeiziFragment extends BaseFragment implements SwipeRefreshLa
 
     private void startLoadData() {
         mainPageId--;
-        String url = "http://jandan.net/ooxx/page-" + mainPageId + "#comments";
+        String url = urlUtils.JIANDAN_NEXT_URL + mainPageId + urlUtils.JIANDAN_NEXT_ID;
         HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
@@ -196,7 +196,8 @@ public class JiandanMeiziFragment extends BaseFragment implements SwipeRefreshLa
 
     @Override
     protected void onLoadDataError() {
-        Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getString(R.string.refresh_net_error),
+                Toast.LENGTH_SHORT).show();
         mRecyclerView.loadMoreComplete();
     }
 
@@ -210,7 +211,8 @@ public class JiandanMeiziFragment extends BaseFragment implements SwipeRefreshLa
     protected void onRefreshError() {
         mRefreshLayout.setRefreshing(false);
         mRecyclerView.refreshComplete();
-        Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getString(R.string.refresh_net_error),
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override

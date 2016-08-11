@@ -1,9 +1,6 @@
 <resources>
     <string name="app_name">TeaCup</string>
     <string name="user_name">Hathaway</string>
-    <string name="url_address">https://api.douban.com/v2/book/search?q=你好&amp;fields=all</string>
-    <string name="url_scheme">https://api.douban.com/v2/book/</string>
-    <string name="url_weather">http://wthrcdn.etouch.cn/weather_mini?city=</string>
     <string name="search">搜索</string>
     <string name="share">分享</string>
     <string name="settings">设置</string>
@@ -23,6 +20,9 @@
     <string name="book_table">目录</string>
     <string name="weather_change">切换</string>
     <string name="music_total_end">首</string>
+    <string name="default_city">上海</string>
+    <string name="refresh_net_error">刷新失败, 请检查网络</string>
+    <string name="not_have_more_data">没有更多的数据了…</string>
 
     <string-array name="tab_name">
         <item>新闻</item>
@@ -34,6 +34,6 @@
         <item>煎蛋妹子</item>
         <item>豆瓣妹子</item>
         <item>搞笑图片</item>
-        <item>糗百福利</item>
+        <item>糗百18</item>
     </string-array>
 </resources>

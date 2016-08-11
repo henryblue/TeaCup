@@ -20,6 +20,7 @@ import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
 import com.app.teacup.ShowPhotoActivity;
 import com.app.util.OkHttpUtils;
+import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.squareup.okhttp.Request;
@@ -129,8 +130,7 @@ public class GaoxiaoFragment extends BaseFragment implements SwipeRefreshLayout.
      */
     private void startRefreshData() {
         mImgUrl.clear();
-        String url = "http://www.qiushibaike.com/pic/";
-        OkHttpUtils.getAsyn(url, new OkHttpUtils.ResultCallback<String>() {
+        OkHttpUtils.getAsyn(urlUtils.GAOXIAO_URL, new OkHttpUtils.ResultCallback<String>() {
 
             @Override
             public void onError(Request request, Exception e) {
@@ -149,14 +149,15 @@ public class GaoxiaoFragment extends BaseFragment implements SwipeRefreshLayout.
      * 下拉加载
      */
     private void startLoadData() {
-        if (mPageNum > 9) {
-            Toast.makeText(getContext(), "没有更多数据了...", Toast.LENGTH_SHORT).show();
+        if (mPageNum > 35) {
+            Toast.makeText(getContext(), getString(R.string.not_have_more_data),
+                    Toast.LENGTH_SHORT).show();
             mRecyclerView.loadMoreComplete();
             return;
         }
         mPageNum++;
 
-        String url = "http://www.qiushibaike.com/pic/page/" + mPageNum + "/?s=4902398";
+        String url = urlUtils.GAOXIAO_URL_NEXT + mPageNum + urlUtils.GAOXIAO_URL_NEXT_ID;
         OkHttpUtils.getAsyn(url, new OkHttpUtils.ResultCallback<String>() {
 
             @Override
@@ -221,7 +222,8 @@ public class GaoxiaoFragment extends BaseFragment implements SwipeRefreshLayout.
 
     @Override
     protected void onLoadDataError() {
-        Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getString(R.string.refresh_net_error),
+                Toast.LENGTH_SHORT).show();
         mRecyclerView.loadMoreComplete();
     }
 
@@ -235,7 +237,8 @@ public class GaoxiaoFragment extends BaseFragment implements SwipeRefreshLayout.
     protected void onRefreshError() {
         mRefreshLayout.setRefreshing(false);
         mRecyclerView.refreshComplete();
-        Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getString(R.string.refresh_net_error),
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override
