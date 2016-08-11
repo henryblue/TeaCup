@@ -34,12 +34,12 @@
     <dimen name="fragment_detail_textview_padding">10dp</dimen>
     <dimen name="fragment_detail_textview_textsize">16sp</dimen>
 
-    <dimen name="item_find_fragment_cardCornerRadius">10dp</dimen>
+    <dimen name="item_find_fragment_cardCornerRadius">6dp</dimen>
     <dimen name="item_find_fragment_cardElevation">10dp</dimen>
-    <dimen name="item_find_fragment_marginleft">24dp</dimen>
-    <dimen name="item_find_fragment_marginright">24dp</dimen>
-    <dimen name="item_find_fragment_margintop">10dp</dimen>
-    <dimen name="item_find_fragment_marginbottom">16dp</dimen>
+    <dimen name="item_find_fragment_marginleft">14dp</dimen>
+    <dimen name="item_find_fragment_marginright">14dp</dimen>
+    <dimen name="item_find_fragment_margintop">8dp</dimen>
+    <dimen name="item_find_fragment_marginbottom">8dp</dimen>
     <dimen name="item_find_fragment_imageview_width">125dp</dimen>
     <dimen name="item_find_fragment_imageview_height">170dp</dimen>
     <dimen name="item_find_fragment_imageview_margin">10dp</dimen>

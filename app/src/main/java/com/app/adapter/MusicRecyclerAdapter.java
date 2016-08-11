@@ -49,7 +49,7 @@ public class MusicRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         final MusicViewHolder myHolder = (MusicViewHolder) holder;
         Glide.with(mContext).load(url).asBitmap()
                 .error(R.drawable.photo_loaderror)
-                .placeholder(R.drawable.photo_default)
+                .placeholder(R.drawable.main_load_bg)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .dontAnimate()
                 .into(myHolder.mPhotoImg);

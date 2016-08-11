@@ -120,7 +120,7 @@ public class FindRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         Glide.with(mContext).load(info.getmImgUrl())
                 .centerCrop()
                 .error(R.drawable.photo_loaderror)
-                .placeholder(R.drawable.photo_default)
+                .placeholder(R.drawable.main_load_bg)
                 .crossFade()
                 .into(myHolder.mBookImg);
     }
