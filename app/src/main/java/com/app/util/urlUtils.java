@@ -9,6 +9,7 @@ public class urlUtils {
 
     public static final String MUSIC_URL = "http://www.luoo.net/music/";
     public static final String MUSIC_NEXT_URL = "http://www.luoo.net/tag/?p=";
+    public static final String MUSIC_PLAYER_URL = "http://luoo-mp3.kssws.ks-cdn.com/low/luoo/radio";
 
     public static final String DOUBAN_MEINV_URL = "http://www.dbmeinv.com/dbgroup/show.htm?pager_offset=1";
     public static final String DOUBAN_MEINV_NEXT_URL = "http://www.dbmeinv.com/dbgroup/show.htm?pager_offset=";
@@ -25,4 +26,7 @@ public class urlUtils {
     public static final String QIUBAI18_NEXT_URL = "http://www.qiushibaike18.com/page/";
 
     public static final String WENZI_URL = "http://www.fqpai.com/writing";
+
+    public static final String NEWS_JIANDAN_URL = "http://jandan.net/page/2";
+
 }

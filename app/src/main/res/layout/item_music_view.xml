@@ -3,24 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="310dp"
-    android:layout_marginLeft="3dp"
-    android:layout_marginRight="3dp"
-    android:layout_marginTop="2dp"
-    android:layout_marginBottom="14dp"
-    app:cardElevation="5dp">
+    android:layout_height="@dimen/item_music_view_height"
+    android:layout_marginLeft="@dimen/item_music_view_marginleft"
+    android:layout_marginRight="@dimen/item_music_view_marginright"
+    android:layout_marginTop="@dimen/item_music_view_marginTop"
+    android:layout_marginBottom="@dimen/item_music_view_marginBottom"
+    app:cardElevation="@dimen/item_music_view_elevation">
 
     <ImageView
         android:id="@+id/iv_music"
         android:layout_width="match_parent"
         android:transitionName="@string/transition_music_img"
-        android:layout_height="250dp"
+        android:layout_height="@dimen/item_music_img_height"
         android:scaleType="centerCrop"
         tools:targetApi="lollipop" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/item_music_view_content_height"
         android:orientation="vertical"
         android:layout_gravity="bottom">
         <TextView
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textSize="18sp"
+            android:textSize="@dimen/item_music_view_title_textsize"
             android:singleLine="true"
             android:ellipsize="end"
             android:textColor="@color/gray"/>
@@ -43,27 +43,27 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
                 <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="@dimen/item_music_view_img_width"
+                    android:layout_height="@dimen/item_music_view_img_width"
                     android:src="@drawable/music_heart"/>
                 <TextView
                     android:id="@+id/tv_happy"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="@dimen/item_music_view_happy_marginLeft"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"
+                    android:textSize="@dimen/item_music_view_happy_textsize"
                     android:textColor="@color/gray"/>
                 <ImageView
-                    android:layout_marginLeft="30dp"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_marginLeft="@dimen/item_music_view_img_marginleft"
+                    android:layout_width="@dimen/item_music_view_img_width"
+                    android:layout_height="@dimen/item_music_view_img_width"
                     android:src="@drawable/music_info"/>
                 <TextView
                     android:id="@+id/tv_info"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="@dimen/item_music_view_info_marginleft"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"
+                    android:textSize="@dimen/item_music_view_happy_textsize"
                     android:textColor="@color/gray"/>
             </LinearLayout>
         </RelativeLayout>

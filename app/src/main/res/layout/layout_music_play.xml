@@ -9,62 +9,64 @@
     <info.abdolahi.CircularMusicProgressBar
         android:id="@+id/album_art"
         android:layout_width="wrap_content"
-        android:layout_height="250dp"
+        android:layout_height="@dimen/music_play_progressbar_height"
         android:layout_gravity="center"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="@dimen/music_play_progressbar_marginTop"
         android:src="@drawable/maron5"
-        app:progress_border_color="#00796B"
-        app:border_width="3dp"
+        app:progress_border_color="@color/progressBorderColor"
+        app:border_width="@dimen/music_play_progressbar_borderWidth"
         app:centercircle_diammterer=".97"
         app:progress_color="@color/yellow"
-        app:progress_startAngle="40" />
+        app:progress_startAngle="0" />
 
 
     <TextView
+        android:id="@+id/tv_music_play_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="@dimen/music_play_title_marginTop"
         android:gravity="center"
         android:text="这就是命"
         android:textColor="@android:color/primary_text_dark"
-        android:textSize="25sp"
+        android:textSize="@dimen/music_play_title_textSize"
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/tv_music_play_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="黄渤"
         android:textColor="@android:color/primary_text_dark"
-        android:textSize="16sp" />
+        android:textSize="@dimen/music_play_user_textSize" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="50dp">
+        android:padding="@dimen/music_play_controller_padding">
 
         <ImageButton
-            android:id="@+id/pre"
+            android:id="@+id/ib_pre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="@dimen/music_play_pre_marginRight"
             android:background="@null"
             android:src="@drawable/ic_fast_rewind_black_24dp" />
 
         <ImageButton
-            android:id="@+id/play"
+            android:id="@+id/ib_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
             android:src="@drawable/ic_play_circle_outline_black_24dp" />
 
         <ImageButton
-            android:id="@+id/next"
+            android:id="@+id/ib_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="@dimen/music_play_next_marginLeft"
             android:background="@null"
             android:src="@drawable/ic_fast_forward_black_24dp" />
     </LinearLayout>

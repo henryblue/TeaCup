@@ -21,6 +21,7 @@ import com.app.bean.Music.MusicDetail;
 import com.app.bean.Music.MusicDetailInfo;
 import com.app.bean.Music.MusicInfo;
 import com.app.util.HttpUtils;
+import com.app.util.urlUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -218,8 +219,7 @@ public class MusicDetailActivity extends AppCompatActivity {
         String id = mMusicInfo.getTitle().substring(4, 7);
         for (int i = 1; i <= musicList.size(); i++) {
             String num = String.format("%02d", i);
-            String musicUrl = "http://luoo-mp3.kssws.ks-cdn.com/low/luoo/radio" +
-                    id + "/" + num + ".mp3";
+            String musicUrl = urlUtils.MUSIC_PLAYER_URL + id + "/" + num + ".mp3";
             musicList.get(i - 1).setMusicUrl(musicUrl);
         }
 

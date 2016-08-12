@@ -53,4 +53,92 @@
     <dimen name="layout_book_detail_CollapsingToolbarLayout_MarginEnd">64dp</dimen>
     <dimen name="layout_book_detail_CollapsingToolbarLayout_MarginStart">48dp</dimen>
 
+    <dimen name="muisic_detail_title_margintop">15dp</dimen>
+    <dimen name="muisic_detail_title_marginleft">15dp</dimen>
+    <dimen name="muisic_detail_title_textsize">20sp</dimen>
+    <dimen name="muisic_detail_type_margintop">10dp</dimen>
+    <dimen name="muisic_detail_type_marginleft">15dp</dimen>
+    <dimen name="muisic_detail_type_textsize">13sp</dimen>
+    <dimen name="muisic_detail_content_margin">13dp</dimen>
+    <dimen name="muisic_detail_content_textsize">14sp</dimen>
+    <dimen name="muisic_detail_total_height">40dp</dimen>
+    <dimen name="muisic_detail_total_textsize">16sp</dimen>
+    <dimen name="muisic_detail_total_margintop">12dp</dimen>
+
+    <dimen name="item_muisic_detail_layout_padding">10dp</dimen>
+    <dimen name="item_muisic_detail_layout_height">60dp</dimen>
+    <dimen name="item_muisic_detail_index_width">40dp</dimen>
+    <dimen name="item_muisic_detail_index_height">40dp</dimen>
+    <dimen name="item_muisic_detail_index_textsize">15sp</dimen>
+    <dimen name="item_muisic_detail_rlayout_height">40dp</dimen>
+    <dimen name="item_muisic_detail_img_width">40dp</dimen>
+    <dimen name="item_muisic_detail_img_height">40dp</dimen>
+    <dimen name="item_muisic_detail_name_marginleft">10dp</dimen>
+    <dimen name="item_muisic_detail_name_textsize">14sp</dimen>
+    <dimen name="item_muisic_detail_user_textsize">14sp</dimen>
+
+    <dimen name="item_music_view_height">310dp</dimen>
+    <dimen name="item_music_view_marginleft">3dp</dimen>
+    <dimen name="item_music_view_marginright">3dp</dimen>
+    <dimen name="item_music_view_marginTop">2dp</dimen>
+    <dimen name="item_music_view_marginBottom">14dp</dimen>
+    <dimen name="item_music_view_elevation">5dp</dimen>
+    <dimen name="item_music_img_height">250dp</dimen>
+    <dimen name="item_music_view_content_height">50dp</dimen>
+    <dimen name="item_music_view_title_textsize">18sp</dimen>
+    <dimen name="item_music_view_img_width">16dp</dimen>
+    <dimen name="item_music_view_happy_textsize">16sp</dimen>
+    <dimen name="item_music_view_happy_marginLeft">5dp</dimen>
+    <dimen name="item_music_view_img_marginleft">30dp</dimen>
+    <dimen name="item_music_view_info_marginleft">5dp</dimen>
+
+    <dimen name="photo_gaoxiao_layout_height">290dp</dimen>
+    <dimen name="photo_gaoxiao_layout_margin">8dp</dimen>
+    <dimen name="photo_gaoxiao_tip_layout_height">30dp</dimen>
+    <dimen name="photo_gaoxiao_tip_layout_marginLeft">16dp</dimen>
+    <dimen name="photo_gaoxiao_tip_img_width">30dp</dimen>
+    <dimen name="photo_gaoxiao_tip_img_height">30dp</dimen>
+    <dimen name="photo_gaoxiao_tip_title_marginLeft">8dp</dimen>
+    <dimen name="photo_gaoxiao_tip_title_textSize">16sp</dimen>
+    <dimen name="photo_gaoxiao_content_marginLeft">16dp</dimen>
+    <dimen name="photo_gaoxiao_content_marginTop">5dp</dimen>
+    <dimen name="photo_gaoxiao_content_marginRight">16dp</dimen>
+    <dimen name="photo_gaoxiao_content_textSize">17sp</dimen>
+    <dimen name="photo_gaoxiao_photo_marginTop">8dp</dimen>
+    <dimen name="photo_gaoxiao_photo_marginBottom">8dp</dimen>
+    <dimen name="photo_gaoxiao_photo_marginLeft">16dp</dimen>
+    <dimen name="photo_gaoxiao_photo_marginRight">16dp</dimen>
+
+    <dimen name="photo_qiubai_layout_height">270dp</dimen>
+    <dimen name="photo_qiubai_layout_margin">7dp</dimen>
+    <dimen name="photo_qiubai_tip_height">50dp</dimen>
+    <dimen name="photo_qiubai_tip_img_marginLeft">16dp</dimen>
+    <dimen name="photo_qiubai_tip_img_width">40dp</dimen>
+    <dimen name="photo_qiubai_tip_img_height">40dp</dimen>
+    <dimen name="photo_qiubai_tip_title_marginLeft">8dp</dimen>
+    <dimen name="photo_qiubai_tip_title_textsize">18sp</dimen>
+    <dimen name="photo_qiubai_photo_marginLeft">16dp</dimen>
+    <dimen name="photo_qiubai_photo_marginBottom">8dp</dimen>
+    <dimen name="photo_qiubai_photo_marginRight">16dp</dimen>
+    <dimen name="photo_qiubai_gif_width">50dp</dimen>
+    <dimen name="photo_qiubai_gif_height">50dp</dimen>
+
+    <dimen name="item_photo_view_height">270dp</dimen>
+    <dimen name="item_photo_view_margin">5dp</dimen>
+    <dimen name="item_photo_view_img_margin">4dp</dimen>
+    <dimen name="item_photo_view_img_height">225dp</dimen>
+    <dimen name="item_photo_view_title_height">40dp</dimen>
+    <dimen name="item_photo_view_title_tiexSize">17sp</dimen>
+    <dimen name="item_photo_view_title_marginLeft">8dp</dimen>
+    <dimen name="item_photo_view_title_marginRight">8dp</dimen>
+
+    <dimen name="music_play_progressbar_height">250dp</dimen>
+    <dimen name="music_play_progressbar_marginTop">40dp</dimen>
+    <dimen name="music_play_progressbar_borderWidth">3dp</dimen>
+    <dimen name="music_play_title_marginTop">60dp</dimen>
+    <dimen name="music_play_title_textSize">25sp</dimen>
+    <dimen name="music_play_user_textSize">16sp</dimen>
+    <dimen name="music_play_controller_padding">50dp</dimen>
+    <dimen name="music_play_pre_marginRight">20dp</dimen>
+    <dimen name="music_play_next_marginLeft">20dp</dimen>
 </resources>
