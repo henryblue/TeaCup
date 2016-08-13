@@ -182,7 +182,13 @@ public class GaoxiaoFragment extends BaseFragment implements SwipeRefreshLayout.
     private void parsePhotoData(String response) {
         Document document = Jsoup.parse(response);
         Element content = document.getElementById("content-left");
+        if (content == null) {
+            return;
+        }
         Elements articles = content.getElementsByClass("article");
+        if (articles == null) {
+            return;
+        }
         for (Element art : articles) {
             PhotoInfo info = new PhotoInfo();
 

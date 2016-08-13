@@ -27,6 +27,7 @@ public class urlUtils {
 
     public static final String WENZI_URL = "http://www.fqpai.com/writing";
 
-    public static final String NEWS_JIANDAN_URL = "http://jandan.net/page/2";
+    public static final String NEWS_JIANDAN_URL = "http://jandan.net";
+    public static final String NEWS_NEXT_URL = "http://jandan.net/page/";
 
 }

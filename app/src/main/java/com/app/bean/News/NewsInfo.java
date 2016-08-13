@@ -3,8 +3,17 @@ package com.app.bean.News;
 
 public class NewsInfo {
     private String imgUrl;
+    private String nextUrl;
     private String title;
     private String label;
+
+    public String getNextUrl() {
+        return nextUrl;
+    }
+
+    public void setNextUrl(String nextUrl) {
+        this.nextUrl = nextUrl;
+    }
 
     public String getImgUrl() {
         return imgUrl;
