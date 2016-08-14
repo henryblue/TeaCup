@@ -25,7 +25,8 @@
     <string name="refresh_net_error">刷新失败, 请检查网络</string>
     <string name="not_have_more_data">没有更多的数据了…</string>
     <string name="screen_shield">抱歉, 网站将您ip屏蔽, 请换个网络重试</string>
-
+    <string name="music_play_pre">当前已经是第一首</string>
+    <string name="load_music_error">音乐文件加载出错</string>
     <string-array name="tab_name">
         <item>新闻</item>
         <item>视频</item>

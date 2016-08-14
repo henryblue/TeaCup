@@ -1,7 +1,9 @@
 package com.app.bean.Music;
 
 
-public class MusicDetail {
+import java.io.Serializable;
+
+public class MusicDetail implements Serializable {
     private String musicName;
     private String musicPlayer;
     private String imgUrl;

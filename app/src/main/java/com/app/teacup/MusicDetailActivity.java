@@ -1,20 +1,15 @@
 package com.app.teacup;
 
 
-import android.animation.Animator;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,8 +28,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,10 +154,13 @@ public class MusicDetailActivity extends AppCompatActivity {
             name.setText(list.get(i).getMusicName());
             user.setText(list.get(i).getMusicPlayer());
 
+            final int finalI = i;
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(MusicDetailActivity.this, MusicPlayActivity.class);
+                    intent.putExtra("position", finalI);
+                    intent.putExtra("musicList", (Serializable) mDetailInfo.getMusicList());
                     startActivity(intent);
                 }
             });
