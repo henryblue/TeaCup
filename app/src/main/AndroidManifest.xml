@@ -28,6 +28,7 @@
             android:theme="@style/FlashTheme" />
         <activity android:name=".MusicDetailActivity" />
         <activity android:name=".MusicPlayActivity" />
+        <activity android:name=".NewsDetailActivity" />
 
         <service android:name="com.app.service.LocationService" />
     </application>

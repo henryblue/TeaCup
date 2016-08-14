@@ -83,7 +83,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         myHolder.mLabel.setText(info.getLabel());
 
         if (mListener != null) {
-            myHolder.mPhotoImg.setOnClickListener(new View.OnClickListener() {
+            myHolder.mainView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int pos = getRealPosition(myHolder);
@@ -142,9 +142,11 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         private TextView mTitle;
         private ImageView mPhotoImg;
         private TextView mLabel;
+        private View mainView;
 
         public NewsViewHolder(View itemView) {
             super(itemView);
+            mainView = itemView;
             mPhotoImg = (ImageView) itemView.findViewById(R.id.iv_news_img);
             mTitle = (TextView) itemView.findViewById(R.id.tv_news_title);
             mLabel = (TextView) itemView.findViewById(R.id.tv_news_label);

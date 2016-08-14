@@ -2,6 +2,7 @@ package com.app.fragment.mainPage;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.app.adapter.NewsRecyclerAdapter;
 import com.app.bean.News.NewsInfo;
 import com.app.fragment.BaseFragment;
+import com.app.teacup.NewsDetailActivity;
 import com.app.teacup.R;
 import com.app.util.HttpUtils;
 import com.app.util.urlUtils;
@@ -110,6 +112,11 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         mNewsRecyclerAdapter.setOnItemClickListener(new NewsRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                Log.i(TAG, "enter===onintenclick==pos==" + position);
+                Intent intent = new Intent(getContext(), NewsDetailActivity.class);
+                intent.putExtra("newsDetailUrl", mNewsDatas.get(position).getNextUrl());
+                intent.putExtra("newsTitle", mNewsDatas.get(position).getTitle());
+                startActivity(intent);
             }
         });
     }
@@ -243,10 +250,15 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     @Override
     protected void onRefreshFinish() {
-        initImageViewList();
-        mRecyclerView.refreshComplete();
-        mRefreshLayout.setRefreshing(false);
-        mNewsRecyclerAdapter.reSetData(mNewsDatas);
+        if (mNewsDatas.size() <= 0) {
+            Toast.makeText(getContext(), getString(R.string.screen_shield),
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            initImageViewList();
+            mRecyclerView.refreshComplete();
+            mRefreshLayout.setRefreshing(false);
+            mNewsRecyclerAdapter.reSetData(mNewsDatas);
+        }
     }
 
     @Override

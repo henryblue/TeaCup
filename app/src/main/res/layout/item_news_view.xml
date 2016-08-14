@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:layout_margin="3dp"
-    app:cardElevation="@dimen/item_music_view_elevation">
+    app:cardElevation="@dimen/item_news_view_elevation">
 
     <RelativeLayout
         android:layout_gravity="center_vertical"

@@ -52,7 +52,15 @@ public class ReactViewPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        container.addView(mImageViewList.get(position % mImageViewList.size()));
+        if (mImageViewList.get(position % mImageViewList.size()).getParent() != null) {
+            ((ViewPager)mImageViewList.get(position % mImageViewList.size()).getParent()).
+                    removeView(mImageViewList.get(position % mImageViewList.size()));
+        }
+        try {
+            container.addView(mImageViewList.get(position % mImageViewList.size()));
+        } catch (Exception e) {
+
+        }
         return mImageViewList.get(position % mImageViewList.size());
     }
 

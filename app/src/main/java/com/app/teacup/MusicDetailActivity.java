@@ -3,13 +3,16 @@ package com.app.teacup;
 
 import android.animation.Animator;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.ImageView;
@@ -30,6 +33,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,16 +79,17 @@ public class MusicDetailActivity extends AppCompatActivity {
         startLoadData();
     }
 
-    private void startAnimator() {
-        int cx = (mCollapsingToolbar.getLeft() + mCollapsingToolbar.getRight()) / 2;
-        int cy = (mCollapsingToolbar.getTop() + mCollapsingToolbar.getBottom()) / 2;
-
-        int finalRadius = mCollapsingToolbar.getWidth();
-
-        Animator anim =
-                ViewAnimationUtils.createCircularReveal(mCollapsingToolbar, cx, cy, 0, finalRadius);
-        anim.start();
-    }
+//    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+//    private void startAnimator() {
+//        int cx = (mCollapsingToolbar.getLeft() + mCollapsingToolbar.getRight()) / 2;
+//        int cy = (mCollapsingToolbar.getTop() + mCollapsingToolbar.getBottom()) / 2;
+//
+//        int finalRadius = mCollapsingToolbar.getWidth();
+//
+//        Animator anim =
+//                ViewAnimationUtils.createCircularReveal(mCollapsingToolbar, cx, cy, 0, finalRadius);
+//        anim.start();
+//    }
 
     private void initToolBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.music_toolbar);
@@ -189,9 +195,7 @@ public class MusicDetailActivity extends AppCompatActivity {
     }
 
     private void parseMusicData(String response) {
-
         Document document = Jsoup.parse(response);
-
         Element playlist = document.getElementById("luooPlayerPlaylist");
         Element element = playlist.getElementsByClass("w").get(0);
         Element head = element.getElementsByClass("vol-head").get(0);

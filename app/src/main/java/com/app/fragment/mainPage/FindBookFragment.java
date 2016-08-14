@@ -57,8 +57,9 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
     private FloatingActionButton mAddBtn;
     private SwipeRefreshLayout mRefreshLayout;
     private FindRecycleAdapter mAdapter;
+    private XRecyclerView recyclerView;
 
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -67,10 +68,12 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
                     initLoadData();
                     break;
                 case REFRESH_FINISH:
+                    recyclerView.refreshComplete();
                     mRefreshLayout.setRefreshing(false);
                     mAdapter.reSetData(mDatas);
                     break;
                 case LOAD_DATA_ERROR:
+                    recyclerView.refreshComplete();
                     mRefreshLayout.setRefreshing(false);
                     if (mDatas.size() <= 0) {
                         readDataFromFile();
@@ -239,14 +242,26 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void setupRecycleView(View view) {
-        XRecyclerView recyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
+        recyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
         recyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLoadingMoreEnabled(false);
-        recyclerView.setPullRefreshEnabled(false);
+        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                Message msg = Message.obtain();
+                msg.what = REFRESH_START;
+                mHandler.sendMessage(msg);
+            }
+
+            @Override
+            public void onLoadMore() {
+
+            }
+        });
 
         mAdapter = new FindRecycleAdapter(getContext(), mDatas);
         mAdapter.setOnItemClickListener(new FindRecycleAdapter.OnItemClickListener() {
