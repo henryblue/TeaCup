@@ -179,9 +179,11 @@ public class QiubaiFragment extends BaseFragment implements SwipeRefreshLayout.O
     }
 
     public void sendParseDataMessage(int message) {
-        Message msg = Message.obtain();
-        msg.what = message;
-        mHandler.sendMessage(msg);
+        if (mHandler != null) {
+            Message msg = Message.obtain();
+            msg.what = message;
+            mHandler.sendMessage(msg);
+        }
     }
 
     private void parsePhotoData(String response) {

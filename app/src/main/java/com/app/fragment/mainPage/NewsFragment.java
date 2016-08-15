@@ -32,13 +32,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * 数据来源于煎蛋网
@@ -272,9 +267,11 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     }
 
     public void sendParseDataMessage(int message) {
-        Message msg = Message.obtain();
-        msg.what = message;
-        mHandler.sendMessage(msg);
+        if (mHandler != null) {
+            Message msg = Message.obtain();
+            msg.what = message;
+            mHandler.sendMessage(msg);
+        }
     }
 
     @Override

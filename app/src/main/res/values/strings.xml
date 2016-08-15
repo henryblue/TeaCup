@@ -28,9 +28,9 @@
     <string name="music_play_pre">当前已经是第一首</string>
     <string name="load_music_error">音乐文件加载出错</string>
     <string-array name="tab_name">
-        <item>新闻</item>
+        <item>新鲜事</item>
         <item>视频</item>
-        <item>音乐</item>
+        <item>音乐期刊</item>
         <item>搜书</item>
     </string-array>
     <string-array name="tab_photo">

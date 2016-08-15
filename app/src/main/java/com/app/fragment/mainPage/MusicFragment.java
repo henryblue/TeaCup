@@ -233,8 +233,10 @@ public class MusicFragment extends BaseFragment implements SwipeRefreshLayout.On
     }
 
     public void sendParseDataMessage(int message) {
-        Message msg = Message.obtain();
-        msg.what = message;
-        mHandler.sendMessage(msg);
+        if (mHandler != null) {
+            Message msg = Message.obtain();
+            msg.what = message;
+            mHandler.sendMessage(msg);
+        }
     }
 }

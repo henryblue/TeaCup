@@ -82,7 +82,8 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
                     }
                     break;
                 case READ_DATA_FROM_FILE_FINISH:
-                    Toast.makeText(getContext(), "刷新失败, 请检查网络", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.refresh_net_error),
+                            Toast.LENGTH_SHORT).show();
                     mAdapter.reSetData(mDatas);
                     break;
                 default:
@@ -123,9 +124,11 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     public void sendParseDataMessage(int message) {
-        Message msg = Message.obtain();
-        msg.what = message;
-        mHandler.sendMessage(msg);
+        if (mHandler != null) {
+            Message msg = Message.obtain();
+            msg.what = message;
+            mHandler.sendMessage(msg);
+        }
     }
 
     private void parseDataFromJson(String response) {
@@ -322,5 +325,17 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
         Message msg = Message.obtain();
         msg.what = REFRESH_START;
         mHandler.sendMessage(msg);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mHandler != null) {
+            mHandler.removeMessages(REFRESH_FINISH);
+            mHandler.removeMessages(REFRESH_START);
+            mHandler.removeMessages(LOAD_DATA_ERROR);
+            mHandler.removeMessages(READ_DATA_FROM_FILE_FINISH);
+            mHandler = null;
+        }
+        super.onDestroy();
     }
 }
