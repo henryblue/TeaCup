@@ -16,7 +16,7 @@
         app:border_width="@dimen/music_play_progressbar_borderWidth"
         app:centercircle_diammterer=".97"
         app:progress_color="@color/yellow"
-        app:progress_startAngle="0" />
+        app:progress_startAngle="-90" />
 
 
     <TextView
@@ -26,6 +26,8 @@
         android:layout_marginTop="@dimen/music_play_title_marginTop"
         android:gravity="center"
         android:textColor="@android:color/primary_text_dark"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:textSize="@dimen/music_play_title_textSize"
         android:textStyle="bold" />
 
@@ -34,6 +36,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:textColor="@android:color/primary_text_dark"
         android:textSize="@dimen/music_play_user_textSize" />
 

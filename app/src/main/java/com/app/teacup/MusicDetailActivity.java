@@ -55,7 +55,7 @@ public class MusicDetailActivity extends AppCompatActivity {
                     initData();
                     break;
                 case LOAD_DATA_ERROR:
-                    Toast.makeText(MusicDetailActivity.this, "加载数据失败, 请检查网络",
+                    Toast.makeText(MusicDetailActivity.this, getString(R.string.refresh_net_error),
                             Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -213,7 +213,8 @@ public class MusicDetailActivity extends AppCompatActivity {
             Element trackName = li.getElementsByClass("track-name").get(0);
             music.setMusicName(trackName.text());
             Element trackMeta = li.getElementsByClass("track-meta").get(0);
-            music.setMusicPlayer(trackMeta.text());
+            String[] split = trackMeta.text().split("-");
+            music.setMusicPlayer(split[0]);
             musicList.add(music);
         }
 
