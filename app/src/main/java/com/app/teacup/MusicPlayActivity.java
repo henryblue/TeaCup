@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -37,6 +38,7 @@ public class MusicPlayActivity extends Activity implements View.OnClickListener 
     private Intent mServiceIntent;
     private boolean mIsPlay = true;
     private PLayUpdateReceiver mPLayUpdateReceiver;
+    private HeadsetPlugReceiver mHeadsetPlugReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,13 @@ public class MusicPlayActivity extends Activity implements View.OnClickListener 
         IntentFilter playFilter = new IntentFilter();
         playFilter.addAction(MediaService.OPTION_PLAY_NEXT);
         registerReceiver(mPLayUpdateReceiver, playFilter);
+        registerHeadsetPlugReceiver();
+    }
+
+    private void registerHeadsetPlugReceiver() {
+        mHeadsetPlugReceiver = new HeadsetPlugReceiver();
+        IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        registerReceiver(mHeadsetPlugReceiver, intentFilter);
     }
 
     private void initData() {
@@ -162,6 +171,7 @@ public class MusicPlayActivity extends Activity implements View.OnClickListener 
     protected void onDestroy() {
         unregisterReceiver(mProgressUpdateReceiver);
         unregisterReceiver(mPLayUpdateReceiver);
+        unregisterReceiver(mHeadsetPlugReceiver);
         stopService(mServiceIntent);
         super.onDestroy();
     }
@@ -183,4 +193,21 @@ public class MusicPlayActivity extends Activity implements View.OnClickListener 
         }
     }
 
+    private class HeadsetPlugReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(action)) {
+                if (mIsPlay) {
+                    Intent pauseIntent = new Intent();
+                    pauseIntent.setAction(MediaService.MUSIC_SERVICE_ACTION);
+                    pauseIntent.putExtra("option", MediaService.OPTION_PAUSE);
+                    mPlayButton.setImageResource(R.drawable.play);
+                    mIsPlay = false;
+                    sendBroadcast(pauseIntent);
+                }
+            }
+        }
+    }
 }

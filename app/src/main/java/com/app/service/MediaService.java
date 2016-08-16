@@ -11,14 +11,14 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.app.teacup.R;
 
 
 public class MediaService extends Service implements MediaPlayer.OnCompletionListener,
-        MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnErrorListener {
+        MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnErrorListener,
+        MediaPlayer.OnPreparedListener {
 
     public static final int OPTION_PLAY = 0;
     public static final int OPTION_PAUSE = 1;
@@ -32,7 +32,6 @@ public class MediaService extends Service implements MediaPlayer.OnCompletionLis
     private int mCurrPlayPosition;
     private String mPlayUrl;
     private MusicServiceReceiver mReceiver;
-
 
     private class MusicServiceReceiver extends BroadcastReceiver {
 
@@ -76,6 +75,7 @@ public class MediaService extends Service implements MediaPlayer.OnCompletionLis
             mMediaPlayer.setOnCompletionListener(this);
             mMediaPlayer.setOnSeekCompleteListener(this);
             mMediaPlayer.setOnErrorListener(this);
+            mMediaPlayer.setOnPreparedListener(this);
         }
         mReceiver = new MusicServiceReceiver();
         IntentFilter filter = new IntentFilter();
@@ -92,8 +92,7 @@ public class MediaService extends Service implements MediaPlayer.OnCompletionLis
         try {
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource(path);
-            mMediaPlayer.prepare();
-            mMediaPlayer.start();
+            mMediaPlayer.prepareAsync();
             if (mProgressTask == null) {
                 mProgressTask = new ProgressTask();
                 mProgressTask.execute();
@@ -143,6 +142,13 @@ public class MediaService extends Service implements MediaPlayer.OnCompletionLis
         mediaIntent.putExtra("playUrl", intent.getStringExtra("playUrl"));
         sendBroadcast(mediaIntent);
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        if (mp != null) {
+            mp.start();
+        }
     }
 
     @Override
