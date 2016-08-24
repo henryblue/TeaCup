@@ -27,6 +27,7 @@
     <string name="screen_shield">抱歉, 网站将您ip屏蔽, 请换个网络重试</string>
     <string name="music_play_pre">当前已经是第一首</string>
     <string name="load_music_error">音乐文件加载出错</string>
+    <string name="unknown_name">未名</string>
     <string-array name="tab_name">
         <item>新鲜事</item>
         <item>阅读</item>

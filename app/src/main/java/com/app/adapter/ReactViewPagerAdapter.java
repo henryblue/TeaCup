@@ -23,7 +23,7 @@ public class ReactViewPagerAdapter extends PagerAdapter {
         public void handleMessage(Message msg) {
             mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
             if (mIsAutoScroll) {
-                mHandler.sendEmptyMessageDelayed(0, 4000);
+                mHandler.sendEmptyMessageDelayed(0, 6000);
             }
             super.handleMessage(msg);
         }

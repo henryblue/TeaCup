@@ -4,6 +4,7 @@ package com.app.adapter;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import com.app.teacup.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -27,6 +31,7 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private Context mContext;
     private OnItemClickListener mListener;
     private List<ImageView> mImageViewList;
+    private List<String> mImageViewUrls;
     private List<ReadInfo> mReadDatas;
     private LayoutInflater mLayoutInflater;
     private HeaderViewHolder mHeaderViewHolder;
@@ -35,9 +40,13 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         void onItemClick(View view, int position, int type);
     }
 
-    public ReadRecyclerAdapter(Context context) {
+    public ReadRecyclerAdapter(Context context, List<ReadInfo> readInfos,
+                               List<String> imageViewUrls) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
+        mReadDatas = readInfos;
+        mImageViewUrls = imageViewUrls;
+        mImageViewList = new ArrayList<>();
     }
 
     @Override
@@ -60,19 +69,35 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             onBindReadViewHolder(holder, position);
         } else if (holder instanceof HeaderViewHolder) {
             onBindHeaderItemViewHolder(holder, position);
-        } else if (holder instanceof ReadTopicViewHolder) {
-
         }
     }
 
     private void onBindHeaderItemViewHolder(RecyclerView.ViewHolder holder, int position) {
         HeaderViewHolder myHolder = (HeaderViewHolder) holder;
-        myHolder.mAdapter.notifyDataSetChanged();
+        mImageViewList.clear();
+        for (int i = 0; i < mImageViewUrls.size(); i++) {
+            ImageView view = new ImageView(mContext);
+            view.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            Glide.with(mContext).load(mImageViewUrls.get(i))
+                    .asBitmap()
+                    .error(R.drawable.photo_loaderror)
+                    .placeholder(R.drawable.main_load_bg)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .dontAnimate()
+                    .into(view);
+            mImageViewList.add(view);
+        }
+        startHeaderAutoScrolled();
+        setHeaderVisible(View.VISIBLE);
+
+        if (myHolder.mAdapter != null) {
+            myHolder.mAdapter.notifyDataSetChanged();
+        }
     }
 
     private void onBindReadViewHolder(RecyclerView.ViewHolder holder, int position) {
         final ReadViewHolder myHolder = (ReadViewHolder) holder;
-        ReadInfo info = mReadDatas.get(position - 3);
+        ReadInfo info = mReadDatas.get(position - 1);
 
         Glide.with(mContext).load(info.getImgurl()).asBitmap()
                 .error(R.drawable.photo_loaderror)
@@ -80,9 +105,15 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .dontAnimate()
                 .into(myHolder.mPhotoImg);
-        myHolder.mTitle.setText(info.getTitle());
+        if (TextUtils.isEmpty(info.getTitle())) {
+            myHolder.mTitle.setText(mContext.getString(R.string.unknown_name));
+        } else {
+            myHolder.mTitle.setText(info.getTitle());
+        }
         myHolder.mContent.setText(info.getRecommend());
-        myHolder.mAuthor.setText(String.format("%s %s", info.getAuthor(), info.getReadNum()));
+        myHolder.mAuthor.setText(info.getAuthor());
+        myHolder.mReadNum.setText(info.getReadNum());
+
         if (mListener != null) {
             myHolder.mainView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -96,7 +127,7 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public int getRealPosition(RecyclerView.ViewHolder holder) {
         int position = holder.getLayoutPosition();
-        return position - 4;
+        return position - 2;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -107,19 +138,38 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public int getItemViewType(int position) {
         if (position == 0) {
             return TYPE_HEADER;
-        } else if (position == 1 || position == 2){
-            return TYPE_TOPIC;
-        } else if (position > 2) {
+        } else {
+//        } else if (position == 1 || position == 2){
+//            return TYPE_TOPIC;
+//        } else if (position > 2) {
+//            return TYPE_NORMAL;
+//        }
             return TYPE_NORMAL;
         }
-        return TYPE_NORMAL;
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return mReadDatas.size() + 1;
     }
 
+    public void startHeaderAutoScrolled() {
+        if (mHeaderViewHolder != null) {
+            mHeaderViewHolder.startAutoScrolled();
+        }
+    }
+
+    public void stopHeaderAutoScrolled() {
+        if (mHeaderViewHolder != null) {
+            mHeaderViewHolder.stopAutoScrolled();
+        }
+    }
+
+    public void setHeaderVisible(int visible) {
+        if (mHeaderViewHolder != null) {
+            mHeaderViewHolder.setGroupVisible(visible);
+        }
+    }
 
     private class ReadViewHolder extends RecyclerView.ViewHolder {
 
@@ -127,6 +177,7 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         private ImageView mPhotoImg;
         private TextView mContent;
         private TextView mAuthor;
+        private TextView mReadNum;
         private View mainView;
 
         public ReadViewHolder(View itemView) {
@@ -136,6 +187,7 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             mTitle = (TextView) itemView.findViewById(R.id.tv_read_title);
             mContent = (TextView) itemView.findViewById(R.id.tv_read_content);
             mAuthor = (TextView) itemView.findViewById(R.id.tv_read_author);
+            mReadNum = (TextView) itemView.findViewById(R.id.tv_read_num);
         }
     }
 
@@ -158,11 +210,11 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             mViewPager = (ViewPager) itemView.findViewById(R.id.vp_news);
             mGroup = (LinearLayout) itemView.findViewById(R.id.ll_group);
 
-            if (mImageViewList.size() <= 0) {
+            if (mImageViewUrls.size() <= 0) {
                 return;
             }
 
-            for (int i = 0; i < mImageViewList.size(); i++) {
+            for (int i = 0; i < mImageViewUrls.size(); i++) {
                 ImageView point = new ImageView(mContext);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams
                         (ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -182,7 +234,7 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             mAdapter = new ReactViewPagerAdapter(mViewPager, mImageViewList);
             mViewPager.setAdapter(mAdapter);
             mViewPager.setCurrentItem(Integer.MAX_VALUE / 2 -
-                    (Integer.MAX_VALUE / 2 % mImageViewList.size()));
+                    (Integer.MAX_VALUE / 2 % mImageViewUrls.size()));
 
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -191,7 +243,7 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 @Override
                 public void onPageSelected(int position) {
-                    position = position % mImageViewList.size();
+                    position = position % mImageViewUrls.size();
                     mGroup.getChildAt(position).setEnabled(true);
                     mGroup.getChildAt(mLastPos).setEnabled(false);
                     mLastPos = position;
@@ -201,6 +253,21 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 public void onPageScrollStateChanged(int state) {
                 }
             });
+        }
+        public void startAutoScrolled() {
+            if (mAdapter != null) {
+                mAdapter.startAutoScrolled();
+            }
+        }
+
+        public void stopAutoScrolled() {
+            if (mAdapter != null) {
+                mAdapter.stopAutoScrolled();
+            }
+        }
+
+        public void setGroupVisible(int visible) {
+            mGroup.setVisibility(visible);
         }
     }
 

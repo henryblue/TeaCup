@@ -73,7 +73,6 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private void initView(View view) {
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
         mRecyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
-
     }
 
     private void setupRecycleView() {
@@ -247,10 +246,10 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                     Toast.LENGTH_SHORT).show();
         } else {
             initImageViewList();
-            mRecyclerView.refreshComplete();
-            mRefreshLayout.setRefreshing(false);
             mNewsRecyclerAdapter.reSetData(mNewsDatas);
         }
+        mRecyclerView.refreshComplete();
+        mRefreshLayout.setRefreshing(false);
     }
 
     @Override

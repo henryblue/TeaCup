@@ -2,20 +2,31 @@ package com.app.fragment.mainPage;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.app.adapter.NewsRecyclerAdapter;
+import com.app.adapter.ReadRecyclerAdapter;
 import com.app.bean.Read.ReadCadInfo;
 import com.app.bean.Read.ReadInfo;
 import com.app.fragment.BaseFragment;
+import com.app.teacup.NewsDetailActivity;
 import com.app.teacup.R;
 import com.app.util.HttpUtils;
 import com.app.util.urlUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -32,10 +43,12 @@ import java.util.List;
 public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private SwipeRefreshLayout mRefreshLayout;
+    private XRecyclerView mRecyclerView;
     private List<ReadInfo> mReadDatas;
     private List<String> mHeadDatas;
     private ReadCadInfo mSpecialTopic;
     private ReadCadInfo mCollection;
+    private ReadRecyclerAdapter mReadRecyclerAdapter;
 
     @Override
     public void onAttach(Context context) {
@@ -52,11 +65,13 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         View view = inflater.inflate(R.layout.reading_fragment, container, false);
         initView(view);
         setupRefreshLayout();
+        setupRecycleView();
         return view;
     }
 
     private void initView(View view) {
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
+        mRecyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
     }
 
     private void setupRefreshLayout() {
@@ -65,6 +80,35 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         mRefreshLayout.setProgressViewEndTarget(true, 100);
         mRefreshLayout.setOnRefreshListener(this);
         StartRefreshPage();
+    }
+
+    private void setupRecycleView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setLoadingMoreEnabled(false);
+        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+
+        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                startRefreshData();
+            }
+
+            @Override
+            public void onLoadMore() {
+            }
+        });
+    }
+
+    private void startLoadData() {
+        if (mReadRecyclerAdapter == null) {
+            mReadRecyclerAdapter = new ReadRecyclerAdapter(getContext(), mReadDatas, mHeadDatas);
+            mRecyclerView.setAdapter(mReadRecyclerAdapter);
+        } else {
+            mReadRecyclerAdapter.notifyDataSetChanged();
+        }
     }
 
     private void StartRefreshPage() {
@@ -187,8 +231,10 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             Toast.makeText(getContext(), getString(R.string.screen_shield),
                     Toast.LENGTH_SHORT).show();
         } else {
-            mRefreshLayout.setRefreshing(false);
+            startLoadData();
         }
+        mRecyclerView.refreshComplete();
+        mRefreshLayout.setRefreshing(false);
     }
 
     @Override
