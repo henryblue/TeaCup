@@ -8,7 +8,6 @@ import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,6 @@ import java.util.List;
  */
 public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    private static final String TAG = "NewsFragment";
     private static final int IMAGE_VIEW_LEN = 4;
     private List<NewsInfo> mNewsDatas;
     private List<ImageView> mImageViewList;
@@ -107,7 +105,6 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         mNewsRecyclerAdapter.setOnItemClickListener(new NewsRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Log.i(TAG, "enter===onintenclick==pos==" + position);
                 Intent intent = new Intent(getContext(), NewsDetailActivity.class);
                 intent.putExtra("newsDetailUrl", mNewsDatas.get(position).getNextUrl());
                 intent.putExtra("newsTitle", mNewsDatas.get(position).getTitle());

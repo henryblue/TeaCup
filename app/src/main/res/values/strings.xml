@@ -29,7 +29,7 @@
     <string name="load_music_error">音乐文件加载出错</string>
     <string-array name="tab_name">
         <item>新鲜事</item>
-        <item>视频</item>
+        <item>阅读</item>
         <item>音乐期刊</item>
         <item>搜书</item>
     </string-array>

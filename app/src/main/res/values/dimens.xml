@@ -147,5 +147,5 @@
     <dimen name="news_detail_item_marginBottom">25dp</dimen>
     <dimen name="news_detail_item_img_height">220dp</dimen>
     <dimen name="news_detail_item_txt_textSize">16sp</dimen>
-    <dimen name="item_news_view_elevation">3dp</dimen>
+    <dimen name="item_news_view_elevation">1dp</dimen>
 </resources>

@@ -18,7 +18,7 @@ import com.app.adapter.PagerAdapter;
 import com.app.fragment.mainPage.FindBookFragment;
 import com.app.fragment.mainPage.MusicFragment;
 import com.app.fragment.mainPage.NewsFragment;
-import com.app.fragment.mainPage.VideoFragment;
+import com.app.fragment.mainPage.ReadFragment;
 
 import java.util.ArrayList;
 
@@ -55,11 +55,11 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<Fragment> mFragmentLists = new ArrayList<>();
         FindBookFragment mFindBookFragment = new FindBookFragment();
-        VideoFragment mVideoFragment = new VideoFragment();
+        ReadFragment mReadFragment = new ReadFragment();
         MusicFragment mMusicFragment = new MusicFragment();
         NewsFragment newsFragment = new NewsFragment();
         mFragmentLists.add(newsFragment);
-        mFragmentLists.add(mVideoFragment);
+        mFragmentLists.add(mReadFragment);
         mFragmentLists.add(mMusicFragment);
         mFragmentLists.add(mFindBookFragment);
 

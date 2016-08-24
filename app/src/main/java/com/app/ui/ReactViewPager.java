@@ -25,7 +25,9 @@ public class ReactViewPager extends ViewPager {
             Field mFirstLayout = ViewPager.class.getDeclaredField("mFirstLayout");
             mFirstLayout.setAccessible(true);
             mFirstLayout.set(this, false);
-            getAdapter().notifyDataSetChanged();
+            if (getAdapter() != null) {
+                getAdapter().notifyDataSetChanged();
+            }
             setCurrentItem(getCurrentItem());
         } catch (Exception e) {
             e.printStackTrace();

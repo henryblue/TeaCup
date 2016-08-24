@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_margin="3dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_read_img"
+        android:layout_width="130dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/header"/>
+
+    <TextView
+        android:id="@+id/tv_read_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:layout_toRightOf="@id/iv_read_img"
+        android:text="泡面已成为美帝监狱的硬通货"
+        android:textSize="17sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:ellipsize="end"/>
+    <TextView
+        android:id="@+id/tv_read_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_read_title"
+        android:layout_alignLeft="@id/tv_read_title"
+        android:text="泡面已成为美帝监狱的硬通货5235"
+        android:maxLines="3"
+        android:textSize="14sp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/deep_gray"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:id="@+id/tv_read_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:layout_alignLeft="@id/tv_read_title"
+        android:layout_alignParentBottom="true"
+        android:text="by 王的小婊子"
+        android:textSize="13sp"
+        android:textColor="@color/deep_gray"
+        android:layout_marginBottom="2dp"
+        android:ellipsize="end"/>
+</RelativeLayout>
