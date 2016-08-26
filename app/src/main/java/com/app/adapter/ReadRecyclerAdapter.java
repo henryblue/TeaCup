@@ -12,12 +12,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.app.bean.Read.ReadCadInfo;
 import com.app.bean.Read.ReadInfo;
 import com.app.teacup.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,25 +26,29 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_TOPIC = 1;
     private static final int TYPE_NORMAL = 2;
+    private static final String TAG = "ReadRecyclerAdapter";
 
     private Context mContext;
     private OnItemClickListener mListener;
     private List<ImageView> mImageViewList;
     private List<String> mImageViewUrls;
     private List<ReadInfo> mReadDatas;
+    private List<ReadCadInfo> mCadInfos;
     private LayoutInflater mLayoutInflater;
     private HeaderViewHolder mHeaderViewHolder;
 
     public interface OnItemClickListener {
-        void onItemClick(View view, int position, int type);
+        void onItemClick(View view, int position);
+        void OnTopicClick(int typePos, int position);
     }
 
     public ReadRecyclerAdapter(Context context, List<ReadInfo> readInfos,
-                               List<String> imageViewUrls) {
+                               List<String> imageViewUrls, List<ReadCadInfo> cadInfos) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
         mReadDatas = readInfos;
         mImageViewUrls = imageViewUrls;
+        mCadInfos = cadInfos;
         mImageViewList = new ArrayList<>();
     }
 
@@ -57,7 +60,7 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
             return mHeaderViewHolder;
             } else if (viewType == TYPE_TOPIC) {
-            return new ReadViewHolder(mLayoutInflater.inflate(R.layout.item_news_view, parent, false));
+            return new ReadTopicViewHolder(mLayoutInflater.inflate(R.layout.item_read_topic_view, parent, false));
         } else {
             return new ReadViewHolder(mLayoutInflater.inflate(R.layout.item_read_view, parent, false));
         }
@@ -69,6 +72,8 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             onBindReadViewHolder(holder, position);
         } else if (holder instanceof HeaderViewHolder) {
             onBindHeaderItemViewHolder(holder, position);
+        } else if (holder instanceof ReadTopicViewHolder) {
+            onBindTopicItemViewHolder(holder, position);
         }
     }
 
@@ -95,9 +100,46 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    private void onBindTopicItemViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        final ReadTopicViewHolder myHolder = (ReadTopicViewHolder) holder;
+        ReadCadInfo info = mCadInfos.get(position - 1);
+        myHolder.mTitle.setText(info.getCadTitle());
+        myHolder.mTitles.setText(info.getCadContent());
+        myHolder.mMores.setText(info.getMore());
+
+        List<ReadInfo> readList = info.getReadList();
+        for (int i = 0; i < myHolder.mViewHolder.size(); i++) {
+            final ReadTopicViewHolder.ViewHolder viewHolder = myHolder.mViewHolder.get(i);
+            Glide.with(mContext).load(readList.get(i).getImgurl()).asBitmap()
+                    .error(R.drawable.photo_loaderror)
+                    .placeholder(R.drawable.main_load_bg)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .dontAnimate()
+                    .into(viewHolder.mImage);
+
+            viewHolder.mContent.setText(readList.get(i).getTitle());
+            viewHolder.mTime.setText(readList.get(i).getAuthor());
+            final int pos = i;
+            if (mListener != null) {
+                viewHolder.mImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mListener.OnTopicClick(position - 1, pos);
+                    }
+                });
+            }
+        }
+    }
+
     private void onBindReadViewHolder(RecyclerView.ViewHolder holder, int position) {
         final ReadViewHolder myHolder = (ReadViewHolder) holder;
-        ReadInfo info = mReadDatas.get(position - 1);
+        if (position < 3) {
+            return;
+        }
+        if (position - 3 > mReadDatas.size() - 1) {
+            return;
+        }
+        ReadInfo info = mReadDatas.get(position - 3);
 
         Glide.with(mContext).load(info.getImgurl()).asBitmap()
                 .error(R.drawable.photo_loaderror)
@@ -119,7 +161,7 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View v) {
                     int pos = getRealPosition(myHolder);
-                    mListener.onItemClick(myHolder.itemView, pos, TYPE_NORMAL);
+                    mListener.onItemClick(myHolder.itemView, pos);
                 }
             });
         }
@@ -127,7 +169,7 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public int getRealPosition(RecyclerView.ViewHolder holder) {
         int position = holder.getLayoutPosition();
-        return position - 2;
+        return position - 4;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -138,19 +180,17 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public int getItemViewType(int position) {
         if (position == 0) {
             return TYPE_HEADER;
-        } else {
-//        } else if (position == 1 || position == 2){
-//            return TYPE_TOPIC;
-//        } else if (position > 2) {
-//            return TYPE_NORMAL;
-//        }
+        } else if (position == 1 || position == 2){
+            return TYPE_TOPIC;
+        } else if (position > 2) {
             return TYPE_NORMAL;
         }
+        return TYPE_NORMAL;
     }
 
     @Override
     public int getItemCount() {
-        return mReadDatas.size() + 1;
+        return mReadDatas.size() + mCadInfos.size() + 1;
     }
 
     public void startHeaderAutoScrolled() {
@@ -171,6 +211,9 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    /**
+     * ReadViewHolder
+     */
     private class ReadViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mTitle;
@@ -191,13 +234,59 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
+    /**
+     * ReadTopicViewHolder
+     */
     private class ReadTopicViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView mTitle;
+        private TextView mTitles;
+        private TextView mMores;
+
+        private List<ViewHolder> mViewHolder;
 
         public ReadTopicViewHolder(View itemView) {
             super(itemView);
+            mTitle = (TextView) itemView.findViewById(R.id.tv_topic_title);
+            mTitles = (TextView) itemView.findViewById(R.id.tv_topic_title1);
+            mMores = (TextView) itemView.findViewById(R.id.tv_topic_more);
+
+            mViewHolder = new ArrayList<>();
+            ViewHolder holder = new ViewHolder();
+            holder.mImage = (ImageView) itemView.findViewById(R.id.iv_read_top_img1);
+            holder.mContent = (TextView) itemView.findViewById(R.id.iv_read_topic_content1);
+            holder.mTime = (TextView) itemView.findViewById(R.id.iv_read_topic_time1);
+            mViewHolder.add(holder);
+
+            ViewHolder holder1 = new ViewHolder();
+            holder1.mImage = (ImageView) itemView.findViewById(R.id.iv_read_top_img2);
+            holder1.mContent = (TextView) itemView.findViewById(R.id.iv_read_topic_content2);
+            holder1.mTime = (TextView) itemView.findViewById(R.id.iv_read_topic_time2);
+            mViewHolder.add(holder1);
+
+            ViewHolder holder2 = new ViewHolder();
+            holder2.mImage = (ImageView) itemView.findViewById(R.id.iv_read_top_img3);
+            holder2.mContent = (TextView) itemView.findViewById(R.id.iv_read_topic_content3);
+            holder2.mTime = (TextView) itemView.findViewById(R.id.iv_read_topic_time3);
+            mViewHolder.add(holder2);
+
+            ViewHolder holder3 = new ViewHolder();
+            holder3.mImage = (ImageView) itemView.findViewById(R.id.iv_read_top_img4);
+            holder3.mContent = (TextView) itemView.findViewById(R.id.iv_read_topic_content4);
+            holder3.mTime = (TextView) itemView.findViewById(R.id.iv_read_topic_time4);
+            mViewHolder.add(holder3);
+        }
+
+        private class ViewHolder {
+            public ImageView mImage;
+            public TextView mContent;
+            public TextView mTime;
         }
     }
 
+    /**
+     * HeaderViewHolder
+     */
     private class HeaderViewHolder extends RecyclerView.ViewHolder {
 
         private ReactViewPagerAdapter mAdapter;

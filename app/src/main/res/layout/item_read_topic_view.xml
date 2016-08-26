@@ -1,29 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
-    android:layout_margin="3dp"
-    android:background="@color/colorPrimary"
-    android:orientation="vertical">
+    android:layout_height="355dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:orientation="vertical"
+    android:elevation="1dp">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="160dp"
-        android:layout_height="140dp">
-        <ImageView
-            android:id="@+id/iv_read_top_img"
-            android:layout_width="match_parent"
-            android:layout_height="100dp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp" >
         <TextView
-            android:id="@+id/iv_read_topic_content"
+            android:id="@+id/tv_topic_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_centerVertical="true"
+            android:text="专题"
+            android:textSize="16sp"
+            android:textColor="@color/deep_gray"/>
+
+        <TextView
+            android:id="@+id/tv_topic_title1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tv_topic_title"
+            android:layout_marginLeft="15dp"
+            android:text="遇见你的风格"
+            android:textSize="15sp"
+            android:textColor="@color/gray"/>
+
+        <TextView
+            android:id="@+id/tv_topic_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="15dp"
+            android:text="遇见你的风格>"
+            android:textSize="15sp"
+            android:textColor="@color/gray"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_1"
+        android:layout_width="177dp"
+        android:layout_height="155dp"
+        android:layout_marginTop="35dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/iv_read_top_img1"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/header"/>
+        <TextView
+            android:id="@+id/iv_read_topic_content1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:singleLine="true"
             android:textColor="@color/deep_gray"
-            android:layout_marginLeft="5dp"
             android:textSize="14sp"
             android:maxLines="2"
             android:ellipsize="end"
-            android:text="前度让他\ngdsfgsdgfasdfa"/>
-    </android.support.v7.widget.CardView>
+            android:text="前度"/>
+
+        <TextView
+            android:id="@+id/iv_read_topic_time1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="sdfsfh"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_2"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="35dp"
+        android:layout_width="177dp"
+        android:layout_height="155dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/iv_read_top_img2"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/header"/>
+        <TextView
+            android:id="@+id/iv_read_topic_content2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:singleLine="true"
+            android:textColor="@color/deep_gray"
+            android:textSize="14sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="前度"/>
+
+        <TextView
+            android:id="@+id/iv_read_topic_time2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="sdfsfh"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="177dp"
+        android:layout_height="155dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/iv_read_top_img3"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/header"/>
+        <TextView
+            android:id="@+id/iv_read_topic_content3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:singleLine="true"
+            android:textColor="@color/deep_gray"
+            android:textSize="14sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="前度"/>
+
+        <TextView
+            android:id="@+id/iv_read_topic_time3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="sdfsfh"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_4"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="177dp"
+        android:layout_height="155dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/iv_read_top_img4"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/header"/>
+        <TextView
+            android:id="@+id/iv_read_topic_content4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:singleLine="true"
+            android:textColor="@color/deep_gray"
+            android:textSize="14sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="前度"/>
+
+        <TextView
+            android:id="@+id/iv_read_topic_time4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="sdfsfh"/>
+    </LinearLayout>
 
 </RelativeLayout>

@@ -2,7 +2,6 @@ package com.app.fragment.mainPage;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,20 +10,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.app.adapter.NewsRecyclerAdapter;
 import com.app.adapter.ReadRecyclerAdapter;
 import com.app.bean.Read.ReadCadInfo;
 import com.app.bean.Read.ReadInfo;
 import com.app.fragment.BaseFragment;
-import com.app.teacup.NewsDetailActivity;
 import com.app.teacup.R;
 import com.app.util.HttpUtils;
 import com.app.util.urlUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -46,8 +40,7 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private XRecyclerView mRecyclerView;
     private List<ReadInfo> mReadDatas;
     private List<String> mHeadDatas;
-    private ReadCadInfo mSpecialTopic;
-    private ReadCadInfo mCollection;
+    private List<ReadCadInfo> mTopicDatas;
     private ReadRecyclerAdapter mReadRecyclerAdapter;
 
     @Override
@@ -55,8 +48,7 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         super.onAttach(context);
         mReadDatas = new ArrayList<>();
         mHeadDatas = new ArrayList<>();
-        mSpecialTopic = new ReadCadInfo();
-        mCollection = new ReadCadInfo();
+        mTopicDatas = new ArrayList<>();
     }
 
     @Override
@@ -104,8 +96,9 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     private void startLoadData() {
         if (mReadRecyclerAdapter == null) {
-            mReadRecyclerAdapter = new ReadRecyclerAdapter(getContext(), mReadDatas, mHeadDatas);
+            mReadRecyclerAdapter = new ReadRecyclerAdapter(getContext(), mReadDatas, mHeadDatas, mTopicDatas);
             mRecyclerView.setAdapter(mReadRecyclerAdapter);
+            mReadRecyclerAdapter.setOnItemClickListener(new ReadItemClickListener());
         } else {
             mReadRecyclerAdapter.notifyDataSetChanged();
         }
@@ -179,12 +172,13 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         }
 
         Element specialTopic = mainLeft.getElementsByClass("column-category").get(0);
-        setTopicCollectData(specialTopic, mSpecialTopic);
+        setTopicCollectData(specialTopic);
         Element collect = mainLeft.getElementsByClass("articles-category").get(0);
-        setTopicCollectData(collect, mCollection);
+        setTopicCollectData(collect);
     }
 
-    private void setTopicCollectData(Element specialTopic, ReadCadInfo topicInfo) {
+    private void setTopicCollectData(Element specialTopic) {
+        ReadCadInfo topicInfo = new ReadCadInfo();
         Element lined = specialTopic.getElementsByClass("lined").get(0);
         String[] text = lined.text().split(" ");
         topicInfo.setCadTitle(text[0]);
@@ -209,6 +203,7 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             list.add(info);
         }
         topicInfo.setReadList(list);
+        mTopicDatas.add(topicInfo);
     }
 
     @Override
@@ -265,5 +260,17 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         super.onPause();
     }
 
+    private class ReadItemClickListener implements ReadRecyclerAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(View view, int position) {
+            Toast.makeText(getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void OnTopicClick(int typePos, int position) {
+            Toast.makeText(getContext(), String.valueOf(typePos) + " : " +String.valueOf(position), Toast.LENGTH_SHORT).show();
+        }
+    }
 }
 
