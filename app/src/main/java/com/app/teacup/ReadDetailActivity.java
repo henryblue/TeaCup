@@ -28,21 +28,22 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.w3c.dom.Text;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class NewsDetailActivity extends AppCompatActivity {
+public class ReadDetailActivity extends AppCompatActivity {
 
     private static final int LOAD_DATA_FINISH = 0;
     private static final int LOAD_DATA_ERROR = 1;
-    private static final String TAG = "NewsDetailActivity";
+    private static final String TAG = "readDetailActivity";
 
     private LinearLayout mLinearLayout;
     private TextView mTitle;
     private TextView mAuthor;
     private List<String> mDatas;
-    private String msTitle;
     private String msAuthor;
 
     private Handler mHandler = new Handler() {
@@ -53,7 +54,7 @@ public class NewsDetailActivity extends AppCompatActivity {
                     initData();
                     break;
                 case LOAD_DATA_ERROR:
-                    Toast.makeText(NewsDetailActivity.this, getString(R.string.not_have_more_data),
+                    Toast.makeText(ReadDetailActivity.this, getString(R.string.not_have_more_data),
                             Toast.LENGTH_SHORT).show();
                     break;
                 default:
@@ -65,11 +66,11 @@ public class NewsDetailActivity extends AppCompatActivity {
 
     private void initData() {
         if (mDatas.isEmpty()) {
-            Toast.makeText(NewsDetailActivity.this, getString(R.string.screen_shield),
+            Toast.makeText(ReadDetailActivity.this, getString(R.string.screen_shield),
                     Toast.LENGTH_SHORT).show();
         } else {
             mAuthor.setText(msAuthor);
-            mTitle.setText(getIntent().getStringExtra("newsTitle"));
+            mTitle.setText(getIntent().getStringExtra("readTitle"));
             loadNewsContent();
         }
 
@@ -92,7 +93,7 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         for (int i = 0; i < mDatas.size(); i++) {
             String tag = mDatas.get(i);
-            if (tag.startsWith("http")) {
+            if (tag.startsWith("http://")) {
                 ImageView view = new ImageView(this);
                 view.setLayoutParams(imgParams);
                 tag = tag.replace("small", "medium");
@@ -120,16 +121,16 @@ public class NewsDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_detail);
+        setContentView(R.layout.activity_read_detail);
         initView();
         initToolBar();
         startLoadData();
     }
 
     private void startLoadData() {
-        String newsUrl = getIntent().getStringExtra("newsDetailUrl");
-        if (!TextUtils.isEmpty(newsUrl)) {
-            HttpUtils.sendHttpRequest(newsUrl, new HttpUtils.HttpCallBackListener() {
+        String readUrl = getIntent().getStringExtra("readDetailUrl");
+        if (!TextUtils.isEmpty(readUrl)) {
+            HttpUtils.sendHttpRequest(readUrl, new HttpUtils.HttpCallBackListener() {
                 @Override
                 public void onFinish(String response) {
                     parseData(response);
@@ -153,31 +154,38 @@ public class NewsDetailActivity extends AppCompatActivity {
 
     private void parseData(String response) {
         Document document = Jsoup.parse(response);
+        String newRes = document.html().replace("<br>", "\n");
+        document = Jsoup.parse(newRes);
+        String text = "";
         if (document != null) {
-            Element maincontent = document.getElementById("maincontent");
-            if (maincontent != null) {
-                Element postinfo = maincontent.getElementsByClass("postinfo").get(0);
-                if (postinfo != null) {
-                    msAuthor = postinfo.ownText();
-                }
-                Element entry = maincontent.getElementsByClass("entry").get(0);
-                if (entry != null) {
-                    Elements ps = entry.getElementsByTag("p");
-                    if (ps != null) {
-                        for (Element p : ps) {
-                            String element = null;
-                            String text = p.text();
-                            if (!TextUtils.isEmpty(text)) {
-                                element = text;
-                            } else {
-                                Element img = p.getElementsByTag("img").get(0);
-                                String url = img.attr("data-original");
-                                if (!TextUtils.isEmpty(url)) {
-                                    element = "http:" + url;
-                                }
+            Element article = document.getElementsByClass("article").get(0);
+            Element h3 = article.getElementsByTag("h3").get(0);
+            msAuthor = h3.text();
+            Elements tags = article.getElementsByTag("p");
+            if (tags != null) {
+                for (Element tag : tags) {
+                    if (!TextUtils.isEmpty(tag.text())) {
+                        text += tag.text() + "\n\n";
+                    } else {
+                        Elements img = tag.getElementsByTag("img");
+                        if (img != null) {
+                            String imageUrl = img.attr("src");
+                            if (!TextUtils.isEmpty(imageUrl)) {
+                                mDatas.add(imageUrl);
                             }
-                            mDatas.add(element);
                         }
+                    }
+                }
+                if (!TextUtils.isEmpty(text)) {
+                    mDatas.add(text);
+                }
+            }
+
+            Elements pres = article.getElementsByTag("pre");
+            if (pres != null) {
+                for (Element pre : pres) {
+                    if (!TextUtils.isEmpty(pre.text())) {
+                        mDatas.add(pre.text());
                     }
                 }
             }
@@ -187,14 +195,14 @@ public class NewsDetailActivity extends AppCompatActivity {
     private void initView() {
         mDatas = new ArrayList<>();
         mLinearLayout = (LinearLayout) findViewById(R.id.ll_container);
-        mTitle = (TextView) findViewById(R.id.tv_new_detail_title);
-        mAuthor = (TextView) findViewById(R.id.tv_news_detail_author);
+        mTitle = (TextView) findViewById(R.id.tv_read_detail_title);
+        mAuthor = (TextView) findViewById(R.id.tv_read_detail_author);
     }
 
     private void initToolBar() {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.activity_navigation_toolbar);
         if (mToolbar != null) {
-            mToolbar.setTitle(getString(R.string.item_news));
+            mToolbar.setTitle(getString(R.string.item_read));
         }
         setSupportActionBar(mToolbar);
         getSupportActionBar().setHomeButtonEnabled(true);

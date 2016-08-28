@@ -2,6 +2,7 @@ package com.app.fragment.mainPage;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,6 +18,7 @@ import com.app.bean.Read.ReadCadInfo;
 import com.app.bean.Read.ReadInfo;
 import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
+import com.app.teacup.ReadDetailActivity;
 import com.app.util.HttpUtils;
 import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -264,12 +266,21 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
         @Override
         public void onItemClick(View view, int position) {
-            Toast.makeText(getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getContext(), ReadDetailActivity.class);
+            intent.putExtra("readDetailUrl", mReadDatas.get(position).getNextUrl());
+            intent.putExtra("readTitle", mReadDatas.get(position).getTitle());
+            startActivity(intent);
         }
 
         @Override
-        public void OnTopicClick(int typePos, int position) {
-            Toast.makeText(getContext(), String.valueOf(typePos) + " : " +String.valueOf(position), Toast.LENGTH_SHORT).show();
+        public void onTopicClick(int typePos, int position) {
+            Toast.makeText(getContext(), String.valueOf(typePos) + " : "
+                    +String.valueOf(position), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onLoadMore(int typePos) {
+            Toast.makeText(getContext(), String.valueOf(typePos), Toast.LENGTH_SHORT).show();
         }
     }
 }

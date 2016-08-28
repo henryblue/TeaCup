@@ -142,10 +142,10 @@
     <dimen name="music_play_pre_marginRight">20dp</dimen>
     <dimen name="music_play_next_marginLeft">20dp</dimen>
 
-    <dimen name="news_detail_item_marginLeft">10dp</dimen>
-    <dimen name="news_detail_item_marginRight">10dp</dimen>
+    <dimen name="news_detail_item_marginLeft">14dp</dimen>
+    <dimen name="news_detail_item_marginRight">14dp</dimen>
     <dimen name="news_detail_item_marginBottom">25dp</dimen>
     <dimen name="news_detail_item_img_height">220dp</dimen>
-    <dimen name="news_detail_item_txt_textSize">16sp</dimen>
+    <dimen name="news_detail_item_txt_textSize">18sp</dimen>
     <dimen name="item_news_view_elevation">0.5dp</dimen>
 </resources>

@@ -9,6 +9,7 @@
     <string name="item_main">主页</string>
     <string name="item_package">美图</string>
     <string name="item_news">新鲜事</string>
+    <string name="item_read">阅读</string>
     <string name="item_weather">天气</string>
     <string name="item_about">关于</string>
     <string name="input_hint">请输入需要添加的书名</string>

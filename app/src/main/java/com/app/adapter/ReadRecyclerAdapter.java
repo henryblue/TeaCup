@@ -39,7 +39,8 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
-        void OnTopicClick(int typePos, int position);
+        void onTopicClick(int typePos, int position);
+        void onLoadMore(int typePos);
     }
 
     public ReadRecyclerAdapter(Context context, List<ReadInfo> readInfos,
@@ -124,7 +125,14 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 viewHolder.mImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mListener.OnTopicClick(position - 1, pos);
+                        mListener.onTopicClick(position - 1, pos);
+                    }
+                });
+
+                myHolder.mMores.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mListener.onLoadMore(position - 1);
                     }
                 });
             }

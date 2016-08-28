@@ -29,6 +29,7 @@
         <activity android:name=".MusicDetailActivity" />
         <activity android:name=".MusicPlayActivity" />
         <activity android:name=".NewsDetailActivity" />
+        <activity android:name=".ReadDetailActivity" />
 
         <service android:name="com.app.service.LocationService" />
         <service android:name="com.app.service.MediaService" />
