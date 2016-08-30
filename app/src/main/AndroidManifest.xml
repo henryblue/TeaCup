@@ -30,6 +30,8 @@
         <activity android:name=".MusicPlayActivity" />
         <activity android:name=".NewsDetailActivity" />
         <activity android:name=".ReadDetailActivity" />
+        <activity android:name=".ReadTopicActivity" />
+        <activity android:name=".ReadCollectionActivity" />
 
         <service android:name="com.app.service.LocationService" />
         <service android:name="com.app.service.MediaService" />

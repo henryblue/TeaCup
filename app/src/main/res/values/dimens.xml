@@ -35,11 +35,11 @@
     <dimen name="fragment_detail_textview_textsize">16sp</dimen>
 
     <dimen name="item_find_fragment_cardCornerRadius">6dp</dimen>
-    <dimen name="item_find_fragment_cardElevation">10dp</dimen>
-    <dimen name="item_find_fragment_marginleft">14dp</dimen>
-    <dimen name="item_find_fragment_marginright">14dp</dimen>
-    <dimen name="item_find_fragment_margintop">8dp</dimen>
-    <dimen name="item_find_fragment_marginbottom">8dp</dimen>
+    <dimen name="item_find_fragment_cardElevation">2dp</dimen>
+    <dimen name="item_find_fragment_marginleft">8dp</dimen>
+    <dimen name="item_find_fragment_marginright">8dp</dimen>
+    <dimen name="item_find_fragment_margintop">4dp</dimen>
+    <dimen name="item_find_fragment_marginbottom">4dp</dimen>
     <dimen name="item_find_fragment_imageview_width">125dp</dimen>
     <dimen name="item_find_fragment_imageview_height">170dp</dimen>
     <dimen name="item_find_fragment_imageview_margin">10dp</dimen>
@@ -81,8 +81,8 @@
     <dimen name="item_music_view_marginleft">3dp</dimen>
     <dimen name="item_music_view_marginright">3dp</dimen>
     <dimen name="item_music_view_marginTop">2dp</dimen>
-    <dimen name="item_music_view_marginBottom">14dp</dimen>
-    <dimen name="item_music_view_elevation">5dp</dimen>
+    <dimen name="item_music_view_marginBottom">8dp</dimen>
+    <dimen name="item_music_view_elevation">1dp</dimen>
     <dimen name="item_music_img_height">250dp</dimen>
     <dimen name="item_music_view_content_height">50dp</dimen>
     <dimen name="item_music_view_title_textsize">18sp</dimen>

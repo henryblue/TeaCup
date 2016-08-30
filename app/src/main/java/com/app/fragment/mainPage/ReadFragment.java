@@ -18,7 +18,9 @@ import com.app.bean.Read.ReadCadInfo;
 import com.app.bean.Read.ReadInfo;
 import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
+import com.app.teacup.ReadCollectionActivity;
 import com.app.teacup.ReadDetailActivity;
+import com.app.teacup.ReadTopicActivity;
 import com.app.util.HttpUtils;
 import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -274,8 +276,25 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
         @Override
         public void onTopicClick(int typePos, int position) {
-            Toast.makeText(getContext(), String.valueOf(typePos) + " : "
-                    +String.valueOf(position), Toast.LENGTH_SHORT).show();
+            switch (typePos) {
+                case 0:
+                    enterNextPage(typePos, position, ReadTopicActivity.class);
+                    break;
+                case 1:
+                    enterNextPage(typePos, position, ReadCollectionActivity.class);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void enterNextPage(int typePos, int position, Class<?> activityClass) {
+            ReadCadInfo cadInfo = mTopicDatas.get(typePos);
+            ReadInfo readInfo = cadInfo.getReadList().get(position);
+            Intent intent = new Intent(getContext(), activityClass);
+            intent.putExtra("readTitle", readInfo.getTitle());
+            intent.putExtra("readTopicUrl", readInfo.getNextUrl());
+            startActivity(intent);
         }
 
         @Override

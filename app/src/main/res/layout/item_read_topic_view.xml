@@ -6,8 +6,7 @@
     android:layout_marginRight="10dp"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
-    android:orientation="vertical"
-    android:elevation="1dp">
+    android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,7 +16,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="专题"
             android:textSize="16sp"
             android:textColor="@color/deep_gray"/>
 
@@ -28,7 +26,6 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/tv_topic_title"
             android:layout_marginLeft="15dp"
-            android:text="遇见你的风格"
             android:textSize="15sp"
             android:textColor="@color/gray"/>
 
@@ -39,7 +36,6 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="15dp"
-            android:text="遇见你的风格>"
             android:textSize="15sp"
             android:textColor="@color/gray"/>
 
@@ -56,8 +52,7 @@
             android:id="@+id/iv_read_top_img1"
             android:layout_width="match_parent"
             android:layout_height="110dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/header"/>
+            android:scaleType="centerCrop" />
         <TextView
             android:id="@+id/iv_read_topic_content1"
             android:layout_width="wrap_content"
@@ -69,8 +64,7 @@
             android:textColor="@color/deep_gray"
             android:textSize="14sp"
             android:maxLines="2"
-            android:ellipsize="end"
-            android:text="前度"/>
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/iv_read_topic_time1"
@@ -82,8 +76,7 @@
             android:textColor="@color/gray"
             android:textSize="12sp"
             android:maxLines="2"
-            android:ellipsize="end"
-            android:text="sdfsfh"/>
+            android:ellipsize="end" />
     </LinearLayout>
 
     <LinearLayout
@@ -98,8 +91,7 @@
             android:id="@+id/iv_read_top_img2"
             android:layout_width="match_parent"
             android:layout_height="110dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/header"/>
+            android:scaleType="centerCrop" />
         <TextView
             android:id="@+id/iv_read_topic_content2"
             android:layout_width="wrap_content"
@@ -111,8 +103,7 @@
             android:textColor="@color/deep_gray"
             android:textSize="14sp"
             android:maxLines="2"
-            android:ellipsize="end"
-            android:text="前度"/>
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/iv_read_topic_time2"
@@ -124,8 +115,7 @@
             android:textColor="@color/gray"
             android:textSize="12sp"
             android:maxLines="2"
-            android:ellipsize="end"
-            android:text="sdfsfh"/>
+            android:ellipsize="end" />
     </LinearLayout>
 
     <LinearLayout
@@ -140,8 +130,7 @@
             android:id="@+id/iv_read_top_img3"
             android:layout_width="match_parent"
             android:layout_height="110dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/header"/>
+            android:scaleType="centerCrop" />
         <TextView
             android:id="@+id/iv_read_topic_content3"
             android:layout_width="wrap_content"
@@ -153,8 +142,7 @@
             android:textColor="@color/deep_gray"
             android:textSize="14sp"
             android:maxLines="2"
-            android:ellipsize="end"
-            android:text="前度"/>
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/iv_read_topic_time3"
@@ -166,8 +154,7 @@
             android:textColor="@color/gray"
             android:textSize="12sp"
             android:maxLines="2"
-            android:ellipsize="end"
-            android:text="sdfsfh"/>
+            android:ellipsize="end" />
     </LinearLayout>
 
     <LinearLayout
@@ -182,8 +169,7 @@
             android:id="@+id/iv_read_top_img4"
             android:layout_width="match_parent"
             android:layout_height="110dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/header"/>
+            android:scaleType="centerCrop" />
         <TextView
             android:id="@+id/iv_read_topic_content4"
             android:layout_width="wrap_content"
@@ -195,8 +181,7 @@
             android:textColor="@color/deep_gray"
             android:textSize="14sp"
             android:maxLines="2"
-            android:ellipsize="end"
-            android:text="前度"/>
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/iv_read_topic_time4"
@@ -208,8 +193,7 @@
             android:textColor="@color/gray"
             android:textSize="12sp"
             android:maxLines="2"
-            android:ellipsize="end"
-            android:text="sdfsfh"/>
+            android:ellipsize="end" />
     </LinearLayout>
 
 </RelativeLayout>

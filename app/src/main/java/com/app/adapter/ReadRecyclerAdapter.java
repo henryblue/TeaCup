@@ -340,10 +340,12 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 @Override
                 public void onPageSelected(int position) {
-                    position = position % mImageViewUrls.size();
-                    mGroup.getChildAt(position).setEnabled(true);
-                    mGroup.getChildAt(mLastPos).setEnabled(false);
-                    mLastPos = position;
+                    if (mImageViewUrls.size() > 0) {
+                        position = position % mImageViewUrls.size();
+                        mGroup.getChildAt(position).setEnabled(true);
+                        mGroup.getChildAt(mLastPos).setEnabled(false);
+                        mLastPos = position;
+                    }
                 }
 
                 @Override
