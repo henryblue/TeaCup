@@ -1,22 +1,23 @@
 package com.app.teacup;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.app.adapter.ReadTopicRecyclerAdapter;
-import com.app.bean.Read.ReadTopicInfo;
+import com.app.adapter.ReadCollectionRecyclerAdapter;
+import com.app.bean.Read.ReadCollectInfo;
 import com.app.util.HttpUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -34,11 +35,11 @@ public class ReadCollectionActivity extends AppCompatActivity {
 
     private static final int LOAD_DATA_FINISH = 0;
     private static final int LOAD_DATA_ERROR = 1;
-    private static final String TAG = "readCollectionActivity";
 
-    private List<ReadTopicInfo> mDatas;
+    private List<ReadCollectInfo> mDatas;
     private XRecyclerView mRecyclerView;
-    private ReadTopicRecyclerAdapter mAdapter;
+    private SwipeRefreshLayout mRefreshLayout;
+    private ReadCollectionRecyclerAdapter mAdapter;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -46,11 +47,14 @@ public class ReadCollectionActivity extends AppCompatActivity {
             switch (msg.what) {
                 case LOAD_DATA_FINISH:
                     mRecyclerView.refreshComplete();
-                    //initData();
+                    mRefreshLayout.setRefreshing(false);
+                    initData();
                     break;
                 case LOAD_DATA_ERROR:
                     Toast.makeText(ReadCollectionActivity.this, getString(R.string.not_have_more_data),
                             Toast.LENGTH_SHORT).show();
+                    mRecyclerView.refreshComplete();
+                    mRefreshLayout.setRefreshing(false);
                     break;
                 default:
                     break;
@@ -65,13 +69,29 @@ public class ReadCollectionActivity extends AppCompatActivity {
         setContentView(R.layout.layout_read_topic);
         initView();
         initToolBar();
-        startRefreshData();
+        setupRefreshLayout();
+    }
+
+    private void setupRefreshLayout() {
+        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+        mRefreshLayout.setProgressViewEndTarget(true, 100);
+        StartRefreshPage();
+    }
+
+    private void StartRefreshPage() {
+        mRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(true);
+                startRefreshData();
+            }
+        });
     }
 
     private void startRefreshData() {
         mDatas.clear();
         String readUrl = getIntent().getStringExtra("readTopicUrl");
-        Log.i(TAG, "url===" + readUrl);
         if (!TextUtils.isEmpty(readUrl)) {
             HttpUtils.sendHttpRequest(readUrl, new HttpUtils.HttpCallBackListener() {
                 @Override
@@ -102,13 +122,14 @@ public class ReadCollectionActivity extends AppCompatActivity {
             Element personalCont = mainLeft.getElementsByClass("personal_cont").get(0);
             Elements createContent = personalCont.getElementsByClass("create_content");
             for (Element e : createContent) {
+                ReadCollectInfo info = new ReadCollectInfo();
                 Element movingCont = e.getElementsByClass("moving_cont").get(0);
                 Element heading = movingCont.getElementsByClass("heading").get(0);
                 Element a = heading.getElementsByTag("a").get(0);
                 String nextUrl = a.attr("href");
                 String title = a.text();
-                Log.i(TAG, "nextUrl=" + nextUrl);
-                Log.i(TAG, "title==" + title);
+                info.setNextUrl(nextUrl);
+                info.setTitle(title);
                 Element wordArticle = movingCont.getElementsByClass("word_article").get(0);
                 Element clearfix = wordArticle.getElementsByClass("clearfix").get(0);
                 Elements a1 = clearfix.getElementsByTag("a");
@@ -118,18 +139,19 @@ public class ReadCollectionActivity extends AppCompatActivity {
                         Element img = e1.getElementsByTag("img").get(0);
                         if (img != null) {
                             String[] srcs = img.attr("src").split("!");
-                            Log.i(TAG, "imgUrl=" + srcs[0]);
+                            info.setImgUrl(srcs[0]);
                         }
                     } else {
-                        Log.i(TAG, "text=" + text);
+                        info.setText(text);
                     }
                 }
 
                 Element moreOperate = e.getElementsByClass("more_operate").get(0);
                 String come = moreOperate.getElementsByClass("moving_come").get(0).text();
                 String detail = moreOperate.getElementsByClass("icon").get(0).text();
-                Log.i(TAG, "come=" + come);
-                Log.i(TAG, "detail=" + detail);
+                info.setCome(come);
+                info.setDetail(detail);
+                mDatas.add(info);
             }
         }
     }
@@ -140,13 +162,15 @@ public class ReadCollectionActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         } else {
             if (mAdapter == null) {
-                mAdapter = new ReadTopicRecyclerAdapter(ReadCollectionActivity.this,
-                        mDatas);
+                mAdapter = new ReadCollectionRecyclerAdapter(ReadCollectionActivity.this, mDatas);
                 mRecyclerView.setAdapter(mAdapter);
-                mAdapter.setOnItemClickListener(new ReadTopicRecyclerAdapter.OnItemClickListener() {
+                mAdapter.setOnItemClickListener(new ReadCollectionRecyclerAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-
+                        Intent intent = new Intent(ReadCollectionActivity.this, ReadDetailActivity.class);
+                        intent.putExtra("readTitle", mDatas.get(position).getTitle());
+                        intent.putExtra("readDetailUrl", mDatas.get(position).getNextUrl());
+                        startActivity(intent);
                     }
                 });
             } else {
@@ -160,12 +184,13 @@ public class ReadCollectionActivity extends AppCompatActivity {
     private void initView() {
         mDatas = new ArrayList<>();
         mRecyclerView = (XRecyclerView) findViewById(R.id.base_recycler_view);
-
+        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.srl_refresh);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+        mRecyclerView.setLoadingMoreEnabled(false);
         mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallSpinFadeLoader);
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override

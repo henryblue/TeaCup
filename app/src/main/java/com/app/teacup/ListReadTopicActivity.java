@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.app.adapter.ReadTopicRecyclerAdapter;
 import com.app.bean.Read.ReadTopicInfo;
 import com.app.util.HttpUtils;
+import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ReadTopicActivity extends AppCompatActivity {
+public class ListReadTopicActivity extends AppCompatActivity {
 
     private static final int LOAD_DATA_FINISH = 0;
     private static final int LOAD_DATA_ERROR = 1;
@@ -51,7 +52,7 @@ public class ReadTopicActivity extends AppCompatActivity {
                     initData();
                     break;
                 case LOAD_DATA_ERROR:
-                    Toast.makeText(ReadTopicActivity.this, getString(R.string.not_have_more_data),
+                    Toast.makeText(ListReadTopicActivity.this, getString(R.string.not_have_more_data),
                             Toast.LENGTH_SHORT).show();
                     mRecyclerView.refreshComplete();
                     mRefreshLayout.setRefreshing(false);
@@ -120,35 +121,25 @@ public class ReadTopicActivity extends AppCompatActivity {
         Document document = Jsoup.parse(response);
         if (document != null) {
             Element main = document.getElementsByClass("main").get(0);
-            Element sDetailLeft = main.getElementsByClass("s_detail_left").get(0);
-            Element mainCont = sDetailLeft.getElementsByClass("main_cont").get(0);
-            Elements content = mainCont.getElementsByClass("create_content");
-            for (Element e : content) {
+            Element specialCont = main.getElementsByClass("special_cont").get(0);
+            Element container = specialCont.getElementsByClass("collect_container").get(0);
+            Element topicList = container.getElementsByClass("topic_list").get(0);
+            Element clearfix = topicList.getElementsByClass("clearfix").get(0);
+            Elements lis = clearfix.getElementsByTag("li");
+            for (Element li : lis) {
                 ReadTopicInfo info = new ReadTopicInfo();
-                Element dCreateTop = e.getElementsByClass("d_create_top").get(0);
-                Element heading = dCreateTop.getElementsByClass("heading").get(0).getElementsByTag("a").get(0);
-                info.setTitle(heading.text());
-                info.setNextUrl(heading.attr("href"));
-
-                String fromNews = e.getElementsByClass("from_news").get(0).text();
-                info.setDetail(fromNews);
-
-                Element article = e.getElementsByClass("word_article").get(0);
-                Element clearfix = article.getElementsByClass("clearfix").get(0);
-                Elements byTag = clearfix.getElementsByTag("a");
-                for (Element tag : byTag) {
-                    String text = tag.text();
-                    if (!TextUtils.isEmpty(text)) {
-                        info.setContent(text + "\n");
-                    } else {
-                        Element img = tag.getElementsByTag("img").get(0);
-                        if (img != null) {
-                            String imgUrl = img.attr("src");
-                            String[] split = imgUrl.split("!");
-                            info.setImgUrl(split[0]);
-                        }
-                    }
-                }
+                Element tListCont = li.getElementsByClass("t_list_cont").get(0);
+                Element lImg = tListCont.getElementsByClass("l_img").get(0);
+                Element a = lImg.getElementsByTag("a").get(0);
+                String nextUrl = urlUtils.READ_URL_NEXT_HEAD + a.attr("href");
+                info.setNextUrl(nextUrl);
+                Element img = a.getElementsByTag("img").get(0);
+                info.setImgUrl(img.attr("src"));
+                Element lCont = tListCont.getElementsByClass("l_cont").get(0);
+                String head = lCont.getElementsByTag("h1").get(0).text();
+                String detail = lCont.getElementsByTag("p").get(0).text();
+                info.setTitle(head);
+                info.setDetail(detail);
                 mDatas.add(info);
             }
         }
@@ -156,19 +147,19 @@ public class ReadTopicActivity extends AppCompatActivity {
 
     private void initData() {
         if (mDatas.isEmpty()) {
-            Toast.makeText(ReadTopicActivity.this, getString(R.string.screen_shield),
+            Toast.makeText(ListReadTopicActivity.this, getString(R.string.screen_shield),
                     Toast.LENGTH_SHORT).show();
         } else {
             if (mAdapter == null) {
-                mAdapter = new ReadTopicRecyclerAdapter(ReadTopicActivity.this,
-                        mDatas, 0);
+                mAdapter = new ReadTopicRecyclerAdapter(ListReadTopicActivity.this,
+                        mDatas, 1);
                 mRecyclerView.setAdapter(mAdapter);
                 mAdapter.setOnItemClickListener(new ReadTopicRecyclerAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(ReadTopicActivity.this, ReadDetailActivity.class);
+                        Intent intent = new Intent(ListReadTopicActivity.this, ReadTopicActivity.class);
                         intent.putExtra("readTitle", mDatas.get(position).getTitle());
-                        intent.putExtra("readDetailUrl", mDatas.get(position).getNextUrl());
+                        intent.putExtra("readTopicUrl", mDatas.get(position).getNextUrl());
                         startActivity(intent);
                     }
                 });

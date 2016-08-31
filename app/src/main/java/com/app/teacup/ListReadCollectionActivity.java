@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ReadTopicActivity extends AppCompatActivity {
+public class ListReadCollectionActivity extends AppCompatActivity {
 
     private static final int LOAD_DATA_FINISH = 0;
     private static final int LOAD_DATA_ERROR = 1;
@@ -47,14 +46,11 @@ public class ReadTopicActivity extends AppCompatActivity {
             switch (msg.what) {
                 case LOAD_DATA_FINISH:
                     mRecyclerView.refreshComplete();
-                    mRefreshLayout.setRefreshing(false);
                     initData();
                     break;
                 case LOAD_DATA_ERROR:
-                    Toast.makeText(ReadTopicActivity.this, getString(R.string.not_have_more_data),
+                    Toast.makeText(ListReadCollectionActivity.this, getString(R.string.not_have_more_data),
                             Toast.LENGTH_SHORT).show();
-                    mRecyclerView.refreshComplete();
-                    mRefreshLayout.setRefreshing(false);
                     break;
                 default:
                     break;
@@ -62,7 +58,6 @@ public class ReadTopicActivity extends AppCompatActivity {
             super.handleMessage(msg);
         }
     };
-    private SwipeRefreshLayout mRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,24 +65,7 @@ public class ReadTopicActivity extends AppCompatActivity {
         setContentView(R.layout.layout_read_topic);
         initView();
         initToolBar();
-        setupRefreshLayout();
-    }
-
-    private void setupRefreshLayout() {
-        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-        mRefreshLayout.setProgressViewEndTarget(true, 100);
-        StartRefreshPage();
-    }
-
-    private void StartRefreshPage() {
-        mRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(true);
-                startRefreshData();
-            }
-        });
+        startRefreshData();
     }
 
     private void startRefreshData() {
@@ -118,6 +96,8 @@ public class ReadTopicActivity extends AppCompatActivity {
 
     private void parseData(String response) {
         Document document = Jsoup.parse(response);
+        String newRes = document.html().replace("<br></br>", "\n");
+        document = Jsoup.parse(newRes);
         if (document != null) {
             Element main = document.getElementsByClass("main").get(0);
             Element sDetailLeft = main.getElementsByClass("s_detail_left").get(0);
@@ -156,17 +136,17 @@ public class ReadTopicActivity extends AppCompatActivity {
 
     private void initData() {
         if (mDatas.isEmpty()) {
-            Toast.makeText(ReadTopicActivity.this, getString(R.string.screen_shield),
+            Toast.makeText(ListReadCollectionActivity.this, getString(R.string.screen_shield),
                     Toast.LENGTH_SHORT).show();
         } else {
             if (mAdapter == null) {
-                mAdapter = new ReadTopicRecyclerAdapter(ReadTopicActivity.this,
-                        mDatas, 0);
+                mAdapter = new ReadTopicRecyclerAdapter(ListReadCollectionActivity.this,
+                        mDatas, 2);
                 mRecyclerView.setAdapter(mAdapter);
                 mAdapter.setOnItemClickListener(new ReadTopicRecyclerAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(ReadTopicActivity.this, ReadDetailActivity.class);
+                        Intent intent = new Intent(ListReadCollectionActivity.this, ReadDetailActivity.class);
                         intent.putExtra("readTitle", mDatas.get(position).getTitle());
                         intent.putExtra("readDetailUrl", mDatas.get(position).getNextUrl());
                         startActivity(intent);
@@ -183,12 +163,11 @@ public class ReadTopicActivity extends AppCompatActivity {
     private void initView() {
         mDatas = new ArrayList<>();
         mRecyclerView = (XRecyclerView) findViewById(R.id.base_recycler_view);
-        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.srl_refresh);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setLoadingMoreEnabled(false);
         mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallSpinFadeLoader);
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {

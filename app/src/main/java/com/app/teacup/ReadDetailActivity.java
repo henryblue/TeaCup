@@ -7,7 +7,6 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,10 +25,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.w3c.dom.Text;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -156,16 +152,22 @@ public class ReadDetailActivity extends AppCompatActivity {
         Document document = Jsoup.parse(response);
         String newRes = document.html().replace("<br>", "\n");
         document = Jsoup.parse(newRes);
-        String text = "";
         if (document != null) {
             Element article = document.getElementsByClass("article").get(0);
-            Element h3 = article.getElementsByTag("h3").get(0);
-            msAuthor = h3.text();
+            try {
+                Elements select = article.select("h3");
+                if (select != null) {
+                    msAuthor = article.getElementsByTag("h3").get(0).text();
+                }
+            } catch (Exception e) {
+            }
+
             Elements tags = article.getElementsByTag("p");
             if (tags != null) {
                 for (Element tag : tags) {
                     if (!TextUtils.isEmpty(tag.text())) {
-                        text += tag.text() + "\n\n";
+                        String text = tag.text();
+                        mDatas.add(text);
                     } else {
                         Elements img = tag.getElementsByTag("img");
                         if (img != null) {
@@ -175,9 +177,6 @@ public class ReadDetailActivity extends AppCompatActivity {
                             }
                         }
                     }
-                }
-                if (!TextUtils.isEmpty(text)) {
-                    mDatas.add(text);
                 }
             }
 
@@ -202,7 +201,7 @@ public class ReadDetailActivity extends AppCompatActivity {
     private void initToolBar() {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.activity_navigation_toolbar);
         if (mToolbar != null) {
-            mToolbar.setTitle(getString(R.string.item_read));
+            mToolbar.setTitle(getIntent().getStringExtra("readTitle"));
         }
         setSupportActionBar(mToolbar);
         getSupportActionBar().setHomeButtonEnabled(true);

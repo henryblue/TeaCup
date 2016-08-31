@@ -17,6 +17,8 @@ import com.app.adapter.ReadRecyclerAdapter;
 import com.app.bean.Read.ReadCadInfo;
 import com.app.bean.Read.ReadInfo;
 import com.app.fragment.BaseFragment;
+import com.app.teacup.ListReadCollectionActivity;
+import com.app.teacup.ListReadTopicActivity;
 import com.app.teacup.R;
 import com.app.teacup.ReadCollectionActivity;
 import com.app.teacup.ReadDetailActivity;
@@ -297,9 +299,25 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             startActivity(intent);
         }
 
+        private void enterMorePage(int typePos, String title, Class<?> activityClass) {
+            ReadCadInfo cadInfo = mTopicDatas.get(typePos);
+            Intent intent = new Intent(getContext(), activityClass);
+            intent.putExtra("readTitle", title);
+            intent.putExtra("readTopicUrl", cadInfo.getMoreUrl());
+            startActivity(intent);
+        }
         @Override
         public void onLoadMore(int typePos) {
-            Toast.makeText(getContext(), String.valueOf(typePos), Toast.LENGTH_SHORT).show();
+            switch (typePos) {
+                case 0:
+                    enterMorePage(typePos, mTopicDatas.get(typePos).getCadContent(), ListReadTopicActivity.class);
+                    break;
+                case 1:
+                    enterMorePage(typePos, mTopicDatas.get(typePos).getCadContent(), ListReadCollectionActivity.class);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
