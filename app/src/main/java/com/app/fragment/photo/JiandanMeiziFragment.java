@@ -219,12 +219,12 @@ public class JiandanMeiziFragment extends BaseFragment implements SwipeRefreshLa
 
     @Override
     protected void onRefreshFinish() {
+        mRefreshLayout.setRefreshing(false);
+        mRecyclerView.refreshComplete();
         if (mImgUrl.size() <= 0) {
             Toast.makeText(getContext(), getString(R.string.screen_shield),
                     Toast.LENGTH_SHORT).show();
         } else {
-            mRefreshLayout.setRefreshing(false);
-            mRecyclerView.refreshComplete();
             mPhotoRecyclerAdapter.reSetData(mImgUrl);
         }
     }

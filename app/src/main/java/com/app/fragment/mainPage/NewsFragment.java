@@ -126,6 +126,16 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .dontAnimate()
                     .into(mImageViewList.get(i));
+            final int pos = i;
+            mImageViewList.get(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), NewsDetailActivity.class);
+                    intent.putExtra("newsDetailUrl", mNewsDatas.get(pos).getNextUrl());
+                    intent.putExtra("newsTitle", mNewsDatas.get(pos).getTitle());
+                    startActivity(intent);
+                }
+            });
         }
         mNewsRecyclerAdapter.startHeaderAutoScrolled();
         mNewsRecyclerAdapter.setHeaderVisible(View.VISIBLE);

@@ -41,6 +41,7 @@
             android:layout_marginRight="@dimen/photo_gaoxiao_content_marginRight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="3"
             android:textSize="@dimen/photo_gaoxiao_content_textSize"
             android:textColor="@color/black"/>
 

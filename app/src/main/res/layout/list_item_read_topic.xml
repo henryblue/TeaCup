@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="220dp"
-    android:background="@color/white"
+    android:layout_height="225dp"
     android:layout_margin="8dp" >
 
     <ImageView
         android:id="@+id/list_read_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/header"
         android:scaleType="centerCrop" />
 
     <LinearLayout
@@ -27,7 +25,6 @@
             android:ellipsize="end"
             android:textColor="@color/white"
             android:gravity="center"
-            android:text="前度"
             android:layout_margin="8dp"
             android:textSize="15sp"/>
 
@@ -39,7 +36,6 @@
             android:ellipsize="end"
             android:textColor="@color/white"
             android:gravity="center"
-            android:text="前度"
             android:textSize="13sp"/>
     </LinearLayout>
 

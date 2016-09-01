@@ -35,7 +35,7 @@
     <dimen name="fragment_detail_textview_textsize">16sp</dimen>
 
     <dimen name="item_find_fragment_cardCornerRadius">6dp</dimen>
-    <dimen name="item_find_fragment_cardElevation">2dp</dimen>
+    <dimen name="item_find_fragment_cardElevation">1dp</dimen>
     <dimen name="item_find_fragment_marginleft">8dp</dimen>
     <dimen name="item_find_fragment_marginright">8dp</dimen>
     <dimen name="item_find_fragment_margintop">4dp</dimen>
@@ -93,7 +93,7 @@
     <dimen name="item_music_view_info_marginleft">5dp</dimen>
 
     <dimen name="photo_gaoxiao_layout_height">290dp</dimen>
-    <dimen name="photo_gaoxiao_layout_margin">8dp</dimen>
+    <dimen name="photo_gaoxiao_layout_margin">4dp</dimen>
     <dimen name="photo_gaoxiao_tip_layout_height">30dp</dimen>
     <dimen name="photo_gaoxiao_tip_layout_marginLeft">16dp</dimen>
     <dimen name="photo_gaoxiao_tip_img_width">30dp</dimen>
@@ -110,7 +110,7 @@
     <dimen name="photo_gaoxiao_photo_marginRight">16dp</dimen>
 
     <dimen name="photo_qiubai_layout_height">270dp</dimen>
-    <dimen name="photo_qiubai_layout_margin">7dp</dimen>
+    <dimen name="photo_qiubai_layout_margin">4dp</dimen>
     <dimen name="photo_qiubai_tip_height">50dp</dimen>
     <dimen name="photo_qiubai_tip_img_marginLeft">16dp</dimen>
     <dimen name="photo_qiubai_tip_img_width">40dp</dimen>
@@ -124,7 +124,7 @@
     <dimen name="photo_qiubai_gif_height">50dp</dimen>
 
     <dimen name="item_photo_view_height">270dp</dimen>
-    <dimen name="item_photo_view_margin">5dp</dimen>
+    <dimen name="item_photo_view_margin">3dp</dimen>
     <dimen name="item_photo_view_img_margin">4dp</dimen>
     <dimen name="item_photo_view_img_height">225dp</dimen>
     <dimen name="item_photo_view_title_height">40dp</dimen>

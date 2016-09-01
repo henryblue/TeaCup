@@ -41,6 +41,7 @@ public class ListReadTopicActivity extends AppCompatActivity {
     private List<ReadTopicInfo> mDatas;
     private XRecyclerView mRecyclerView;
     private ReadTopicRecyclerAdapter mAdapter;
+    private SwipeRefreshLayout mRefreshLayout;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -63,7 +64,6 @@ public class ListReadTopicActivity extends AppCompatActivity {
             super.handleMessage(msg);
         }
     };
-    private SwipeRefreshLayout mRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

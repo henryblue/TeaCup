@@ -28,6 +28,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/photo_qiubai_tip_title_marginLeft"
                 android:gravity="center_vertical"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textSize="@dimen/photo_qiubai_tip_title_textsize"/>
         </LinearLayout>
         <FrameLayout

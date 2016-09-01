@@ -27,6 +27,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,6 +119,13 @@ public class ReadCollectionActivity extends AppCompatActivity {
     private void parseData(String response) {
         Document document = Jsoup.parse(response);
         if (document != null) {
+            try {
+                FileOutputStream outputStream = openFileOutput("hhahah.html", MODE_PRIVATE);
+                outputStream.write(document.toString().getBytes());
+                outputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             Element mainLeft = document.getElementsByClass("main_left").get(0);
             Element personalCont = mainLeft.getElementsByClass("personal_cont").get(0);
             Elements createContent = personalCont.getElementsByClass("create_content");
@@ -148,7 +156,12 @@ public class ReadCollectionActivity extends AppCompatActivity {
 
                 Element moreOperate = e.getElementsByClass("more_operate").get(0);
                 String come = moreOperate.getElementsByClass("moving_come").get(0).text();
-                String detail = moreOperate.getElementsByClass("icon").get(0).text();
+                String detail = "";
+                Elements icon = moreOperate.getElementsByClass("icon").get(0).getElementsByTag("a");
+                for (Element ic : icon) {
+                    detail += ic.text() + " ";
+                }
+
                 info.setCome(come);
                 info.setDetail(detail);
                 mDatas.add(info);
@@ -162,7 +175,7 @@ public class ReadCollectionActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         } else {
             if (mAdapter == null) {
-                mAdapter = new ReadCollectionRecyclerAdapter(ReadCollectionActivity.this, mDatas);
+                mAdapter = new ReadCollectionRecyclerAdapter(ReadCollectionActivity.this, mDatas, 0);
                 mRecyclerView.setAdapter(mAdapter);
                 mAdapter.setOnItemClickListener(new ReadCollectionRecyclerAdapter.OnItemClickListener() {
                     @Override
