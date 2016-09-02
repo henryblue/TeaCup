@@ -22,17 +22,17 @@
                 android:id="@+id/tv_read_detail_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="@dimen/activity_read_detail_title_margin"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="@dimen/activity_read_detail_title_textSize" />
 
             <TextView
                 android:id="@+id/tv_read_detail_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="@dimen/activity_read_detail_author_margin"
                 android:textColor="@color/gray"
-                android:textSize="14sp" />
+                android:textSize="@dimen/activity_read_detail_author_textSize" />
 
         </LinearLayout>
     </ScrollView>

@@ -24,15 +24,15 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="@dimen/activity_new_detail_textSize" />
 
             <TextView
                 android:id="@+id/tv_news_detail_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="@dimen/activity_new_detail_margin"
                 android:textColor="@color/gray"
-                android:textSize="14sp" />
+                android:textSize="@dimen/activity_new_detail_author_textSize" />
 
         </LinearLayout>
     </ScrollView>

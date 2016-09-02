@@ -148,4 +148,47 @@
     <dimen name="news_detail_item_img_height">220dp</dimen>
     <dimen name="news_detail_item_txt_textSize">18sp</dimen>
     <dimen name="item_news_view_elevation">0.5dp</dimen>
+
+    <dimen name="activity_new_detail_textSize">20sp</dimen>
+    <dimen name="activity_new_detail_margin">10dp</dimen>
+    <dimen name="activity_new_detail_author_textSize">14sp</dimen>
+
+    <dimen name="activity_read_detail_title_margin">10dp</dimen>
+    <dimen name="activity_read_detail_author_margin">10dp</dimen>
+    <dimen name="activity_read_detail_author_textSize">14sp</dimen>
+    <dimen name="activity_read_detail_title_textSize">20sp</dimen>
+
+    <dimen name="item_news_header_height">170dp</dimen>
+    <dimen name="item_news_header_ll_marginBootm">16dp</dimen>
+
+    <dimen name="item_news_view_cardView_margin">3dp</dimen>
+    <dimen name="item_news_view_cardView_height">100dp</dimen>
+    <dimen name="item_news_view_rl_marginLeft">10dp</dimen>
+    <dimen name="item_news_view_rl_marginRight">10dp</dimen>
+    <dimen name="item_news_view_rl_height">80dp</dimen>
+    <dimen name="item_news_view_rl_iv_width">80dp</dimen>
+    <dimen name="item_news_view_rl_tv_marginLeft">8dp</dimen>
+    <dimen name="item_news_view_rl_tv_marginTop">5dp</dimen>
+    <dimen name="item_news_view_rl_tv_textSize">16sp</dimen>
+    <dimen name="item_news_view_rl_tv_label_textSize">13sp</dimen>
+    <dimen name="item_news_view_rl_tv_label_marginBottom">5dp</dimen>
+
+    <dimen name="item_read_collection_height">198dp</dimen>
+    <dimen name="item_read_collection_marginBottom">15dp</dimen>
+    <dimen name="item_read_collection_title_textSize">18sp</dimen>
+    <dimen name="item_read_collection_title_margin">8dp</dimen>
+    <dimen name="item_read_collection_ll_height">118dp</dimen>
+    <dimen name="item_read_collection_ll_marginTop">4dp</dimen>
+    <dimen name="item_read_collection_ll_marginRight">8dp</dimen>
+    <dimen name="item_read_collection_iv_width">100dp</dimen>
+    <dimen name="item_read_collection_iv_height">105dp</dimen>
+    <dimen name="item_read_collection_iv_marginLeft">8dp</dimen>
+    <dimen name="item_read_collection_tv_marginLeft">8dp</dimen>
+    <dimen name="item_read_collection_tv_textSize">15sp</dimen>
+    <dimen name="item_read_collection_tv_come_marginBottom">8dp</dimen>
+    <dimen name="item_read_collection_tv_come_marginLeft">8dp</dimen>
+    <dimen name="item_read_collection_tv_come_textSize">13sp</dimen>
+    <dimen name="item_read_collection_tv_detail_marginBottom">8dp</dimen>
+    <dimen name="item_read_collection_tv_detail_marginRight">8dp</dimen>
+    <dimen name="item_read_collection_tv_detail_textSize">13sp</dimen>
 </resources>

@@ -6,14 +6,14 @@
     <com.app.ui.ReactViewPager
         android:id="@+id/vp_news"
         android:layout_width="match_parent"
-        android:layout_height="170dp" />
+        android:layout_height="@dimen/item_news_header_height" />
 
     <LinearLayout
         android:id="@+id/ll_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="@dimen/item_news_header_ll_marginBootm"
         android:orientation="horizontal"
         android:visibility="gone" >
     </LinearLayout>
