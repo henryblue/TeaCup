@@ -119,13 +119,6 @@ public class ReadCollectionActivity extends AppCompatActivity {
     private void parseData(String response) {
         Document document = Jsoup.parse(response);
         if (document != null) {
-            try {
-                FileOutputStream outputStream = openFileOutput("hhahah.html", MODE_PRIVATE);
-                outputStream.write(document.toString().getBytes());
-                outputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             Element mainLeft = document.getElementsByClass("main_left").get(0);
             Element personalCont = mainLeft.getElementsByClass("personal_cont").get(0);
             Elements createContent = personalCont.getElementsByClass("create_content");

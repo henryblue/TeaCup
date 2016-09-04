@@ -55,6 +55,7 @@
 
     <dimen name="muisic_detail_title_margintop">15dp</dimen>
     <dimen name="muisic_detail_title_marginleft">15dp</dimen>
+    <dimen name="muisic_detail_title_marginRight">10dp</dimen>
     <dimen name="muisic_detail_title_textsize">20sp</dimen>
     <dimen name="muisic_detail_type_margintop">10dp</dimen>
     <dimen name="muisic_detail_type_marginleft">15dp</dimen>

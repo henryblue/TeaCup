@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_ting_detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/deep_gray"
+        android:layout_marginTop="@dimen/muisic_detail_title_margintop"
+        android:layout_marginLeft="@dimen/muisic_detail_title_marginleft"
+        android:layout_marginRight="@dimen/muisic_detail_title_marginRight"
+        android:maxLines="1"
+        android:textSize="@dimen/muisic_detail_title_textsize"/>
+
+    <TextView
+        android:id="@+id/tv_ting_detail_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/muisic_detail_type_marginleft"
+        android:layout_marginTop="@dimen/muisic_detail_type_margintop"
+        android:textSize="@dimen/muisic_detail_type_textsize"
+        android:textColor="@color/gray"/>
+
+    <com.hrb.library.MiniMusicView
+        android:id="@+id/chl_music_view"
+        android:visibility="invisible"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/tv_ting_detail_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
+
+</LinearLayout>

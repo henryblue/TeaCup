@@ -7,6 +7,7 @@
     <string name="drawer_open">打开</string>
     <string name="drawer_close">关闭</string>
     <string name="item_main">主页</string>
+    <string name="item_book">搜书</string>
     <string name="item_package">美图</string>
     <string name="item_news">新鲜事</string>
     <string name="item_read">阅读</string>
@@ -17,6 +18,7 @@
     <string name="ok">确定</string>
     <string name="transition_book_img">transition_book_img</string>
     <string name="transition_music_img">transition_music_img</string>
+    <string name="transition_ting_img">transition_ting_img</string>
     <string name="book_content_detail">内容简介</string>
     <string name="book_author_detail">作者简介</string>
     <string name="book_table">目录</string>
@@ -33,7 +35,7 @@
         <item>新鲜事</item>
         <item>阅读</item>
         <item>音乐期刊</item>
-        <item>搜书</item>
+        <item>电台</item>
     </string-array>
     <string-array name="tab_photo">
         <item>煎蛋妹子</item>

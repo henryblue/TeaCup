@@ -15,10 +15,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.app.adapter.PagerAdapter;
-import com.app.fragment.mainPage.FindBookFragment;
 import com.app.fragment.mainPage.MusicFragment;
 import com.app.fragment.mainPage.NewsFragment;
 import com.app.fragment.mainPage.ReadFragment;
+import com.app.fragment.mainPage.TingFragment;
 
 import java.util.ArrayList;
 
@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
+    private NavigationView mNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,18 +51,18 @@ public class MainActivity extends AppCompatActivity {
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
         setupDrawerContent(mNavigationView);
 
         ArrayList<Fragment> mFragmentLists = new ArrayList<>();
-        FindBookFragment mFindBookFragment = new FindBookFragment();
+        TingFragment mTingFragment = new TingFragment();
         ReadFragment mReadFragment = new ReadFragment();
         MusicFragment mMusicFragment = new MusicFragment();
         NewsFragment newsFragment = new NewsFragment();
         mFragmentLists.add(newsFragment);
         mFragmentLists.add(mReadFragment);
         mFragmentLists.add(mMusicFragment);
-        mFragmentLists.add(mFindBookFragment);
+        mFragmentLists.add(mTingFragment);
 
         ViewPager mViewPager = (ViewPager) findViewById(R.id.main_view_pager);
         PagerAdapter mPagerAdapter = new PagerAdapter(getSupportFragmentManager(),
@@ -78,13 +79,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setupDrawerContent(NavigationView mNavigationView) {
+    private void setupDrawerContent(final NavigationView mNavigationView) {
         mNavigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.navigation_item_main:
+                                break;
+                            case R.id.navigation_item_book:
+                                enterOtherActivity(FindBookActivity.class);
                                 break;
                             case R.id.navigation_item_photo:
                                 enterOtherActivity(PhotoActivity.class);
@@ -105,6 +109,12 @@ public class MainActivity extends AppCompatActivity {
     private void enterOtherActivity(Class<?> activityClass) {
         Intent intent = new Intent(MainActivity.this, activityClass);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mNavigationView.getMenu().getItem(0).setChecked(true);
     }
 
     @Override

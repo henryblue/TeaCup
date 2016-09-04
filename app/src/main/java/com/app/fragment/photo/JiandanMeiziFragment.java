@@ -18,6 +18,7 @@ import com.app.adapter.PhotoRecyclerAdapter;
 import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
 import com.app.teacup.ShowPhotoActivity;
+import com.app.teacup.ShowPhotoListActivity;
 import com.app.util.HttpUtils;
 import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -33,7 +34,7 @@ import java.util.List;
 
 public class JiandanMeiziFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    private List<String> mImgUrl;
+    private ArrayList<String> mImgUrl;
     private SwipeRefreshLayout mRefreshLayout;
     private XRecyclerView mRecyclerView;
     private int mainPageId = -1;

@@ -19,6 +19,7 @@ import com.app.bean.PhotoInfo;
 import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
 import com.app.teacup.ShowPhotoActivity;
+import com.app.teacup.ShowPhotoListActivity;
 import com.app.util.HttpUtils;
 import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -36,6 +37,7 @@ public class DoubanMeiziFragment extends BaseFragment implements SwipeRefreshLay
 
     private int mPageNum = 1;
     private List<PhotoInfo> mImgUrl;
+    private ArrayList<String> mImageUrls;
     private SwipeRefreshLayout mRefreshLayout;
     private XRecyclerView mRecyclerView;
     private PhotoDoubanRecyclerAdapter mPhotoRecyclerAdapter;
@@ -44,6 +46,7 @@ public class DoubanMeiziFragment extends BaseFragment implements SwipeRefreshLay
     public void onAttach(Context context) {
         super.onAttach(context);
         mImgUrl = new ArrayList<>();
+        mImageUrls = new ArrayList<>();
     }
 
     @Override
@@ -120,6 +123,7 @@ public class DoubanMeiziFragment extends BaseFragment implements SwipeRefreshLay
 
     private void startRefreshData() {
         mImgUrl.clear();
+        mImageUrls.clear();
         HttpUtils.sendHttpRequest(urlUtils.DOUBAN_MEINV_URL, new HttpUtils.HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
@@ -173,6 +177,7 @@ public class DoubanMeiziFragment extends BaseFragment implements SwipeRefreshLay
                     String url = height.attr("src");
                     if (url.contains(".jpg")) {
                         info.setImgUrl(url);
+                        mImageUrls.add(url);
                     }
                     String title = height.attr("title");
                     info.setTitle(title);

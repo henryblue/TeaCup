@@ -125,11 +125,11 @@ public class MusicPlayActivity extends Activity implements View.OnClickListener 
                 intent.setAction(MediaService.MUSIC_SERVICE_ACTION);
                 if (mIsPlay) {
                     intent.putExtra("option", MediaService.OPTION_PAUSE);
-                    mPlayButton.setImageResource(R.drawable.play);
+                    mPlayButton.setImageResource(R.drawable.playmusic);
                     mIsPlay = false;
                 } else {
                     intent.putExtra("option", MediaService.OPTION_CONTINUE);
-                    mPlayButton.setImageResource(R.drawable.pause);
+                    mPlayButton.setImageResource(R.drawable.pausemusic);
                     mIsPlay = true;
                 }
                 sendBroadcast(intent);
@@ -165,7 +165,7 @@ public class MusicPlayActivity extends Activity implements View.OnClickListener 
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade()
                 .into(mProgressBar);
-        mPlayButton.setImageResource(R.drawable.pause);
+        mPlayButton.setImageResource(R.drawable.pausemusic);
     }
     @Override
     protected void onDestroy() {
@@ -203,7 +203,7 @@ public class MusicPlayActivity extends Activity implements View.OnClickListener 
                     Intent pauseIntent = new Intent();
                     pauseIntent.setAction(MediaService.MUSIC_SERVICE_ACTION);
                     pauseIntent.putExtra("option", MediaService.OPTION_PAUSE);
-                    mPlayButton.setImageResource(R.drawable.play);
+                    mPlayButton.setImageResource(R.drawable.playmusic);
                     mIsPlay = false;
                     sendBroadcast(pauseIntent);
                 }

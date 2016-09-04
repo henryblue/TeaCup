@@ -1,4 +1,4 @@
-package com.app.fragment.mainPage;
+package com.app.teacup;
 
 
 import android.content.Context;
@@ -12,27 +12,28 @@ import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.app.adapter.FindRecycleAdapter;
 import com.app.bean.book.Book;
 import com.app.bean.book.BookInfo;
 import com.app.bean.book.FindBookInfo;
-import com.app.teacup.BookDetailActivity;
-import com.app.teacup.R;
 import com.app.util.HttpUtils;
 import com.app.util.JsonUtils;
 import com.app.util.urlUtils;
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -44,7 +45,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class FindBookActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final int REFRESH_START = 0;
     private static final int REFRESH_FINISH = 1;
@@ -82,7 +83,7 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
                     }
                     break;
                 case READ_DATA_FROM_FILE_FINISH:
-                    Toast.makeText(getContext(), getString(R.string.refresh_net_error),
+                    Toast.makeText(FindBookActivity.this, getString(R.string.refresh_net_error),
                             Toast.LENGTH_SHORT).show();
                     mAdapter.reSetData(mDatas);
                     break;
@@ -92,22 +93,14 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
         }
     };
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mDatas = new ArrayList<>();
-    }
-
     private void initLoadData() {
-        SharedPreferences pref = getContext().getSharedPreferences("config",
+        SharedPreferences pref = getSharedPreferences("config",
                 Context.MODE_PRIVATE);
         String url = pref.getString("url", "");
         if (TextUtils.isEmpty(url)) {
             url = urlUtils.DOUBAN_URL_ADDR;
-        } else {
-            mDatas.clear();
         }
-
+        mDatas.clear();
         HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
@@ -171,7 +164,7 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
     private void writeDataToFile(String data) {
         FileOutputStream outputStream;
         try {
-            outputStream = getContext().openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
             outputStream.write(data.getBytes());
             outputStream.close();
         } catch (Exception e) {
@@ -185,7 +178,7 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
             public void run() {
                 try {
                     FileInputStream fis;
-                    fis = getContext().openFileInput(filename);
+                    fis = openFileInput(filename);
                     byte[] buffer = new byte[fis.available()];
                     fis.read(buffer);
                     fis.close();
@@ -200,27 +193,54 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.find_book_activity);
+        mDatas = new ArrayList<>();
+        initToolBar();
+        setupRecycleView();
+        setupRefreshLayout();
+        setupFAB();
+    }
+
+    private void initToolBar() {
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.activity_navigation_toolbar);
+        if (mToolbar != null) {
+            mToolbar.setTitle(getString(R.string.item_book));
+        }
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.find_book_fragment, container, false);
-
-        setupRecycleView(view);
-        setupRefreshLayout(view);
-        setupFAB(view);
-        return view;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_normal, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
-    private void setupRefreshLayout(View view) {
-        mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
-        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-        mRefreshLayout.setProgressViewEndTarget(true, 100);
-        mRefreshLayout.setOnRefreshListener(this);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_share:
+                return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setupRefreshLayout() {
+        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.srl_refresh);
+        if (mRefreshLayout != null) {
+            mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+            mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+            mRefreshLayout.setProgressViewEndTarget(true, 100);
+            mRefreshLayout.setOnRefreshListener(this);
+        }
         StartRefreshPage();
     }
 
@@ -234,8 +254,8 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
     }
 
-    private void setupFAB(View view) {
-        mAddBtn = (FloatingActionButton) view.findViewById(R.id.fab_btn_add);
+    private void setupFAB() {
+        mAddBtn = (FloatingActionButton) findViewById(R.id.fab_btn_add);
         mAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -244,14 +264,17 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
     }
 
-    private void setupRecycleView(View view) {
-        recyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
-        recyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getContext());
+    private void setupRecycleView() {
+        recyclerView = (XRecyclerView) findViewById(R.id.base_recycler_view);
+        if (recyclerView != null) {
+            recyclerView.setHasFixedSize(true);
+        }
+        mLayoutManager = new LinearLayoutManager(FindBookActivity.this);
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLoadingMoreEnabled(false);
+        recyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
@@ -266,19 +289,19 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         });
 
-        mAdapter = new FindRecycleAdapter(getContext(), mDatas);
+        mAdapter = new FindRecycleAdapter(this, mDatas);
         mAdapter.setOnItemClickListener(new FindRecycleAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(getContext(), BookDetailActivity.class);
+                Intent intent = new Intent(FindBookActivity.this, BookDetailActivity.class);
                 intent.putExtra("book", mDatas.get(position));
 
                 ActivityOptionsCompat options =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(FindBookActivity.this,
                                 view.findViewById(R.id.iv_book_img),
                                 getString(R.string.transition_book_img));
 
-                ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+                ActivityCompat.startActivity(FindBookActivity.this, intent, options.toBundle());
             }
 
             @Override
@@ -290,14 +313,14 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void showAddDialog() {
-        final MaterialEditText editText = new MaterialEditText(getContext());
+        final MaterialEditText editText = new MaterialEditText(FindBookActivity.this);
         editText.setHint(R.string.input_hint);
         editText.setMetTextColor(Color.parseColor("#009688"));
         editText.setPrimaryColor(Color.parseColor("#009688"));
         editText.setMaxCharacters(20);
         editText.setErrorColor(Color.parseColor("#ff0000"));
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+        AlertDialog.Builder builder = new AlertDialog.Builder(FindBookActivity.this)
                 .setTitle(R.string.add_book)
                 .setView(editText, 30, 20, 20, 20)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -312,7 +335,7 @@ public class FindBookFragment extends Fragment implements SwipeRefreshLayout.OnR
     private void doSearch(String bookName) {
         if (!TextUtils.isEmpty(bookName)) {
             String url = urlUtils.DOUBAN_URL_SEARCH + "search?q=" + bookName + "&fields=all";
-            SharedPreferences.Editor edit = getContext().getSharedPreferences("config",
+            SharedPreferences.Editor edit = getSharedPreferences("config",
                     Context.MODE_PRIVATE).edit();
             edit.putString("url", url);
             edit.apply();

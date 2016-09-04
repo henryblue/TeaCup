@@ -2,11 +2,13 @@ package com.app.adapter;
 
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.bean.Music.MusicInfo;
@@ -16,31 +18,88 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
+
 public class MusicRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<MusicInfo> mDatas;
     private OnItemClickListener mListener;
     private LayoutInflater mLayoutInflater;
+    private int mType;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
 
-    public MusicRecyclerAdapter(Context context, List<MusicInfo> datas) {
+    public MusicRecyclerAdapter(Context context, List<MusicInfo> datas, int type) {
         mContext = context;
         mDatas = datas;
         mLayoutInflater = LayoutInflater.from(context);
+        mType = type;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (0 == mType) {
             return new MusicViewHolder(mLayoutInflater.inflate(R.layout.item_music_view, parent, false));
+        } else {
+            return new TingViewHolder(mLayoutInflater.inflate(R.layout.item_ting_view, parent, false));
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof MusicViewHolder) {
             onBindSingleItemViewHolder(holder, position);
+        } else if (holder instanceof TingViewHolder) {
+            onBindTingItemViewHolder(holder, position);
+        }
+    }
+
+    private void onBindTingItemViewHolder(final RecyclerView.ViewHolder holder, int position) {
+        MusicInfo info = mDatas.get(position);
+        String url = info.getImgUrl();
+        final TingViewHolder myHolder = (TingViewHolder) holder;
+        myHolder.mLayout.setVisibility(View.GONE);
+        myHolder.mJcVideoPlayer.setVisibility(View.GONE);
+        myHolder.mJcVideoPlayer.release();
+        String strType = info.getHappyNum();
+        if (strType.startsWith("http://")) {
+            myHolder.mJcVideoPlayer.setVisibility(View.VISIBLE);
+            myHolder.mJcVideoPlayer.setUp(strType
+                    , JCVideoPlayerStandard.SCREEN_LAYOUT_LIST, info.getTitle());
+
+            Glide.with(mContext).load(url).asBitmap()
+                    .error(R.drawable.photo_loaderror)
+                    .placeholder(R.drawable.main_load_bg)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .dontAnimate()
+                    .into(myHolder.mJcVideoPlayer.thumbImageView);
+            return;
+        } else {
+            myHolder.mLayout.setVisibility(View.VISIBLE);
+        }
+
+        Glide.with(mContext).load(url).asBitmap()
+                .error(R.drawable.photo_loaderror)
+                .placeholder(R.drawable.main_load_bg)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .dontAnimate()
+                .into(myHolder.mPhotoImg);
+        myHolder.mTitle.setText(info.getTitle());
+        myHolder.mDetail.setText(info.getInfoNum());
+        myHolder.mContent.setText(strType);
+
+        if (mListener != null) {
+            myHolder.mLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = myHolder.getLayoutPosition() - 1;
+                    mListener.onItemClick(myHolder.itemView, pos);
+                }
+            });
+        }
     }
 
     private void onBindSingleItemViewHolder(final RecyclerView.ViewHolder holder, int position) {
@@ -96,6 +155,27 @@ public class MusicRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             mTitle = (TextView) itemView.findViewById(R.id.tv_title);
             mHappy = (TextView) itemView.findViewById(R.id.tv_happy);
             mInfos = (TextView) itemView.findViewById(R.id.tv_info);
+        }
+
+    }
+
+    private class TingViewHolder extends RecyclerView.ViewHolder {
+
+        private LinearLayout mLayout;
+        private TextView mTitle;
+        private ImageView mPhotoImg;
+        private TextView mContent;
+        private TextView mDetail;
+        private JCVideoPlayerStandard mJcVideoPlayer;
+
+        public TingViewHolder(View itemView) {
+            super(itemView);
+            mLayout = (LinearLayout) itemView.findViewById(R.id.ll_radio_layout);
+            mPhotoImg = (ImageView) itemView.findViewById(R.id.iv_ting_img);
+            mTitle = (TextView) itemView.findViewById(R.id.tv_ting_title);
+            mContent = (TextView) itemView.findViewById(R.id.tv_ting_content);
+            mDetail = (TextView) itemView.findViewById(R.id.tv_ting_detail);
+            mJcVideoPlayer = (JCVideoPlayerStandard) itemView.findViewById(R.id.jps_video_player);
         }
 
     }

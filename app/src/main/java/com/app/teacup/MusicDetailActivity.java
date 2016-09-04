@@ -73,18 +73,6 @@ public class MusicDetailActivity extends AppCompatActivity {
         startLoadData();
     }
 
-//    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-//    private void startAnimator() {
-//        int cx = (mCollapsingToolbar.getLeft() + mCollapsingToolbar.getRight()) / 2;
-//        int cy = (mCollapsingToolbar.getTop() + mCollapsingToolbar.getBottom()) / 2;
-//
-//        int finalRadius = mCollapsingToolbar.getWidth();
-//
-//        Animator anim =
-//                ViewAnimationUtils.createCircularReveal(mCollapsingToolbar, cx, cy, 0, finalRadius);
-//        anim.start();
-//    }
-
     private void initToolBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.music_toolbar);
         setSupportActionBar(toolbar);
