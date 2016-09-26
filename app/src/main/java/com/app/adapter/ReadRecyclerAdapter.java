@@ -93,7 +93,6 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     .into(view);
             mImageViewList.add(view);
         }
-        startHeaderAutoScrolled();
         setHeaderVisible(View.VISIBLE);
 
         if (myHolder.mAdapter != null) {
@@ -199,18 +198,6 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public int getItemCount() {
         return mReadDatas.size() + mCadInfos.size() + 1;
-    }
-
-    public void startHeaderAutoScrolled() {
-        if (mHeaderViewHolder != null) {
-            mHeaderViewHolder.startAutoScrolled();
-        }
-    }
-
-    public void stopHeaderAutoScrolled() {
-        if (mHeaderViewHolder != null) {
-            mHeaderViewHolder.stopAutoScrolled();
-        }
     }
 
     public void setHeaderVisible(int visible) {
@@ -350,6 +337,18 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 @Override
                 public void onPageScrollStateChanged(int state) {
+                }
+            });
+
+            mViewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(View view) {
+                    startAutoScrolled();
+                }
+
+                @Override
+                public void onViewDetachedFromWindow(View view) {
+                    stopAutoScrolled();
                 }
             });
         }

@@ -137,7 +137,6 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 }
             });
         }
-        mNewsRecyclerAdapter.startHeaderAutoScrolled();
         mNewsRecyclerAdapter.setHeaderVisible(View.VISIBLE);
     }
 
@@ -283,13 +282,11 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     @Override
     public void onResume() {
         super.onResume();
-        mNewsRecyclerAdapter.startHeaderAutoScrolled();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mNewsRecyclerAdapter.stopHeaderAutoScrolled();
     }
 
 }

@@ -196,4 +196,9 @@
     <dimen name="item_read_collection_tv_detail_marginRight">8dp</dimen>
     <dimen name="item_read_collection_tv_detail_textSize">13sp</dimen>
 
+    <dimen name="activity_about_tv_textSize">16sp</dimen>
+    <dimen name="activity_about_tv_margin">10dp</dimen>
+    <dimen name="activity_about_tv_lineSpacing">3dp</dimen>
+    <dimen name="activity_about_iv_height">220dp</dimen>
+
 </resources>

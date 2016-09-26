@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">TeaCup</string>
-    <string name="user_name">Hathaway</string>
+    <string name="app_name">茶杯</string>
+    <string name="user_name">gakki</string>
+    <string name="about">关于茶杯</string>
     <string name="search">搜索</string>
     <string name="share">分享</string>
     <string name="settings">设置</string>
@@ -31,6 +32,26 @@
     <string name="music_play_pre">当前已经是第一首</string>
     <string name="load_music_error">音乐文件加载出错</string>
     <string name="unknown_name">未名</string>
+
+    <string name="about_for_tea">茶,\n一片树叶的故事\n一道茶,就是一种人生\n一道茶,
+        总会苦一阵子,\n但不会苦一辈子.\n寻茶、遇茶、品茶,\n就是寻人、遇人、品人的过程,\n
+        人对了,茶就对了.\n七八年的茶之旅,终于理解,\n所谓茶道,就是在不完整的生命中感知完美,
+        \n哪怕,\n只有一杯茶的时间.</string>
+
+    <string name="about_for_detail">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;一杯茶的时间,缓慢,
+        却不纠缠,泡一杯暖心茶,与岁月,与那个怜惜的人,共老,爱至无心有来生,"你若不认得我,我就说:你的茶凉了,我再去给你续上,你便知那个人是我.
+        "在一杯茶中,一起活着,爱着,陪着.别等到遗憾!有些人,一旦错过就不再;有些茶,一旦错过,再遇见,已是另一番境遇.</string>
+
+    <string name="about_for_last">请放下内心的匆忙, 端起手边的茶杯, 留一杯茶的时间给自己.</string>
+
+    <string name="about_for_me">作者: henry li\n博客: http://blog.csdn.net/lbcab\n数据来源:\n
+        落网音乐\n&#160;片刻网\n&#160;煎蛋网\n&#160;豆瓣网\n&#160;糗事百科\n&#160;悦听有声网</string>
+
+    <string name="share_text">茶杯\n留一杯茶的时间给自己,读一篇文章或听一首歌,放下内心的匆忙.\n
+        https://github.com/henry-blue/TeaCup</string>
+
+    <string name="share_header">分享到</string>
+
     <string-array name="tab_name">
         <item>新鲜事</item>
         <item>阅读</item>

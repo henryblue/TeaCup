@@ -121,18 +121,6 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return mDatas.size() + 1;
     }
 
-    public void startHeaderAutoScrolled() {
-        if (mHeaderViewHolder != null) {
-            mHeaderViewHolder.startAutoScrolled();
-        }
-    }
-
-    public void stopHeaderAutoScrolled() {
-        if (mHeaderViewHolder != null) {
-            mHeaderViewHolder.stopAutoScrolled();
-        }
-    }
-
     public void setHeaderVisible(int visible) {
         mHeaderViewHolder.setGroupVisible(visible);
     }
@@ -206,6 +194,18 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 @Override
                 public void onPageScrollStateChanged(int state) {
+                }
+            });
+
+            mViewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(View view) {
+                    startAutoScrolled();
+                }
+
+                @Override
+                public void onViewDetachedFromWindow(View view) {
+                    stopAutoScrolled();
                 }
             });
         }

@@ -6,16 +6,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.app.adapter.PagerAdapter;
 import com.app.fragment.photo.DoubanMeiziFragment;
-import com.app.fragment.photo.QiubaiFragment;
-import com.app.fragment.photo.JiandanMeiziFragment;
 import com.app.fragment.photo.GaoxiaoFragment;
-
+import com.app.fragment.photo.JiandanMeiziFragment;
+import com.app.fragment.photo.QiubaiFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,17 +66,8 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_normal, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_share:
-                return true;
             case android.R.id.home:
                 onBackPressed();
                 return true;

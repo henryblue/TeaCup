@@ -2,6 +2,7 @@ package com.app.teacup;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -23,11 +24,18 @@ public class FlashActivity extends Activity {
             public void run() {
                 enterMainPage();
             }
-        }, 2000);
+        }, 1000);
     }
 
     private void enterMainPage() {
-        Intent intent = new Intent(FlashActivity.this, MainActivity.class);
+        SharedPreferences sp = getSharedPreferences("config", MODE_PRIVATE);
+        boolean isFirst = sp.getBoolean("com.app.teacup.GuideActivity", true);
+        Intent intent = new Intent();
+        if (isFirst) {
+            intent.setClass(FlashActivity.this, GuideActivity.class);
+        } else {
+            intent.setClass(FlashActivity.this, MainActivity.class);
+        }
         startActivity(intent);
         finish();
     }
