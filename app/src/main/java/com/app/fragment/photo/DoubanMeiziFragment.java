@@ -18,7 +18,6 @@ import com.app.adapter.PhotoDoubanRecyclerAdapter;
 import com.app.bean.PhotoInfo;
 import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
-import com.app.teacup.ShowPhotoActivity;
 import com.app.teacup.ShowPhotoListActivity;
 import com.app.util.HttpUtils;
 import com.app.util.urlUtils;
@@ -108,8 +107,9 @@ public class DoubanMeiziFragment extends BaseFragment implements SwipeRefreshLay
             public void onItemClick(View view, int position) {
                 String url = mImgUrl.get(position).getImgUrl();
                 if (!TextUtils.isEmpty(url)) {
-                    Intent intent = new Intent(getContext(), ShowPhotoActivity.class);
-                    intent.putExtra("ImageUrl", url);
+                    Intent intent = new Intent(getContext(), ShowPhotoListActivity.class);
+                    intent.putStringArrayListExtra("photoList", mImageUrls);
+                    intent.putExtra("photoPos", position);
                     startActivity(intent);
                 }
             }

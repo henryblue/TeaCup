@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                                 enterOtherActivity(WeatherActivity.class);
                                 break;
                             case R.id.navigation_item_about:
+                                enterOtherActivity(AboutActivity.class);
                                 break;
                         }
                         menuItem.setChecked(true);

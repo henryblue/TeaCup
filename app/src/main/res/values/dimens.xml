@@ -58,13 +58,16 @@
     <dimen name="muisic_detail_title_marginRight">10dp</dimen>
     <dimen name="muisic_detail_title_textsize">20sp</dimen>
     <dimen name="muisic_detail_type_margintop">10dp</dimen>
-    <dimen name="muisic_detail_type_marginleft">15dp</dimen>
+    <dimen name="muisic_detail_type_marginBottom">10dp</dimen>
+    <dimen name="muisic_detail_type_marginleft">10dp</dimen>
     <dimen name="muisic_detail_type_textsize">13sp</dimen>
     <dimen name="muisic_detail_content_margin">13dp</dimen>
     <dimen name="muisic_detail_content_textsize">14sp</dimen>
     <dimen name="muisic_detail_total_height">40dp</dimen>
     <dimen name="muisic_detail_total_textsize">16sp</dimen>
     <dimen name="muisic_detail_total_margintop">12dp</dimen>
+    <dimen name="muisic_detail_MiniMusicView_marginBottom">10dp</dimen>
+    <dimen name="muisic_detail_MiniMusicView_marginTop">10dp</dimen>
 
     <dimen name="item_muisic_detail_layout_padding">10dp</dimen>
     <dimen name="item_muisic_detail_layout_height">60dp</dimen>
@@ -192,4 +195,5 @@
     <dimen name="item_read_collection_tv_detail_marginBottom">8dp</dimen>
     <dimen name="item_read_collection_tv_detail_marginRight">8dp</dimen>
     <dimen name="item_read_collection_tv_detail_textSize">13sp</dimen>
+
 </resources>

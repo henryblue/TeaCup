@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -37,6 +38,7 @@ public class ReadDetailActivity extends AppCompatActivity {
     private static final String TAG = "readDetailActivity";
 
     private LinearLayout mLinearLayout;
+    private SwipeRefreshLayout mRefreshLayout;
     private TextView mTitle;
     private TextView mAuthor;
     private List<String> mDatas;
@@ -47,9 +49,11 @@ public class ReadDetailActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case LOAD_DATA_FINISH:
+                    mRefreshLayout.setRefreshing(false);
                     initData();
                     break;
                 case LOAD_DATA_ERROR:
+                    mRefreshLayout.setRefreshing(false);
                     Toast.makeText(ReadDetailActivity.this, getString(R.string.not_have_more_data),
                             Toast.LENGTH_SHORT).show();
                     break;
@@ -69,7 +73,7 @@ public class ReadDetailActivity extends AppCompatActivity {
             mTitle.setText(getIntent().getStringExtra("readTitle"));
             loadNewsContent();
         }
-
+        mRefreshLayout.setEnabled(false);  //forbidden pull refresh
     }
 
     private void loadNewsContent() {
@@ -118,9 +122,9 @@ public class ReadDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_detail);
-        initView();
         initToolBar();
-        startLoadData();
+        initView();
+
     }
 
     private void startLoadData() {
@@ -196,6 +200,22 @@ public class ReadDetailActivity extends AppCompatActivity {
         mLinearLayout = (LinearLayout) findViewById(R.id.ll_container);
         mTitle = (TextView) findViewById(R.id.tv_read_detail_title);
         mAuthor = (TextView) findViewById(R.id.tv_read_detail_author);
+
+        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.read_srl_refresh);
+        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+        mRefreshLayout.setProgressViewEndTarget(true, 100);
+        StartRefreshPage();
+    }
+
+    private void StartRefreshPage() {
+        mRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(true);
+                startLoadData();
+            }
+        });
     }
 
     private void initToolBar() {

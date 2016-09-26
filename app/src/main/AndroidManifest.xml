@@ -40,6 +40,7 @@
         <activity android:name=".ListReadTopicActivity" />
         <activity android:name=".FindBookActivity" />
         <activity android:name=".TingDetailActivity" />
+        <activity android:name=".AboutActivity" />
         <service android:name="com.app.service.LocationService" />
         <service android:name="com.app.service.MediaService" />
     </application>

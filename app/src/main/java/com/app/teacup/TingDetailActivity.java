@@ -39,8 +39,6 @@ public class TingDetailActivity extends AppCompatActivity {
     private static final int LOAD_DATA_ERROR = 1;
 
     private MusicInfo mMusicInfo;
-    private CollapsingToolbarLayout mCollapsingToolbar;
-    private TextView mTitle;
     private TextView mDetail;
     private LinearLayout mContent;
     private MiniMusicView mMusicView;
@@ -91,7 +89,8 @@ public class TingDetailActivity extends AppCompatActivity {
 
     private void initView() {
         mMusicInfo = (MusicInfo) getIntent().getSerializableExtra("ting");
-        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        CollapsingToolbarLayout mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+
         if (mCollapsingToolbar != null) {
             mCollapsingToolbar.setTitle(mMusicInfo.getTitle());
         }
@@ -106,14 +105,12 @@ public class TingDetailActivity extends AppCompatActivity {
                     .into(ivImage);
         }
 
-        mTitle = (TextView) findViewById(R.id.tv_ting_detail_title);
         mDetail = (TextView) findViewById(R.id.tv_ting_detail_type);
         mContent = (LinearLayout) findViewById(R.id.tv_ting_detail_content);
         mMusicView = (MiniMusicView) findViewById(R.id.chl_music_view);
     }
 
     private void initData() {
-        mTitle.setText(mMusicInfo.getTitle());
         mDetail.setText(mMusicInfo.getInfoNum());
         mMusicView.setTitleText(mMusicInfo.getTitle());
         mMusicView.setVisibility(View.VISIBLE);
@@ -180,8 +177,8 @@ public class TingDetailActivity extends AppCompatActivity {
 
             Element yueTing = singlePos.getElementsByClass("yueting-skin").get(0);
             Element player = yueTing.getElementsByClass("pro-small-player").get(0);
-            Element mediaelement = player.getElementsByClass("wp-audio-shortcode").get(0);
-            mAudioUrl = mediaelement.getElementsByTag("a").get(0).text();
+            Element mediaElement = player.getElementsByClass("wp-audio-shortcode").get(0);
+            mAudioUrl = mediaElement.getElementsByTag("a").get(0).text();
         }
 
     }

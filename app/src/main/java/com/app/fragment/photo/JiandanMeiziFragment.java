@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.app.adapter.PhotoRecyclerAdapter;
 import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
-import com.app.teacup.ShowPhotoActivity;
 import com.app.teacup.ShowPhotoListActivity;
 import com.app.util.HttpUtils;
 import com.app.util.urlUtils;
@@ -30,7 +29,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class JiandanMeiziFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -106,8 +104,9 @@ public class JiandanMeiziFragment extends BaseFragment implements SwipeRefreshLa
             public void onItemClick(View view, int position) {
                 String url = mImgUrl.get(position);
                 if (!TextUtils.isEmpty(url)) {
-                    Intent intent = new Intent(getContext(), ShowPhotoActivity.class);
-                    intent.putExtra("ImageUrl", url);
+                    Intent intent = new Intent(getContext(), ShowPhotoListActivity.class);
+                    intent.putStringArrayListExtra("photoList", mImgUrl);
+                    intent.putExtra("photoPos", position);
                     startActivity(intent);
                 }
             }
