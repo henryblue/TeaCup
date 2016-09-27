@@ -38,7 +38,6 @@ public class NewsDetailActivity extends AppCompatActivity {
     private TextView mTitle;
     private TextView mAuthor;
     private List<String> mDatas;
-    private String msTitle;
     private String msAuthor;
 
     private Handler mHandler = new Handler() {
@@ -142,9 +141,11 @@ public class NewsDetailActivity extends AppCompatActivity {
     }
 
     private void sendLoadStateMessage(int what) {
-        Message msg = Message.obtain();
-        msg.what = what;
-        mHandler.sendMessage(msg);
+        if (mHandler != null) {
+            Message msg = Message.obtain();
+            msg.what = what;
+            mHandler.sendMessage(msg);
+        }
     }
 
     private void parseData(String response) {

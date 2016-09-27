@@ -174,9 +174,11 @@ public class MusicDetailActivity extends AppCompatActivity {
     }
 
     private void sendParseMessage(int what) {
-        Message msg = Message.obtain();
-        msg.what = what;
-        mHandler.sendMessage(msg);
+        if (mHandler != null) {
+            Message msg = Message.obtain();
+            msg.what = what;
+            mHandler.sendMessage(msg);
+        }
     }
 
     private void parseMusicData(String response) {

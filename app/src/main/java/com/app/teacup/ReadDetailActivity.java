@@ -145,9 +145,11 @@ public class ReadDetailActivity extends AppCompatActivity {
     }
 
     private void sendLoadStateMessage(int what) {
-        Message msg = Message.obtain();
-        msg.what = what;
-        mHandler.sendMessage(msg);
+        if (mHandler != null) {
+            Message msg = Message.obtain();
+            msg.what = what;
+            mHandler.sendMessage(msg);
+        }
     }
 
     private void parseData(String response) {

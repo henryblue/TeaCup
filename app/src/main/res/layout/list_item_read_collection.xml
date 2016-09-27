@@ -5,6 +5,7 @@
     android:layout_height="170dp"
     android:background="@color/white"
     android:layout_marginBottom="10dp"
+    android:foreground="?android:attr/selectableItemBackgroundBorderless"
     android:elevation="1dp"
     android:orientation="vertical"
     tools:targetApi="lollipop">
@@ -13,7 +14,6 @@
         android:id="@+id/list_item_collect_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="我是标题"
         android:textSize="18sp"
         android:textColor="@color/black"
         android:layout_margin="8dp"
@@ -41,7 +41,6 @@
             android:layout_gravity="center_vertical"
             android:maxLines="3"
             android:layout_marginLeft="8dp"
-            android:text="rgrgtwert\nfwererw\nfsdgfasg"
             android:textColor="@color/deep_gray"
             android:textSize="15sp"/>
     </LinearLayout>
@@ -55,7 +54,6 @@
         android:layout_marginLeft="8dp"
         android:layout_marginBottom="8dp"
         android:layout_alignParentBottom="true"
-        android:text="hdfsfgsdf"
         android:maxLines="1" />
 
     <TextView
@@ -68,7 +66,6 @@
         android:layout_marginBottom="8dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="dfghdfsghsfdhg"
         android:maxLines="1" />
 
 </RelativeLayout>

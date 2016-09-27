@@ -267,9 +267,7 @@ public class FindBookActivity extends AppCompatActivity implements SwipeRefreshL
         recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                Message msg = Message.obtain();
-                msg.what = REFRESH_START;
-                mHandler.sendMessage(msg);
+                sendParseDataMessage(REFRESH_START);
             }
 
             @Override
@@ -334,9 +332,7 @@ public class FindBookActivity extends AppCompatActivity implements SwipeRefreshL
 
     @Override
     public void onRefresh() {
-        Message msg = Message.obtain();
-        msg.what = REFRESH_START;
-        mHandler.sendMessage(msg);
+        sendParseDataMessage(REFRESH_START);
     }
 
     @Override

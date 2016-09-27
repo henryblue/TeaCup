@@ -33,6 +33,9 @@ public class FlashActivity extends Activity {
         Intent intent = new Intent();
         if (isFirst) {
             intent.setClass(FlashActivity.this, GuideActivity.class);
+            SharedPreferences.Editor edit = sp.edit();
+            edit.putBoolean("com.app.teacup.GuideActivity", false);
+            edit.apply();
         } else {
             intent.setClass(FlashActivity.this, MainActivity.class);
         }

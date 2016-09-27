@@ -4,11 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_music_view_height"
+    android:foreground="?android:attr/selectableItemBackgroundBorderless"
     android:layout_marginLeft="@dimen/item_music_view_marginleft"
     android:layout_marginRight="@dimen/item_music_view_marginright"
     android:layout_marginTop="@dimen/item_music_view_marginTop"
     android:layout_marginBottom="@dimen/item_music_view_marginBottom"
-    app:cardElevation="@dimen/item_music_view_elevation">
+    app:cardElevation="@dimen/item_music_view_elevation"
+    tools:targetApi="lollipop">
 
     <ImageView
         android:id="@+id/iv_music"
