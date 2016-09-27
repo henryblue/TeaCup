@@ -10,8 +10,9 @@
     <color name="deep_gray">#727272</color>
     <color name="gray">#9e9e9e</color>
     <color name="alpha_white">#99ffffff</color>
-    <color name="green">#4caf50</color>
-    <color name="blue">#303f9f</color>
+    <color name="green">#388e3c</color>
+    <color name="blue">#88303f9f</color>
+    <color name="orange">#ffccbc</color>
     <color name="yellow">#ffc107</color>
     <color name="deepYellow">#F57C00</color>
     <color name="green_blue">#03A9F4</color>

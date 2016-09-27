@@ -1,12 +1,14 @@
 package com.app.teacup;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,29 +18,66 @@ public class GuideActivity extends Activity {
 
     private static final int[] mImageUris = {R.drawable.guide_1,
             R.drawable.guide_2, R.drawable.guide_3, R.drawable.guide_4};
-    private List<ImageView> mImgList = new ArrayList<>();
+
+    private static final int[] mBgColors = {R.color.colorPrimaryDark,
+    R.color.orange, R.color.blue, R.color.green};
+
+    private List<View> mViewList = new ArrayList<>();
+    private ViewPager mViewPager;
+    private LinearLayout mLayoutDot;
+    private ImageView mImgView;
+    private int mLastDotPos = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_guide);
         for (int i = 0; i < mImageUris.length; i++) {
-            ImageView view = new ImageView(GuideActivity.this);
-            mImgList.add(view);
+            View view = View.inflate(GuideActivity.this, R.layout.item_activity_guide, null);
+            ImageView imgView = (ImageView) view.findViewById(R.id.iv_guide_view);
+            imgView.setImageResource(mImageUris[i]);
+            mViewList.add(view);
         }
 
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.vp_guide);
+        mLayoutDot = (LinearLayout) findViewById(R.id.ll_dot);
+        mImgView = (ImageView) findViewById(R.id.iv_enter_teacup);
+        mImgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GuideActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
+        for (int i = 1; i < mLayoutDot.getChildCount(); i++) {
+            View view = mLayoutDot.getChildAt(i);
+            view.setEnabled(false);
+        }
+
+        mViewPager = (ViewPager) findViewById(R.id.vp_guide);
         mViewPager.setAdapter(new GuidePagerAdapter());
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
             public void onPageSelected(int position) {
                 colorChange(position);
+                if (position == mImageUris.length - 1) {
+                    mImgView.setVisibility(View.VISIBLE);
+                    mLayoutDot.setVisibility(View.GONE);
+                } else {
+                    mImgView.setVisibility(View.GONE);
+                    mLayoutDot.setVisibility(View.VISIBLE);
+                }
+
+                View view = mLayoutDot.getChildAt(position);
+                view.setEnabled(true);
+                View viewLast = mLayoutDot.getChildAt(mLastDotPos);
+                viewLast.setEnabled(false);
+                mLastDotPos = position;
             }
 
             @Override
@@ -49,8 +88,7 @@ public class GuideActivity extends Activity {
     }
 
     private void colorChange(int position) {
-        // 用来提取颜色的Bitmap
-//http://blog.csdn.net/jdsjlzx/article/details/41441083/
+        mViewPager.setBackgroundResource(mBgColors[position]);
     }
 
     private class GuidePagerAdapter extends PagerAdapter {
@@ -67,12 +105,14 @@ public class GuideActivity extends Activity {
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            super.destroyItem(container, position, object);
+            container.removeView((View)object);
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            return super.instantiateItem(container, position);
+            View view = mViewList.get(position);
+            container.addView(view);
+            return view;
         }
     }
 }

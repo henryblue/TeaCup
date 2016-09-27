@@ -201,4 +201,16 @@
     <dimen name="activity_about_tv_lineSpacing">3dp</dimen>
     <dimen name="activity_about_iv_height">220dp</dimen>
 
+    <dimen name="activity_guide_rl_marginBottom">50dp</dimen>
+    <dimen name="activity_guide_iv_dot_padding">10dp</dimen>
+    <dimen name="activity_guide_iv_button_width">125dp</dimen>
+    <dimen name="activity_guide_iv_button_height">40dp</dimen>
+
+    <dimen name="item_guide_cardView_marginTop">40dp</dimen>
+    <dimen name="item_guide_cardView_marginLeft">50dp</dimen>
+    <dimen name="item_guide_cardView_cardCornerRadius">4dp</dimen>
+    <dimen name="item_guide_cardView_cardElevation">10dp</dimen>
+    <dimen name="item_guide_iv_width">280dp</dimen>
+    <dimen name="item_guide_iv_height">380dp</dimen>
+
 </resources>

@@ -1,52 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_guide"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark" />
 
-    <LinearLayout
-        android:id="@+id/ll_dot"
-        android:orientation="horizontal"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="40dip" >
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/activity_guide_rl_marginBottom">
 
-        <ImageView
+        <LinearLayout
+            android:id="@+id/ll_dot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:clickable="true"
-            android:padding="15dip"
-            android:src="@drawable/point_bg" />
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:padding="@dimen/activity_guide_iv_dot_padding"
+                android:src="@drawable/dot_bg" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:padding="@dimen/activity_guide_iv_dot_padding"
+                android:src="@drawable/dot_bg" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:padding="@dimen/activity_guide_iv_dot_padding"
+                android:src="@drawable/dot_bg" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:padding="@dimen/activity_guide_iv_dot_padding"
+                android:src="@drawable/dot_bg" />
+        </LinearLayout>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:clickable="true"
-            android:padding="15dip"
-            android:src="@drawable/point_bg" />
+            android:id="@+id/iv_enter_teacup"
+            android:layout_width="@dimen/activity_guide_iv_button_width"
+            android:layout_height="@dimen/activity_guide_iv_button_height"
+            android:visibility="gone"
+            android:background="@drawable/button_bg" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:clickable="true"
-            android:padding="15dip"
-            android:src="@drawable/point_bg" />
+    </RelativeLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:clickable="true"
-            android:padding="15dip"
-            android:src="@drawable/point_bg" />
-    </LinearLayout>
-</FrameLayout>
+</RelativeLayout>
