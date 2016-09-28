@@ -9,6 +9,5 @@
     android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     android:background="@color/colorPrimary"
     app:titleTextColor="@color/white"
-    android:elevation="@dimen/toolbar_elevation"
     tools:ignore="UnusedAttribute">
 </android.support.v7.widget.Toolbar>

@@ -1,6 +1,7 @@
 package com.app.teacup;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -19,6 +20,7 @@ import com.app.fragment.mainPage.MusicFragment;
 import com.app.fragment.mainPage.NewsFragment;
 import com.app.fragment.mainPage.ReadFragment;
 import com.app.fragment.mainPage.TingFragment;
+import com.app.util.HttpUtils;
 
 import java.util.ArrayList;
 
@@ -28,13 +30,31 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
-
+    public static boolean mIsLoadPhoto;
+    public static boolean mIsPlayMusic;
+    public static boolean mIsWIFIState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mIsWIFIState = HttpUtils.isWifi(MainActivity.this);
+        SharedPreferences sp = getSharedPreferences("config", MODE_PRIVATE);
+        mIsLoadPhoto = sp.getBoolean("loadPhoto", false);
+        mIsPlayMusic = sp.getBoolean("playMusic", false);
+        boolean isNeedWarm = sp.getBoolean("warmData", false);
         initToolbar();
-        initView();
+        if (isNeedWarm) {
+            if (mIsWIFIState) {
+                initView();
+            } else {
+                showAlertDialog();
+            }
+        } else {
+            initView();
+        }
+    }
+
+    private void showAlertDialog() {
     }
 
     private void initToolbar() {
@@ -132,6 +152,8 @@ public class MainActivity extends AppCompatActivity {
                 shareApplication();
                 return true;
             case R.id.action_settings:
+                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -97,12 +97,25 @@ public class TingDetailActivity extends AppCompatActivity {
 
         ImageView ivImage = (ImageView) findViewById(R.id.iv_ting_image);
         if (ivImage != null) {
-            Glide.with(this).load(mMusicInfo.getImgUrl())
-                    .error(R.drawable.photo_loaderror)
-                    .dontAnimate()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .crossFade()
-                    .into(ivImage);
+            if (MainActivity.mIsLoadPhoto) {
+                Glide.with(this).load(mMusicInfo.getImgUrl())
+                        .error(R.drawable.photo_loaderror)
+                        .dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .crossFade()
+                        .into(ivImage);
+            } else {
+                if (MainActivity.mIsWIFIState) {
+                    Glide.with(this).load(mMusicInfo.getImgUrl())
+                            .error(R.drawable.photo_loaderror)
+                            .dontAnimate()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .crossFade()
+                            .into(ivImage);
+                } else {
+                    ivImage.setImageResource(R.drawable.main_load_bg);
+                }
+            }
         }
 
         mDetail = (TextView) findViewById(R.id.tv_ting_detail_type);

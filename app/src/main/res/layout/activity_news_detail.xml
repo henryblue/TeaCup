@@ -6,35 +6,41 @@
 
     <include layout="@layout/navigation_toolbar" />
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:fadingEdge="vertical"
-        android:scrollbars="vertical">
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srf_new_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/ll_container"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:fadingEdge="vertical"
+            android:scrollbars="vertical">
 
-            <TextView
-                android:id="@+id/tv_new_detail_title"
+            <LinearLayout
+                android:id="@+id/ll_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:textColor="@color/black"
-                android:textSize="@dimen/activity_new_detail_textSize" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_news_detail_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_new_detail_margin"
-                android:textColor="@color/gray"
-                android:textSize="@dimen/activity_new_detail_author_textSize" />
+                <TextView
+                    android:id="@+id/tv_new_detail_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/activity_new_detail_textSize" />
 
-        </LinearLayout>
-    </ScrollView>
+                <TextView
+                    android:id="@+id/tv_news_detail_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_new_detail_margin"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/activity_new_detail_author_textSize" />
+
+            </LinearLayout>
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

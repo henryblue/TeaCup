@@ -62,11 +62,23 @@ public class BookDetailActivity extends AppCompatActivity {
         }
 
         ImageView ivImage = (ImageView) findViewById(R.id.iv_book_image);
-        Glide.with(this).load(mBookInfo.getmImgUrl())
-                .error(R.drawable.photo_loaderror)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .crossFade()
-                .into(ivImage);
+        if (!MainActivity.mIsLoadPhoto) {
+            Glide.with(this).load(mBookInfo.getmImgUrl())
+                    .error(R.drawable.photo_loaderror)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .crossFade()
+                    .into(ivImage);
+        } else {
+            if (MainActivity.mIsWIFIState) {
+                Glide.with(this).load(mBookInfo.getmImgUrl())
+                        .error(R.drawable.photo_loaderror)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .crossFade()
+                        .into(ivImage);
+            } else {
+                ivImage.setImageResource(R.drawable.main_load_bg);
+            }
+        }
 
         mViewPager = (ViewPager) findViewById(R.id.book_viewpager);
         setupViewPager(mViewPager);

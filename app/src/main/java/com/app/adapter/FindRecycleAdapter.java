@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.bean.book.FindBookInfo;
+import com.app.teacup.MainActivity;
 import com.app.teacup.R;
 import com.app.util.ToolUtils;
 import com.bumptech.glide.Glide;
@@ -117,12 +118,25 @@ public class FindRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void bindViewHolderItem(FindBookInfo info, MyViewHolder myHolder) {
         myHolder.mBookTitle.setText(info.getmBookTitle());
         myHolder.mBookContent.setText(info.getmBookContent());
-        Glide.with(mContext).load(info.getmImgUrl())
-                .centerCrop()
-                .error(R.drawable.photo_loaderror)
-                .placeholder(R.drawable.main_load_bg)
-                .crossFade()
-                .into(myHolder.mBookImg);
+        if (!MainActivity.mIsLoadPhoto) {
+            Glide.with(mContext).load(info.getmImgUrl())
+                    .centerCrop()
+                    .error(R.drawable.photo_loaderror)
+                    .placeholder(R.drawable.main_load_bg)
+                    .crossFade()
+                    .into(myHolder.mBookImg);
+        } else {
+            if (MainActivity.mIsWIFIState) {
+                Glide.with(mContext).load(info.getmImgUrl())
+                        .centerCrop()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.main_load_bg)
+                        .crossFade()
+                        .into(myHolder.mBookImg);
+            } else {
+                myHolder.mBookImg.setImageResource(R.drawable.main_load_bg);
+            }
+        }
     }
 
     @Override

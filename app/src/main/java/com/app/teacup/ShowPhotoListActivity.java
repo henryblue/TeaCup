@@ -61,11 +61,23 @@ public class ShowPhotoListActivity extends Activity {
         public Object instantiateItem(ViewGroup container, int position) {
             PhotoView photoView = new PhotoView(ShowPhotoListActivity.this);
             photoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            Glide.with(ShowPhotoListActivity.this).load(mPhotoList.get(position))
-                    .error(R.drawable.photo_loaderror)
-                    .placeholder(R.drawable.loading_photo)
-                    .dontAnimate()
-                    .into(photoView);
+            if (!MainActivity.mIsLoadPhoto) {
+                Glide.with(ShowPhotoListActivity.this).load(mPhotoList.get(position))
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.loading_photo)
+                        .dontAnimate()
+                        .into(photoView);
+            } else {
+                if (MainActivity.mIsWIFIState) {
+                    Glide.with(ShowPhotoListActivity.this).load(mPhotoList.get(position))
+                            .error(R.drawable.photo_loaderror)
+                            .placeholder(R.drawable.loading_photo)
+                            .dontAnimate()
+                            .into(photoView);
+                } else {
+                    photoView.setImageResource(R.drawable.photo_default);
+                }
+            }
             container.addView(photoView, mLps);
             return photoView;
         }

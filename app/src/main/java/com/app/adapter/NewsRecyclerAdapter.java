@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.bean.News.NewsInfo;
+import com.app.teacup.MainActivity;
 import com.app.teacup.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -72,12 +73,25 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         String url = info.getImgUrl();
 
         final NewsViewHolder myHolder = (NewsViewHolder) holder;
-        Glide.with(mContext).load(url).asBitmap()
-                .error(R.drawable.photo_loaderror)
-                .placeholder(R.drawable.main_load_bg)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .dontAnimate()
-                .into(myHolder.mPhotoImg);
+        if (!MainActivity.mIsLoadPhoto) {
+            Glide.with(mContext).load(url).asBitmap()
+                    .error(R.drawable.photo_loaderror)
+                    .placeholder(R.drawable.main_load_bg)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .dontAnimate()
+                    .into(myHolder.mPhotoImg);
+        } else {
+            if (MainActivity.mIsWIFIState) {
+                Glide.with(mContext).load(url).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.main_load_bg)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .into(myHolder.mPhotoImg);
+            } else {
+                myHolder.mPhotoImg.setImageResource(R.drawable.main_load_bg);
+            }
+        }
 
         myHolder.mTitle.setText(info.getTitle());
         myHolder.mLabel.setText(info.getLabel());

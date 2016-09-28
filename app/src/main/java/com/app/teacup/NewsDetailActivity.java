@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -46,17 +47,21 @@ public class NewsDetailActivity extends AppCompatActivity {
             switch (msg.what) {
                 case LOAD_DATA_FINISH:
                     initData();
+                    mRefreshLayout.setRefreshing(false);
                     break;
                 case LOAD_DATA_ERROR:
+                    mRefreshLayout.setRefreshing(false);
                     Toast.makeText(NewsDetailActivity.this, getString(R.string.not_have_more_data),
                             Toast.LENGTH_SHORT).show();
                     break;
                 default:
                     break;
             }
+            mRefreshLayout.setEnabled(false);
             super.handleMessage(msg);
         }
     };
+    private SwipeRefreshLayout mRefreshLayout;
 
     private void initData() {
         if (mDatas.isEmpty()) {
@@ -92,13 +97,27 @@ public class NewsDetailActivity extends AppCompatActivity {
                 view.setLayoutParams(imgParams);
                 tag = tag.replace("small", "medium");
                 view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                Glide.with(this).load(tag)
-                        .asBitmap()
-                        .error(R.drawable.photo_loaderror)
-                        .placeholder(R.drawable.main_load_bg)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .dontAnimate()
-                        .into(view);
+                if (!MainActivity.mIsLoadPhoto) {
+                    Glide.with(this).load(tag)
+                            .asBitmap()
+                            .error(R.drawable.photo_loaderror)
+                            .placeholder(R.drawable.main_load_bg)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .dontAnimate()
+                            .into(view);
+                } else {
+                    if (MainActivity.mIsWIFIState) {
+                        Glide.with(this).load(tag)
+                                .asBitmap()
+                                .error(R.drawable.photo_loaderror)
+                                .placeholder(R.drawable.main_load_bg)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .dontAnimate()
+                                .into(view);
+                    } else {
+                        view.setImageResource(R.drawable.main_load_bg);
+                    }
+                }
                 mLinearLayout.addView(view);
             } else {
                 TextView textView = new TextView(this);
@@ -116,9 +135,8 @@ public class NewsDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
-        initView();
         initToolBar();
-        startLoadData();
+        initView();
     }
 
     private void startLoadData() {
@@ -186,8 +204,22 @@ public class NewsDetailActivity extends AppCompatActivity {
         mLinearLayout = (LinearLayout) findViewById(R.id.ll_container);
         mTitle = (TextView) findViewById(R.id.tv_new_detail_title);
         mAuthor = (TextView) findViewById(R.id.tv_news_detail_author);
+        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.srf_new_layout);
+        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+        mRefreshLayout.setProgressViewEndTarget(true, 100);
+        StartRefreshPage();
     }
 
+    private void StartRefreshPage() {
+        mRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(true);
+                startLoadData();
+            }
+        });
+    }
     private void initToolBar() {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.activity_navigation_toolbar);
         if (mToolbar != null) {

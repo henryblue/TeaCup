@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.app.teacup.MainActivity;
 import com.app.teacup.R;
 import com.bumptech.glide.Glide;
 
@@ -57,11 +58,23 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
 
         final PhotoViewHolder myHolder = (PhotoViewHolder) holder;
-        Glide.with(mContext).load(url).asBitmap()
-                .error(R.drawable.photo_loaderror)
-                .placeholder(R.drawable.photo_default)
-                .dontAnimate()
-                .into(myHolder.mPhotoImg);
+        if (!MainActivity.mIsLoadPhoto) {
+            Glide.with(mContext).load(url).asBitmap()
+                    .error(R.drawable.photo_loaderror)
+                    .placeholder(R.drawable.photo_default)
+                    .dontAnimate()
+                    .into(myHolder.mPhotoImg);
+        } else {
+            if (MainActivity.mIsWIFIState) {
+                Glide.with(mContext).load(url).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.photo_default)
+                        .dontAnimate()
+                        .into(myHolder.mPhotoImg);
+            } else {
+                myHolder.mPhotoImg.setImageResource(R.drawable.photo_default);
+            }
+        }
 
         if (mListener != null) {
             myHolder.mPhotoImg.setOnClickListener(new View.OnClickListener() {

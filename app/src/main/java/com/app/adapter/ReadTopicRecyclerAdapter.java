@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.bean.Read.ReadTopicInfo;
+import com.app.teacup.MainActivity;
 import com.app.teacup.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -61,13 +62,27 @@ public class ReadTopicRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         myHolder.mPhotoImg.setVisibility(View.GONE);
         if (!TextUtils.isEmpty(url)) {
             myHolder.mPhotoImg.setVisibility(View.VISIBLE);
-            Glide.with(mContext).load(url).asBitmap()
-                    .error(R.drawable.photo_loaderror)
-                    .placeholder(R.drawable.main_load_bg)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .dontAnimate()
-                    .into(myHolder.mPhotoImg);
+            if (!MainActivity.mIsLoadPhoto) {
+                Glide.with(mContext).load(url).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.main_load_bg)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .into(myHolder.mPhotoImg);
+            } else {
+                if (MainActivity.mIsWIFIState) {
+                    Glide.with(mContext).load(url).asBitmap()
+                            .error(R.drawable.photo_loaderror)
+                            .placeholder(R.drawable.main_load_bg)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .dontAnimate()
+                            .into(myHolder.mPhotoImg);
+                } else {
+                    myHolder.mPhotoImg.setImageResource(R.drawable.main_load_bg);
+                }
+            }
         }
+
         myHolder.mTitle.setText(info.getTitle());
         myHolder.mAuthor.setText(info.getDetail());
 
@@ -89,12 +104,25 @@ public class ReadTopicRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         myHolder.mPhotoImg.setVisibility(View.GONE);
         if (!TextUtils.isEmpty(url)) {
             myHolder.mPhotoImg.setVisibility(View.VISIBLE);
-            Glide.with(mContext).load(url).asBitmap()
-                    .error(R.drawable.photo_loaderror)
-                    .placeholder(R.drawable.main_load_bg)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .dontAnimate()
-                    .into(myHolder.mPhotoImg);
+            if (!MainActivity.mIsLoadPhoto) {
+                Glide.with(mContext).load(url).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.main_load_bg)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .into(myHolder.mPhotoImg);
+            } else {
+                if (MainActivity.mIsWIFIState) {
+                    Glide.with(mContext).load(url).asBitmap()
+                            .error(R.drawable.photo_loaderror)
+                            .placeholder(R.drawable.main_load_bg)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .dontAnimate()
+                            .into(myHolder.mPhotoImg);
+                } else {
+                    myHolder.mPhotoImg.setImageResource(R.drawable.main_load_bg);
+                }
+            }
         }
         myHolder.mTitle.setText(info.getTitle());
         myHolder.mAuthor.setText(info.getDetail());

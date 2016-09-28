@@ -98,12 +98,25 @@ public class MusicDetailActivity extends AppCompatActivity {
 
         ImageView ivImage = (ImageView) findViewById(R.id.iv_music_image);
         if (ivImage != null) {
-            Glide.with(this).load(mMusicInfo.getImgUrl())
-                    .error(R.drawable.photo_loaderror)
-                    .dontAnimate()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .crossFade()
-                    .into(ivImage);
+            if (!MainActivity.mIsLoadPhoto) {
+                Glide.with(this).load(mMusicInfo.getImgUrl())
+                        .error(R.drawable.photo_loaderror)
+                        .dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .crossFade()
+                        .into(ivImage);
+            } else {
+                if (MainActivity.mIsWIFIState) {
+                    Glide.with(this).load(mMusicInfo.getImgUrl())
+                            .error(R.drawable.photo_loaderror)
+                            .dontAnimate()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .crossFade()
+                            .into(ivImage);
+                } else {
+                    ivImage.setImageResource(R.drawable.main_load_bg);
+                }
+            }
         }
 
         mMusicTitle = (TextView) findViewById(R.id.tv_music_title);
@@ -133,12 +146,25 @@ public class MusicDetailActivity extends AppCompatActivity {
             TextView user = (TextView) view.findViewById(R.id.tv_play_user);
 
             index.setText(String.format("%02d", i + 1));
-            Glide.with(this).load(list.get(i).getImgUrl())
-                    .error(R.drawable.photo_loaderror)
-                    .dontAnimate()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .crossFade()
-                    .into(img);
+            if (!MainActivity.mIsLoadPhoto) {
+                Glide.with(this).load(list.get(i).getImgUrl())
+                        .error(R.drawable.photo_loaderror)
+                        .dontAnimate()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .crossFade()
+                        .into(img);
+            } else {
+                if (MainActivity.mIsWIFIState) {
+                    Glide.with(this).load(list.get(i).getImgUrl())
+                            .error(R.drawable.photo_loaderror)
+                            .dontAnimate()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .crossFade()
+                            .into(img);
+                } else {
+                    img.setImageResource(R.drawable.main_load_bg);
+                }
+            }
             name.setText(list.get(i).getMusicName());
             user.setText(list.get(i).getMusicPlayer());
 

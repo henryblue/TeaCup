@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.bean.PhotoInfo;
+import com.app.teacup.MainActivity;
 import com.app.teacup.R;
 import com.bumptech.glide.Glide;
 
@@ -50,11 +51,23 @@ public class PhotoGaoxiaoRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         }
 
         final PhotoViewHolder myHolder = (PhotoViewHolder) holder;
-        Glide.with(mContext).load(url).asBitmap()
-                .error(R.drawable.photo_loaderror)
-                .placeholder(R.drawable.photo_default)
-                .dontAnimate()
-                .into(myHolder.mPhotoImg);
+        if (!MainActivity.mIsLoadPhoto) {
+            Glide.with(mContext).load(url).asBitmap()
+                    .error(R.drawable.photo_loaderror)
+                    .placeholder(R.drawable.photo_default)
+                    .dontAnimate()
+                    .into(myHolder.mPhotoImg);
+        } else {
+            if (MainActivity.mIsWIFIState) {
+                Glide.with(mContext).load(url).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.photo_default)
+                        .dontAnimate()
+                        .into(myHolder.mPhotoImg);
+            } else {
+                myHolder.mPhotoImg.setImageResource(R.drawable.photo_default);
+            }
+        }
 
         myHolder.mTitle.setText(mDatas.get(position).getTitle());
         myHolder.mContent.setText(mDatas.get(position).getContent());

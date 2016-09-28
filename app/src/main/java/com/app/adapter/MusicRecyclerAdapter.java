@@ -2,7 +2,6 @@ package com.app.adapter;
 
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.bean.Music.MusicInfo;
+import com.app.teacup.MainActivity;
 import com.app.teacup.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -69,24 +69,36 @@ public class MusicRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             myHolder.mJcVideoPlayer.setVisibility(View.VISIBLE);
             myHolder.mJcVideoPlayer.setUp(strType
                     , JCVideoPlayerStandard.SCREEN_LAYOUT_LIST, info.getTitle());
-
+                Glide.with(mContext).load(url).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.main_load_bg)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .into(myHolder.mJcVideoPlayer.thumbImageView);
+            return;
+        } else {
+            myHolder.mLayout.setVisibility(View.VISIBLE);
+        }
+        if (!MainActivity.mIsLoadPhoto) {
             Glide.with(mContext).load(url).asBitmap()
                     .error(R.drawable.photo_loaderror)
                     .placeholder(R.drawable.main_load_bg)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .dontAnimate()
-                    .into(myHolder.mJcVideoPlayer.thumbImageView);
-            return;
+                    .into(myHolder.mPhotoImg);
         } else {
-            myHolder.mLayout.setVisibility(View.VISIBLE);
+            if (MainActivity.mIsWIFIState) {
+                Glide.with(mContext).load(url).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.main_load_bg)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .into(myHolder.mPhotoImg);
+            } else {
+                myHolder.mPhotoImg.setImageResource(R.drawable.main_load_bg);
+            }
         }
 
-        Glide.with(mContext).load(url).asBitmap()
-                .error(R.drawable.photo_loaderror)
-                .placeholder(R.drawable.main_load_bg)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .dontAnimate()
-                .into(myHolder.mPhotoImg);
         myHolder.mTitle.setText(info.getTitle());
         myHolder.mDetail.setText(info.getInfoNum());
         myHolder.mContent.setText(strType);
@@ -106,12 +118,25 @@ public class MusicRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         MusicInfo info = mDatas.get(position);
         String url = info.getImgUrl();
         final MusicViewHolder myHolder = (MusicViewHolder) holder;
-        Glide.with(mContext).load(url).asBitmap()
-                .error(R.drawable.photo_loaderror)
-                .placeholder(R.drawable.main_load_bg)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .dontAnimate()
-                .into(myHolder.mPhotoImg);
+        if (!MainActivity.mIsLoadPhoto) {
+            Glide.with(mContext).load(url).asBitmap()
+                    .error(R.drawable.photo_loaderror)
+                    .placeholder(R.drawable.main_load_bg)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .dontAnimate()
+                    .into(myHolder.mPhotoImg);
+        } else {
+            if (MainActivity.mIsWIFIState) {
+                Glide.with(mContext).load(url).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.main_load_bg)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .into(myHolder.mPhotoImg);
+            } else {
+                myHolder.mPhotoImg.setImageResource(R.drawable.main_load_bg);
+            }
+        }
         myHolder.mTitle.setText(info.getTitle());
         myHolder.mHappy.setText(info.getHappyNum());
         myHolder.mInfos.setText(info.getInfoNum());

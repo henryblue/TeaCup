@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true">
 
-    <include layout="@layout/navigation_toolbar"/>
+    <include layout="@layout/photo_navigation_toolbar"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/photo_tab_layout"

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.app.adapter.NewsRecyclerAdapter;
 import com.app.bean.News.NewsInfo;
 import com.app.fragment.BaseFragment;
+import com.app.teacup.MainActivity;
 import com.app.teacup.NewsDetailActivity;
 import com.app.teacup.R;
 import com.app.util.HttpUtils;
@@ -119,13 +120,28 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         for (int i = 0; i < IMAGE_VIEW_LEN; i++) {
             String url = mNewsDatas.get(i).getImgUrl();
             url = url.replace("square", "medium");
-            Glide.with(getContext()).load(url)
-                    .asBitmap()
-                    .error(R.drawable.photo_loaderror)
-                    .placeholder(R.drawable.main_load_bg)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .dontAnimate()
-                    .into(mImageViewList.get(i));
+            if (!MainActivity.mIsLoadPhoto) {
+                Glide.with(getContext()).load(url)
+                        .asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.main_load_bg)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .into(mImageViewList.get(i));
+            } else {
+                if (MainActivity.mIsWIFIState) {
+                    Glide.with(getContext()).load(url)
+                            .asBitmap()
+                            .error(R.drawable.photo_loaderror)
+                            .placeholder(R.drawable.main_load_bg)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .dontAnimate()
+                            .into(mImageViewList.get(i));
+                } else {
+                    mImageViewList.get(i).setImageResource(R.drawable.main_load_bg);
+                }
+            }
+
             final int pos = i;
             mImageViewList.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override

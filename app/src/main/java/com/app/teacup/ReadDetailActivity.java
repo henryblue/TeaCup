@@ -96,13 +96,27 @@ public class ReadDetailActivity extends AppCompatActivity {
                 view.setLayoutParams(imgParams);
                 tag = tag.replace("small", "medium");
                 view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                Glide.with(this).load(tag)
-                        .asBitmap()
-                        .error(R.drawable.photo_loaderror)
-                        .placeholder(R.drawable.main_load_bg)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .dontAnimate()
-                        .into(view);
+                if (!MainActivity.mIsLoadPhoto) {
+                    Glide.with(this).load(tag)
+                            .asBitmap()
+                            .error(R.drawable.photo_loaderror)
+                            .placeholder(R.drawable.main_load_bg)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .dontAnimate()
+                            .into(view);
+                } else {
+                    if (MainActivity.mIsWIFIState) {
+                        Glide.with(this).load(tag)
+                                .asBitmap()
+                                .error(R.drawable.photo_loaderror)
+                                .placeholder(R.drawable.main_load_bg)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .dontAnimate()
+                                .into(view);
+                    } else {
+                        view.setImageResource(R.drawable.main_load_bg);
+                    }
+                }
                 mLinearLayout.addView(view);
             } else {
                 TextView textView = new TextView(this);

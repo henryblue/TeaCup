@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.app.bean.Read.ReadCadInfo;
 import com.app.bean.Read.ReadInfo;
+import com.app.teacup.MainActivity;
 import com.app.teacup.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -84,13 +85,27 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         for (int i = 0; i < mImageViewUrls.size(); i++) {
             ImageView view = new ImageView(mContext);
             view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Glide.with(mContext).load(mImageViewUrls.get(i))
-                    .asBitmap()
-                    .error(R.drawable.photo_loaderror)
-                    .placeholder(R.drawable.main_load_bg)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .dontAnimate()
-                    .into(view);
+            if (!MainActivity.mIsLoadPhoto) {
+                Glide.with(mContext).load(mImageViewUrls.get(i))
+                        .asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.main_load_bg)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .into(view);
+            } else {
+                if (MainActivity.mIsWIFIState) {
+                    Glide.with(mContext).load(mImageViewUrls.get(i))
+                            .asBitmap()
+                            .error(R.drawable.photo_loaderror)
+                            .placeholder(R.drawable.main_load_bg)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .dontAnimate()
+                            .into(view);
+                } else {
+                    view.setImageResource(R.drawable.main_load_bg);
+                }
+            }
             mImageViewList.add(view);
         }
         setHeaderVisible(View.VISIBLE);
@@ -110,12 +125,25 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         List<ReadInfo> readList = info.getReadList();
         for (int i = 0; i < myHolder.mViewHolder.size(); i++) {
             final ReadTopicViewHolder.ViewHolder viewHolder = myHolder.mViewHolder.get(i);
-            Glide.with(mContext).load(readList.get(i).getImgurl()).asBitmap()
-                    .error(R.drawable.photo_loaderror)
-                    .placeholder(R.drawable.main_load_bg)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .dontAnimate()
-                    .into(viewHolder.mImage);
+            if (!MainActivity.mIsLoadPhoto) {
+                Glide.with(mContext).load(readList.get(i).getImgurl()).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.main_load_bg)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .into(viewHolder.mImage);
+            } else {
+                if (MainActivity.mIsWIFIState) {
+                    Glide.with(mContext).load(readList.get(i).getImgurl()).asBitmap()
+                            .error(R.drawable.photo_loaderror)
+                            .placeholder(R.drawable.main_load_bg)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .dontAnimate()
+                            .into(viewHolder.mImage);
+                } else {
+                    viewHolder.mImage.setImageResource(R.drawable.main_load_bg);
+                }
+            }
 
             viewHolder.mContent.setText(readList.get(i).getTitle());
             viewHolder.mTime.setText(readList.get(i).getAuthor());
@@ -148,12 +176,26 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         ReadInfo info = mReadDatas.get(position - 3);
 
-        Glide.with(mContext).load(info.getImgurl()).asBitmap()
-                .error(R.drawable.photo_loaderror)
-                .placeholder(R.drawable.main_load_bg)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .dontAnimate()
-                .into(myHolder.mPhotoImg);
+        if (!MainActivity.mIsLoadPhoto) {
+            Glide.with(mContext).load(info.getImgurl()).asBitmap()
+                    .error(R.drawable.photo_loaderror)
+                    .placeholder(R.drawable.main_load_bg)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .dontAnimate()
+                    .into(myHolder.mPhotoImg);
+        } else {
+            if (MainActivity.mIsWIFIState) {
+                Glide.with(mContext).load(info.getImgurl()).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.main_load_bg)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .into(myHolder.mPhotoImg);
+            } else {
+                myHolder.mPhotoImg.setImageResource(R.drawable.main_load_bg);
+            }
+        }
+
         if (TextUtils.isEmpty(info.getTitle())) {
             myHolder.mTitle.setText(mContext.getString(R.string.unknown_name));
         } else {

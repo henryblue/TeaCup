@@ -1,6 +1,7 @@
 <resources>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="toolbar_elevation">6dp</dimen>
 
     <dimen name="navigation_header_layout_padding">16dp</dimen>
     <dimen name="navigation_header_circleImageView_width">82dp</dimen>
@@ -213,4 +214,12 @@
     <dimen name="item_guide_iv_width">280dp</dimen>
     <dimen name="item_guide_iv_height">380dp</dimen>
 
+    <dimen name="setting_item_ll_marginLeft">10dp</dimen>
+    <dimen name="setting_item_ll_title_textSize">15sp</dimen>
+    <dimen name="setting_item_ll_content_textSize">13sp</dimen>
+    <dimen name="setting_item_checkBox_width">50dp</dimen>
+    <dimen name="setting_item_checkBox_height">30dp</dimen>
+    <dimen name="setting_item_view_marginLeft">10dp</dimen>
+    <dimen name="setting_item_view_marginRight">10dp</dimen>
+    <dimen name="setting_item_rl_height">75dp</dimen>
 </resources>

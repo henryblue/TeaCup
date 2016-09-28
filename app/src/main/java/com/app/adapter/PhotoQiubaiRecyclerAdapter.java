@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.bean.PhotoInfo;
+import com.app.teacup.MainActivity;
 import com.app.teacup.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -38,11 +39,23 @@ public class PhotoQiubaiRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         if (url.contains(".gif")) {
             ImageView photoImg = (ImageView) view.findViewById(R.id.iv_photo);
             ImageView gifView = (ImageView) view.findViewById(R.id.iv_gif);
-            Glide.with(mContext).load(url)
-                    .asGif()
-                    .error(R.drawable.photo_loaderror)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(photoImg);
+            if (!MainActivity.mIsLoadPhoto) {
+                Glide.with(mContext).load(url)
+                        .asGif()
+                        .error(R.drawable.photo_loaderror)
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .into(photoImg);
+            } else {
+                if (MainActivity.mIsWIFIState) {
+                    Glide.with(mContext).load(url)
+                            .asGif()
+                            .error(R.drawable.photo_loaderror)
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                            .into(photoImg);
+                } else {
+                    photoImg.setImageResource(R.drawable.photo_default);
+                }
+            }
             gifView.setVisibility(View.GONE);
         }
     }
@@ -64,11 +77,24 @@ public class PhotoQiubaiRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
 
         final PhotoViewHolder myHolder = (PhotoViewHolder) holder;
-        Glide.with(mContext).load(url).asBitmap()
-                .error(R.drawable.photo_loaderror)
-                .placeholder(R.drawable.photo_default)
-                .dontAnimate()
-                .into(myHolder.mPhotoImg);
+        if (!MainActivity.mIsLoadPhoto) {
+            Glide.with(mContext).load(url).asBitmap()
+                    .error(R.drawable.photo_loaderror)
+                    .placeholder(R.drawable.photo_default)
+                    .dontAnimate()
+                    .into(myHolder.mPhotoImg);
+        } else {
+            if (MainActivity.mIsWIFIState) {
+                Glide.with(mContext).load(url).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.photo_default)
+                        .dontAnimate()
+                        .into(myHolder.mPhotoImg);
+            } else {
+                myHolder.mPhotoImg.setImageResource(R.drawable.photo_default);
+            }
+        }
+
         if (url.contains(".gif")) {
             myHolder.mGif.setVisibility(View.VISIBLE);
         } else {

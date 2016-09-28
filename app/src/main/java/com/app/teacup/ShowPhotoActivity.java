@@ -27,11 +27,23 @@ public class ShowPhotoActivity extends Activity {
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(showPhoto);
         } else {
-            Glide.with(this).load(imgUrl).asBitmap()
-                    .error(R.drawable.photo_loaderror)
-                    .placeholder(R.drawable.loading_photo)
-                    .dontAnimate()
-                    .into(showPhoto);
+            if (!MainActivity.mIsLoadPhoto) {
+                Glide.with(this).load(imgUrl).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.loading_photo)
+                        .dontAnimate()
+                        .into(showPhoto);
+            } else {
+                if (MainActivity.mIsWIFIState) {
+                    Glide.with(this).load(imgUrl).asBitmap()
+                            .error(R.drawable.photo_loaderror)
+                            .placeholder(R.drawable.loading_photo)
+                            .dontAnimate()
+                            .into(showPhoto);
+                } else {
+                    showPhoto.setImageResource(R.drawable.photo_default);
+                }
+            }
         }
     }
 }
