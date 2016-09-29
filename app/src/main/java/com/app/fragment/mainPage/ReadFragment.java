@@ -231,6 +231,7 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     @Override
     protected void onRefreshError() {
         mRefreshLayout.setRefreshing(false);
+        mRecyclerView.refreshComplete();
         Toast.makeText(getContext(), getString(R.string.refresh_net_error), Toast.LENGTH_SHORT).show();
     }
 

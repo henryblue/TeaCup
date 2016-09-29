@@ -3,6 +3,7 @@ package com.app.teacup;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,6 +14,10 @@ import com.app.bean.WeatherInfo;
 import com.app.util.OkHttpUtils;
 import com.app.util.ToolUtils;
 import com.app.util.urlUtils;
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Request;
 
@@ -26,14 +31,32 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView mWeatherContent;
     private LinearLayout mLayoutWeatherStatus;
     private Toolbar mToolbar;
+    private LocationClient locationClient = null;
+    public BDLocationListener myListener = new MyBdlocationListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
+        locationClient = new LocationClient(getApplicationContext());
+        locationClient.registerLocationListener(myListener);
+        locationClient.start();
+        initLocation();
         initView();
         initToolBar();
         startLoadData();
+    }
+
+    private void initLocation() {
+        LocationClientOption option = new LocationClientOption();
+        option.setCoorType("bd09ll");
+        option.setOpenGps(true);
+        option.setIsNeedLocationDescribe(true);
+        option.setIsNeedLocationPoiList(true);
+        option.setIgnoreKillProcess(false);
+        option.SetIgnoreCacheException(false);
+        option.setEnableSimulateGps(false);
+        locationClient.setLocOption(option);
     }
 
     private void startLoadData() {
@@ -116,6 +139,20 @@ public class WeatherActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        locationClient.stop();
+        super.onDestroy();
+    }
+
+    private class MyBdlocationListener implements BDLocationListener {
+        @Override
+        public void onReceiveLocation(BDLocation bdLocation) {
+            String city = bdLocation.getCity();
+            Log.i("WeatherActivity", "current===city==" + city);
         }
     }
 }
