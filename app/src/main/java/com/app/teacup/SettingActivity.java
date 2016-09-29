@@ -6,8 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.app.ui.SettingItemView;
+import com.app.util.ToolUtils;
 
 
 public class SettingActivity extends AppCompatActivity {
@@ -32,6 +34,12 @@ public class SettingActivity extends AppCompatActivity {
         mWarmSetting = (SettingItemView) findViewById(R.id.siv_warm_data_stream);
         mPlayMusic = (SettingItemView) findViewById(R.id.siv_play_music);
         mCleanCache = (SettingItemView) findViewById(R.id.siv_clean_cache);
+        try {
+            String cacheSize = ToolUtils.getTotalCacheSize(SettingActivity.this);
+            mCleanCache.setContent(getString(R.string.cache_size) + cacheSize);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         mSaveData.setChecked(mSps.getBoolean("loadPhoto", false));
         mWarmSetting.setChecked(mSps.getBoolean("warmData", false));
@@ -47,7 +55,7 @@ public class SettingActivity extends AppCompatActivity {
                 } else {
                     edit.putBoolean("loadPhoto", true);
                 }
-                edit.commit();
+                edit.apply();
                 mSaveData.setChecked(!mSaveData.isChecked());
             }
         });
@@ -62,7 +70,7 @@ public class SettingActivity extends AppCompatActivity {
                 } else {
                     edit.putBoolean("warmData", true);
                 }
-                edit.commit();
+                edit.apply();
                 mWarmSetting.setChecked(!mWarmSetting.isChecked());
             }
         });
@@ -77,7 +85,7 @@ public class SettingActivity extends AppCompatActivity {
                 } else {
                     edit.putBoolean("playMusic", true);
                 }
-                edit.commit();
+                edit.apply();
                 mPlayMusic.setChecked(!mPlayMusic.isChecked());
             }
         });
@@ -92,6 +100,16 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void cleanCache() {
+        ToolUtils.clearAllCache(SettingActivity.this);
+        try {
+            String cacheSize = ToolUtils.getTotalCacheSize(SettingActivity.this);
+            mCleanCache.setContent(getString(R.string.cache_size) + cacheSize);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Toast.makeText(SettingActivity.this, getString(R.string.clean_cache_finish),
+                Toast.LENGTH_SHORT).show();
     }
 
     private void initToolBar() {

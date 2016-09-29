@@ -11,28 +11,27 @@
         android:id="@+id/siv_save_data_stream"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:setting_title="省流量模式"
-        app:setting_content="仅在Wi-Fi环境下才会自动加载图片"/>
+        app:setting_title="@string/save_mobile_data"
+        app:setting_content="@string/tip_save_data"/>
 
     <com.app.ui.SettingItemView
         android:id="@+id/siv_warm_data_stream"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:setting_title="流量模式下提醒" />
+        app:setting_title="@string/tip_not_wifi" />
 
     <com.app.ui.SettingItemView
         android:id="@+id/siv_play_music"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:setting_title="非WIFI模式下播放音乐" />
+        app:setting_title="@string/play_play_not_wifi" />
 
     <com.app.ui.SettingItemView
         android:id="@+id/siv_clean_cache"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:hide_checkbox="true"
-        app:setting_title="清除缓存"
-        app:setting_content="缓存大小 15KB"/>
+        app:setting_title="@string/clean_cache" />
 
 
 </LinearLayout>

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import info.abdolahi.CircularMusicProgressBar;
+import me.drakeet.materialdialog.MaterialDialog;
 
 
 public class MusicPlayActivity extends Activity implements View.OnClickListener {
@@ -114,7 +115,6 @@ public class MusicPlayActivity extends Activity implements View.OnClickListener 
     }
 
     private void startPlay(int pos) {
-        mMusicView.startPlayMusic(mMusicList.get(pos).getMusicUrl());
         mPlayTitle.setText(mMusicList.get(pos).getMusicName());
         mPlayAuthor.setText(mMusicList.get(pos).getMusicPlayer());
         if (!MainActivity.mIsLoadPhoto) {
@@ -137,12 +137,39 @@ public class MusicPlayActivity extends Activity implements View.OnClickListener 
             }
         }
         mPlayButton.setImageResource(R.drawable.pausemusic);
+
+        if (!MainActivity.mIsPlayMusic) {
+            if (!MainActivity.mIsWIFIState) {
+                showAlertDialog();
+                return;
+            }
+        }
+
+        mMusicView.startPlayMusic(mMusicList.get(pos).getMusicUrl());
+    }
+
+    private void showAlertDialog() {
+        final MaterialDialog mMaterialDialog = new MaterialDialog(this);
+        mMaterialDialog.setTitle(getString(R.string.alert_dialog))
+                .setMessage(getString(R.string.music_tips_not_wifi))
+                .setPositiveButton(getString(R.string.ok), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mMaterialDialog.dismiss();
+                    }
+                });
+        mMaterialDialog.show();
     }
 
     @Override
     protected void onDestroy() {
         mMusicView.stopPlayMusic();
         super.onDestroy();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     private class OnPlayerMusicStateListener implements MiniMusicView.OnMusicStateListener {

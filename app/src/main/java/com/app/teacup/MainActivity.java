@@ -1,7 +1,9 @@
 package com.app.teacup;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -14,7 +16,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.app.ConnectionChangeReceiver;
 import com.app.adapter.PagerAdapter;
 import com.app.fragment.mainPage.MusicFragment;
 import com.app.fragment.mainPage.NewsFragment;
@@ -23,6 +27,8 @@ import com.app.fragment.mainPage.TingFragment;
 import com.app.util.HttpUtils;
 
 import java.util.ArrayList;
+
+import me.drakeet.materialdialog.MaterialDialog;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -33,21 +39,27 @@ public class MainActivity extends AppCompatActivity {
     public static boolean mIsLoadPhoto;
     public static boolean mIsPlayMusic;
     public static boolean mIsWIFIState;
+    private ConnectionChangeReceiver mNetSateReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mIsWIFIState = HttpUtils.isWifi(MainActivity.this);
+        //注册网络监听
+        registerReceiver();
+
         SharedPreferences sp = getSharedPreferences("config", MODE_PRIVATE);
         mIsLoadPhoto = sp.getBoolean("loadPhoto", false);
         mIsPlayMusic = sp.getBoolean("playMusic", false);
         boolean isNeedWarm = sp.getBoolean("warmData", false);
+
         initToolbar();
-        if (isNeedWarm) {
-            if (mIsWIFIState) {
-                initView();
-            } else {
+        if (isNeedWarm) {  //流量状态下提醒
+            if (HttpUtils.isMobile(MainActivity.this)) {
                 showAlertDialog();
+            } else {
+                initView();
             }
         } else {
             initView();
@@ -55,6 +67,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showAlertDialog() {
+        final MaterialDialog mMaterialDialog = new MaterialDialog(this);
+        mMaterialDialog.setTitle(getString(R.string.alert_dialog))
+                .setMessage(getString(R.string.main_tips_not_wifi))
+                .setPositiveButton(getString(R.string.ok), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        initView();
+                        mMaterialDialog.dismiss();
+                    }
+                })
+        .setNegativeButton(getString(R.string.cancel), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMaterialDialog.dismiss();
+                finish();
+            }
+        });
+
+        mMaterialDialog.show();
     }
 
     private void initToolbar() {
@@ -132,10 +163,18 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private  void registerReceiver(){
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        mNetSateReceiver = new ConnectionChangeReceiver();
+        this.registerReceiver(mNetSateReceiver, filter);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        mNavigationView.getMenu().getItem(0).setChecked(true);
+        if (mNavigationView != null) {
+            mNavigationView.getMenu().getItem(0).setChecked(true);
+        }
     }
 
     @Override
@@ -168,4 +207,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(shareIntent, getString(R.string.share_header)));
     }
 
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(mNetSateReceiver);
+        super.onDestroy();
+    }
 }

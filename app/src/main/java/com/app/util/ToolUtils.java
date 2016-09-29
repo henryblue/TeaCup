@@ -2,9 +2,13 @@ package com.app.util;
 
 
 import android.content.Context;
+import android.os.Environment;
+import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 
 import com.app.teacup.R;
+
+import java.io.File;
 
 public class ToolUtils {
 
@@ -56,6 +60,56 @@ public class ToolUtils {
             return R.drawable.biz_plugin_weather_zhongxue;
         } else {
             return R.drawable.biz_plugin_weather_duoyun;
+        }
+    }
+
+    public static String getTotalCacheSize(Context context) throws Exception {
+        long cacheSize = getFolderSize(context.getCacheDir());
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            cacheSize += getFolderSize(context.getExternalCacheDir());
+        }
+        return Formatter.formatFileSize(context, cacheSize);
+    }
+
+    public static long getFolderSize(File file) throws Exception {
+        long size = 0;
+        try {
+            File[] fileList = file.listFiles();
+            for (int i = 0; i < fileList.length; i++) {
+                // 如果下面还有文件
+                if (fileList[i].isDirectory()) {
+                    size = size + getFolderSize(fileList[i]);
+                } else {
+                    size = size + fileList[i].length();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return size;
+    }
+
+    public static void clearAllCache(Context context) {
+        deleteDir(context.getCacheDir());
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            deleteDir(context.getExternalCacheDir());
+        }
+    }
+
+    private static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        if (dir != null) {
+            return dir.delete();
+        } else {
+            return false;
         }
     }
 }

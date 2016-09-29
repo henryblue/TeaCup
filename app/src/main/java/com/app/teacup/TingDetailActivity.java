@@ -32,6 +32,8 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.drakeet.materialdialog.MaterialDialog;
+
 
 public class TingDetailActivity extends AppCompatActivity {
 
@@ -97,7 +99,7 @@ public class TingDetailActivity extends AppCompatActivity {
 
         ImageView ivImage = (ImageView) findViewById(R.id.iv_ting_image);
         if (ivImage != null) {
-            if (MainActivity.mIsLoadPhoto) {
+            if (!MainActivity.mIsLoadPhoto) {
                 Glide.with(this).load(mMusicInfo.getImgUrl())
                         .error(R.drawable.photo_loaderror)
                         .dontAnimate()
@@ -128,7 +130,26 @@ public class TingDetailActivity extends AppCompatActivity {
         mMusicView.setTitleText(mMusicInfo.getTitle());
         mMusicView.setVisibility(View.VISIBLE);
         initLayout();
+        if (!MainActivity.mIsPlayMusic) {
+            if (!MainActivity.mIsWIFIState) {
+                showAlertDialog();
+                return;
+            }
+        }
         mMusicView.startPlayMusic(mAudioUrl);
+    }
+
+    private void showAlertDialog() {
+        final MaterialDialog mMaterialDialog = new MaterialDialog(this);
+        mMaterialDialog.setTitle(getString(R.string.alert_dialog))
+                .setMessage(getString(R.string.music_tips_not_wifi))
+                .setPositiveButton(getString(R.string.ok), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mMaterialDialog.dismiss();
+                    }
+                });
+        mMaterialDialog.show();
     }
 
     private void initLayout() {

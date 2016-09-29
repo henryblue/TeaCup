@@ -17,6 +17,7 @@
     <string name="input_hint">请输入需要添加的书名</string>
     <string name="add_book">添加</string>
     <string name="ok">确定</string>
+    <string name="cancel">取消</string>
     <string name="transition_book_img">transition_book_img</string>
     <string name="transition_music_img">transition_music_img</string>
     <string name="transition_ting_img">transition_ting_img</string>
@@ -51,6 +52,16 @@
         https://github.com/henry-blue/TeaCup</string>
 
     <string name="share_header">分享到</string>
+    <string name="alert_dialog">提醒</string>
+    <string name="music_tips_not_wifi">您当前正在使用移动网络, 继续播放将消耗流量, 如果继续请到设置里修改.</string>
+    <string name="main_tips_not_wifi">您当前正在使用移动网络, 是否需要继续?</string>
+    <string name="save_mobile_data">省流量模式</string>
+    <string name="tip_save_data">仅在Wi-Fi环境下才会自动加载图片</string>
+    <string name="tip_not_wifi">流量模式下提醒</string>
+    <string name="play_play_not_wifi">非WIFI模式下播放音乐</string>
+    <string name="clean_cache">清除缓存</string>
+    <string name="cache_size">缓存大小: </string>
+    <string name="clean_cache_finish">缓存清理完成</string>
 
     <string-array name="tab_name">
         <item>新鲜事</item>
