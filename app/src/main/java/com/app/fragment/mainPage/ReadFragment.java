@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.app.adapter.ReadRecyclerAdapter;
+import com.app.bean.News.NewsHeadInfo;
 import com.app.bean.Read.ReadCadInfo;
 import com.app.bean.Read.ReadInfo;
 import com.app.fragment.BaseFragment;
@@ -45,7 +46,7 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private SwipeRefreshLayout mRefreshLayout;
     private XRecyclerView mRecyclerView;
     private List<ReadInfo> mReadDatas;
-    private List<String> mHeadDatas;
+    private List<NewsHeadInfo> mHeadDatas;
     private List<ReadCadInfo> mTopicDatas;
     private ReadRecyclerAdapter mReadRecyclerAdapter;
 
@@ -148,9 +149,16 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         Element ul = slider.getElementsByTag("ul").get(0);
         Elements lis = ul.getElementsByTag("li");
         for (Element li : lis) {
-            Element img = li.getElementsByTag("a").get(0).getElementsByTag("img").get(0);
-            String imgUrl = img.attr("src");
-            mHeadDatas.add(imgUrl);
+            NewsHeadInfo info = new NewsHeadInfo();
+            Element element = li.getElementsByTag("a").get(0);
+            String href = element.attr("href");
+            info.setNewsUrl(urlUtils.READ_URL_NEXT_HEAD + href);
+            Element img = element.getElementsByTag("img").get(0);
+            info.setImgUrl(img.attr("src"));
+            Element cover = li.getElementsByClass("cover").get(0);
+            String title = cover.getElementsByClass("article-name").get(0).text();
+            info.setNewsTitle(title);
+            mHeadDatas.add(info);
         }
 
         Element story = mainLeft.getElementsByClass("story-category").get(0);
@@ -267,6 +275,14 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     }
 
     private class ReadItemClickListener implements ReadRecyclerAdapter.OnItemClickListener {
+
+        @Override
+        public void onHeadClick(View view, int position) {
+            Intent intent = new Intent(getContext(), ReadDetailActivity.class);
+            intent.putExtra("readDetailUrl", mHeadDatas.get(position).getNewsUrl());
+            intent.putExtra("readTitle", mHeadDatas.get(position).getNewsTitle());
+            startActivity(intent);
+        }
 
         @Override
         public void onItemClick(View view, int position) {

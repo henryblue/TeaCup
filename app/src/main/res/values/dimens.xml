@@ -208,7 +208,6 @@
     <dimen name="activity_guide_iv_button_height">40dp</dimen>
 
     <dimen name="item_guide_cardView_marginTop">40dp</dimen>
-    <dimen name="item_guide_cardView_marginLeft">50dp</dimen>
     <dimen name="item_guide_cardView_cardCornerRadius">4dp</dimen>
     <dimen name="item_guide_cardView_cardElevation">10dp</dimen>
     <dimen name="item_guide_iv_width">280dp</dimen>
@@ -222,4 +221,96 @@
     <dimen name="setting_item_view_marginLeft">10dp</dimen>
     <dimen name="setting_item_view_marginRight">10dp</dimen>
     <dimen name="setting_item_rl_height">75dp</dimen>
+
+    <dimen name="read_topic_view_height">355dp</dimen>
+    <dimen name="read_topic_view_marginBottom">8dp</dimen>
+    <dimen name="read_topic_view_marginTop">8dp</dimen>
+    <dimen name="read_topic_view_marginLeft">10dp</dimen>
+    <dimen name="read_topic_view_marginRight">10dp</dimen>
+    <dimen name="read_topic_view_title_height">35dp</dimen>
+    <dimen name="read_topic_view_title_textSize">16sp</dimen>
+    <dimen name="read_topic_view_title1_marginLeft">15dp</dimen>
+    <dimen name="read_topic_view_title1_textSize">15sp</dimen>
+    <dimen name="read_topic_view_more_marginLeft">15dp</dimen>
+    <dimen name="read_topic_view_more_textSize">15sp</dimen>
+    <dimen name="read_topic_view_ll_height">155dp</dimen>
+    <dimen name="read_topic_view_ll_marginTop">35dp</dimen>
+    <dimen name="read_topic_view_ll1_marginRight">5dp</dimen>
+    <dimen name="read_topic_view_ll1_marginLeft">5dp</dimen>
+    <dimen name="read_topic_view_img_height">110dp</dimen>
+    <dimen name="read_topic_view_text_margin">5dp</dimen>
+    <dimen name="read_topic_view_text_size">14sp</dimen>
+    <dimen name="read_topic_view_text_time_size">12sp</dimen>
+
+    <dimen name="item_read_topic_rl_height">205dp</dimen>
+    <dimen name="item_read_topic_rl_marginBottom">5dp</dimen>
+    <dimen name="item_read_topic_read_title_size">18sp</dimen>
+    <dimen name="item_read_topic_read_title_margin">8dp</dimen>
+    <dimen name="item_read_topic_read_author_margin">8dp</dimen>
+    <dimen name="item_read_topic_read_author_size">14sp</dimen>
+    <dimen name="item_read_topic_ll_height">118dp</dimen>
+    <dimen name="item_read_topic_ll_marginRight">8dp</dimen>
+    <dimen name="item_read_topic_ll_img_width">100dp</dimen>
+    <dimen name="item_read_topic_ll_img_height">105dp</dimen>
+    <dimen name="item_read_topic_ll_img_marginLeft">8dp</dimen>
+    <dimen name="item_read_topic_ll_content_marginLeft">8dp</dimen>
+    <dimen name="item_read_topic_ll_content_textSize">15sp</dimen>
+
+    <dimen name="item_read_view_cardView_height">180dp</dimen>
+    <dimen name="item_read_view_cardView_marginTop">3dp</dimen>
+    <dimen name="item_read_view_cardView_marginBottom">3dp</dimen>
+    <dimen name="item_read_view_title_marginLeft">10dp</dimen>
+    <dimen name="item_read_view_title_marginTop">8dp</dimen>
+    <dimen name="item_read_view_title_size">16sp</dimen>
+    <dimen name="item_read_view_rl_marginLeft">10dp</dimen>
+    <dimen name="item_read_view_rl_iv_width">110dp</dimen>
+    <dimen name="item_read_view_rl_iv_height">85dp</dimen>
+    <dimen name="item_read_view_rl_content_marginLeft">8dp</dimen>
+    <dimen name="item_read_view_rl_content_marginTop">5dp</dimen>
+    <dimen name="item_read_view_rl_content_marginBottom">5dp</dimen>
+    <dimen name="item_read_view_rl_content_marginRight">10dp</dimen>
+    <dimen name="item_read_view_rl_content_size">14sp</dimen>
+    <dimen name="item_read_view_rl_author_marginLeft">10dp</dimen>
+    <dimen name="item_read_view_rl_author_marginBottom">10dp</dimen>
+    <dimen name="item_read_view_rl_author_size">13sp</dimen>
+    <dimen name="item_read_view_rl_num_marginRight">10dp</dimen>
+    <dimen name="item_read_view_rl_num_marginBottom">10dp</dimen>
+    <dimen name="item_read_view_rl_num_size">13sp</dimen>
+
+    <dimen name="item_ting_radio_view_height">150dp</dimen>
+    <dimen name="item_ting_radio_view_ll_marginLeft">8dp</dimen>
+    <dimen name="item_ting_radio_view_title_size">16sp</dimen>
+    <dimen name="item_ting_radio_view_content_size">14sp</dimen>
+    <dimen name="item_ting_radio_view_detail_size">13sp</dimen>
+    <dimen name="item_ting_radio_view_content_marginBottom">8dp</dimen>
+    <dimen name="item_ting_radio_view_content_marginTop">8dp</dimen>
+    <dimen name="item_ting_radio_view_img_height">106dp</dimen>
+    <dimen name="item_ting_radio_view_img_marginRight">8dp</dimen>
+    <dimen name="item_ting_view_marginBottom">10dp</dimen>
+    <dimen name="item_ting_view_player_height">230dp</dimen>
+
+    <dimen name="list_item_read_collection_height">170dp</dimen>
+    <dimen name="list_item_read_collection_marginBottom">10dp</dimen>
+    <dimen name="list_item_read_collection_title_size">18sp</dimen>
+    <dimen name="list_item_read_collection_title_margin">8dp</dimen>
+    <dimen name="list_item_read_collection_ll_marginTop">4dp</dimen>
+    <dimen name="list_item_read_collection_ll_marginRight">8dp</dimen>
+    <dimen name="list_item_read_collection_img_width">75dp</dimen>
+    <dimen name="list_item_read_collection_img_height">85dp</dimen>
+    <dimen name="list_item_read_collection_img_marginLeft">8dp</dimen>
+    <dimen name="list_item_read_collection_content_marginLeft">8dp</dimen>
+    <dimen name="list_item_read_collection_content_size">15sp</dimen>
+    <dimen name="list_item_read_collection_author_marginBottom">8dp</dimen>
+    <dimen name="list_item_read_collection_author_marginLeft">8dp</dimen>
+    <dimen name="list_item_read_collection_author_size">13sp</dimen>
+    <dimen name="list_item_read_collection_detail_marginBottom">8dp</dimen>
+    <dimen name="list_item_read_collection_detail_marginLeft">8dp</dimen>
+    <dimen name="list_item_read_collection_detail_size">13sp</dimen>
+
+    <dimen name="list_item_read_topic_height">225dp</dimen>
+    <dimen name="list_item_read_topic_margin">8dp</dimen>
+    <dimen name="list_item_read_topic_ll_height">60dp</dimen>
+    <dimen name="list_item_read_topic_title_margin">8dp</dimen>
+    <dimen name="list_item_read_topic_title_size">15sp</dimen>
+    <dimen name="list_item_read_topic_detail_size">13sp</dimen>
 </resources>

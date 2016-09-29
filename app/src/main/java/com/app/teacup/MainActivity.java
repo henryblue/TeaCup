@@ -18,7 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.app.ConnectionChangeReceiver;
+import com.app.receiver.ConnectionChangeReceiver;
 import com.app.adapter.PagerAdapter;
 import com.app.fragment.mainPage.MusicFragment;
 import com.app.fragment.mainPage.NewsFragment;

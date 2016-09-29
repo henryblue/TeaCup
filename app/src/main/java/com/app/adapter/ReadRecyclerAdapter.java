@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.app.bean.News.NewsHeadInfo;
 import com.app.bean.Read.ReadCadInfo;
 import com.app.bean.Read.ReadInfo;
 import com.app.teacup.MainActivity;
@@ -32,20 +33,21 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private Context mContext;
     private OnItemClickListener mListener;
     private List<ImageView> mImageViewList;
-    private List<String> mImageViewUrls;
+    private List<NewsHeadInfo> mImageViewUrls;
     private List<ReadInfo> mReadDatas;
     private List<ReadCadInfo> mCadInfos;
     private LayoutInflater mLayoutInflater;
     private HeaderViewHolder mHeaderViewHolder;
 
     public interface OnItemClickListener {
+        void onHeadClick(View view, int position);
         void onItemClick(View view, int position);
         void onTopicClick(int typePos, int position);
         void onLoadMore(int typePos);
     }
 
     public ReadRecyclerAdapter(Context context, List<ReadInfo> readInfos,
-                               List<String> imageViewUrls, List<ReadCadInfo> cadInfos) {
+                               List<NewsHeadInfo> imageViewUrls, List<ReadCadInfo> cadInfos) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
         mReadDatas = readInfos;
@@ -86,7 +88,7 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ImageView view = new ImageView(mContext);
             view.setScaleType(ImageView.ScaleType.CENTER_CROP);
             if (!MainActivity.mIsLoadPhoto) {
-                Glide.with(mContext).load(mImageViewUrls.get(i))
+                Glide.with(mContext).load(mImageViewUrls.get(i).getImgUrl())
                         .asBitmap()
                         .error(R.drawable.photo_loaderror)
                         .placeholder(R.drawable.main_load_bg)
@@ -95,7 +97,7 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         .into(view);
             } else {
                 if (MainActivity.mIsWIFIState) {
-                    Glide.with(mContext).load(mImageViewUrls.get(i))
+                    Glide.with(mContext).load(mImageViewUrls.get(i).getImgUrl())
                             .asBitmap()
                             .error(R.drawable.photo_loaderror)
                             .placeholder(R.drawable.main_load_bg)
@@ -106,8 +108,18 @@ public class ReadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     view.setImageResource(R.drawable.main_load_bg);
                 }
             }
+            //设置广告栏点击事件
+            final int pos = i;
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mListener.onHeadClick(view, pos);
+                }
+            });
+
             mImageViewList.add(view);
         }
+
         setHeaderVisible(View.VISIBLE);
 
         if (myHolder.mAdapter != null) {

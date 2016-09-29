@@ -1,71 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="170dp"
+    android:layout_height="@dimen/list_item_read_collection_height"
+    android:layout_marginBottom="@dimen/list_item_read_collection_marginBottom"
     android:background="@color/white"
-    android:layout_marginBottom="10dp"
-    android:foreground="?android:attr/selectableItemBackgroundBorderless"
-    android:elevation="1dp"
-    android:orientation="vertical"
-    tools:targetApi="lollipop">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/list_item_collect_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:layout_margin="@dimen/list_item_read_collection_title_margin"
+        android:maxLines="1"
         android:textColor="@color/black"
-        android:layout_margin="8dp"
-        android:maxLines="1" />
+        android:textSize="@dimen/list_item_read_collection_title_size" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/list_item_collect_title"
-        android:layout_marginTop="4dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginRight="@dimen/list_item_read_collection_ll_marginRight"
+        android:layout_marginTop="@dimen/list_item_read_collection_ll_marginTop"
         android:orientation="horizontal">
+
         <ImageView
             android:id="@+id/list_item_collect_img"
-            android:layout_width="75dp"
-            android:layout_height="85dp"
-            android:layout_marginLeft="8dp"
+            android:layout_width="@dimen/list_item_read_collection_img_width"
+            android:layout_height="@dimen/list_item_read_collection_img_height"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/header"
-            android:scaleType="centerCrop" />
+            android:layout_marginLeft="@dimen/list_item_read_collection_img_marginLeft"
+            android:scaleType="centerCrop"
+            android:src="@drawable/header" />
+
         <TextView
             android:id="@+id/list_item_collect_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/list_item_read_collection_content_marginLeft"
             android:maxLines="3"
-            android:layout_marginLeft="8dp"
             android:textColor="@color/deep_gray"
-            android:textSize="15sp"/>
+            android:textSize="@dimen/list_item_read_collection_content_size" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/list_item_collect_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="13sp"
-        android:textColor="@color/gray"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp"
         android:layout_alignParentBottom="true"
-        android:maxLines="1" />
+        android:layout_marginBottom="@dimen/list_item_read_collection_author_marginBottom"
+        android:layout_marginLeft="@dimen/list_item_read_collection_author_marginLeft"
+        android:maxLines="1"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/list_item_read_collection_author_size" />
 
     <TextView
         android:id="@+id/list_item_collect_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="13sp"
-        android:textColor="@color/gray"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:maxLines="1" />
+        android:layout_marginBottom="@dimen/list_item_read_collection_detail_marginBottom"
+        android:layout_marginRight="@dimen/list_item_read_collection_detail_marginLeft"
+        android:maxLines="1"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/list_item_read_collection_detail_size" />
 
 </RelativeLayout>

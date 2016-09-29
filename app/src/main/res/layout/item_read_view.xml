@@ -2,11 +2,11 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="180dp"
+    android:layout_height="@dimen/item_read_view_cardView_height"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:foreground="?android:attr/selectableItemBackgroundBorderless"
-    android:layout_marginTop="3dp"
-    android:layout_marginBottom="3dp"
+    android:layout_marginTop="@dimen/item_read_view_cardView_marginTop"
+    android:layout_marginBottom="@dimen/item_read_view_cardView_marginBottom"
     app:cardElevation="0.5dp"
     tools:targetApi="lollipop">
 
@@ -14,23 +14,23 @@
         android:id="@+id/tv_read_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="@dimen/item_read_view_title_marginLeft"
+        android:layout_marginTop="@dimen/item_read_view_title_marginTop"
         android:ellipsize="end"
         android:singleLine="true"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="@dimen/item_read_view_title_size" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="@dimen/item_read_view_rl_marginLeft"
         android:gravity="center_vertical">
 
         <ImageView
             android:id="@+id/iv_read_img"
-            android:layout_width="110dp"
-            android:layout_height="85dp"
+            android:layout_width="@dimen/item_read_view_rl_iv_width"
+            android:layout_height="@dimen/item_read_view_rl_iv_height"
             android:scaleType="centerCrop" />
 
         <TextView
@@ -38,36 +38,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/iv_read_img"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="@dimen/item_read_view_rl_content_marginLeft"
+            android:layout_marginTop="@dimen/item_read_view_rl_content_marginTop"
+            android:layout_marginBottom="@dimen/item_read_view_rl_content_marginBottom"
+            android:layout_marginRight="@dimen/item_read_view_rl_content_marginRight"
             android:ellipsize="end"
             android:maxLines="4"
             android:textColor="@color/deep_gray"
-            android:textSize="14sp" />
+            android:textSize="@dimen/item_read_view_rl_content_size" />
     </RelativeLayout>
     <TextView
         android:id="@+id/tv_read_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="@dimen/item_read_view_rl_author_marginLeft"
+        android:layout_marginBottom="@dimen/item_read_view_rl_author_marginBottom"
         android:ellipsize="end"
         android:singleLine="true"
         android:textColor="@color/gray"
-        android:textSize="13sp" />
+        android:textSize="@dimen/item_read_view_rl_author_size" />
 
     <TextView
         android:id="@+id/tv_read_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginRight="@dimen/item_read_view_rl_num_marginRight"
+        android:layout_marginBottom="@dimen/item_read_view_rl_num_marginBottom"
         android:ellipsize="end"
         android:singleLine="true"
         android:textColor="@color/gray"
-        android:textSize="13sp" />
+        android:textSize="@dimen/item_read_view_rl_num_size" />
 </android.support.v7.widget.CardView>

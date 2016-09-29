@@ -7,6 +7,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -32,9 +33,16 @@ public class GuideActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_guide);
+
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height= getResources().getDisplayMetrics().heightPixels;
+        FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(
+                (int)(width * 0.7), (int)(height * 0.6));
+
         for (int i = 0; i < mImageUris.length; i++) {
             View view = View.inflate(GuideActivity.this, R.layout.item_activity_guide, null);
             ImageView imgView = (ImageView) view.findViewById(R.id.iv_guide_view);
+            imgView.setLayoutParams(lps);
             imgView.setImageResource(mImageUris[i]);
             mViewList.add(view);
         }

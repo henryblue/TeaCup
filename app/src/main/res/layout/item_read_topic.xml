@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="205dp"
+    android:layout_height="@dimen/item_read_topic_rl_height"
     android:background="@color/white"
-    android:layout_marginBottom="10dp"
+    android:layout_marginBottom="@dimen/item_read_topic_rl_marginBottom"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/item_read_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="@dimen/item_read_topic_read_title_size"
         android:textColor="@color/black"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/item_read_topic_read_title_margin"
         android:maxLines="1" />
 
     <TextView
@@ -20,22 +20,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/item_read_title"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/item_read_topic_read_author_margin"
         android:textColor="@color/gray"
-        android:textSize="14sp"
+        android:textSize="@dimen/item_read_topic_read_author_size"
         android:maxLines="1"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="118dp"
+        android:layout_height="@dimen/item_read_topic_ll_height"
         android:layout_below="@id/item_read_author"
-        android:layout_marginRight="8dp"
+        android:layout_marginRight="@dimen/item_read_topic_ll_marginRight"
         android:orientation="horizontal">
         <ImageView
             android:id="@+id/item_read_img"
-            android:layout_width="100dp"
-            android:layout_height="105dp"
-            android:layout_marginLeft="8dp"
+            android:layout_width="@dimen/item_read_topic_ll_img_width"
+            android:layout_height="@dimen/item_read_topic_ll_img_height"
+            android:layout_marginLeft="@dimen/item_read_topic_ll_img_marginLeft"
             android:layout_gravity="center_vertical"
             android:scaleType="centerCrop"
             android:visibility="visible"/>
@@ -45,9 +45,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:maxLines="5"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="@dimen/item_read_topic_ll_content_marginLeft"
             android:textColor="@color/deep_gray"
-            android:textSize="15sp"/>
+            android:textSize="@dimen/item_read_topic_ll_content_textSize"/>
     </LinearLayout>
 
 </RelativeLayout>
