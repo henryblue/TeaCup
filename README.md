@@ -58,4 +58,4 @@ Use Baidu maps to locate.
 
 ## Building
 
-You can download the APK file from [releases]() of this project.
+You can download the APK file from [releases](/teacup_1.0.0.apk) of this project.
