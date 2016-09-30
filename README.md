@@ -36,7 +36,6 @@ Data sources:
 
 - [煎蛋网](http://jandan.net/)
 - [豆瓣读书](https://book.douban.com/)
-- [豆瓣读书](https://book.douban.com/)
 - [片刻网](http://www.pianke.me/index/)
 - [落网](http://www.luoo.net/)
 - [糗事百科](http://www.qiushibaike.com/)
