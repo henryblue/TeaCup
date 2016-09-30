@@ -10,6 +10,7 @@ android {
         }
     }
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.app.teacup"
         minSdkVersion 15
         targetSdkVersion 24

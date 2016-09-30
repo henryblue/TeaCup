@@ -1,14 +1,18 @@
 package com.app.teacup;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.bean.WeatherInfo;
 import com.app.util.OkHttpUtils;
@@ -21,9 +25,19 @@ import com.baidu.location.LocationClientOption;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Request;
 
+import org.apache.http.util.EncodingUtils;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 
 public class WeatherActivity extends AppCompatActivity {
 
+    private static final int GET_LOCATION_FINISH = 1;
+    private static final int GET_LOCATION_ERROR = 2;
+
+    private String mFlieName = "WeatherCacheInfo.json";
     private ImageView mWeatherIcon;
     private TextView mWeatherLocal;
     private TextView mWeatherTemp;
@@ -31,47 +45,105 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView mWeatherContent;
     private LinearLayout mLayoutWeatherStatus;
     private Toolbar mToolbar;
-    private LocationClient locationClient = null;
+    private String mCurrCity;
+    private LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyBdlocationListener();
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case GET_LOCATION_FINISH:
+                    startLoadData();
+                    break;
+                case GET_LOCATION_ERROR:
+                    Toast.makeText(WeatherActivity.this,
+                            getString(R.string.location_error), Toast.LENGTH_SHORT).show();
+                    startLoadData();
+                    break;
+             default:
+                 break;
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
-        locationClient = new LocationClient(getApplicationContext());
-        locationClient.registerLocationListener(myListener);
-        locationClient.start();
+        mLocationClient = new LocationClient(getApplicationContext());
+        mLocationClient.registerLocationListener(myListener);
         initLocation();
+        mLocationClient.start();
         initView();
         initToolBar();
-        startLoadData();
     }
 
     private void initLocation() {
         LocationClientOption option = new LocationClientOption();
-        option.setCoorType("bd09ll");
+        option.setIsNeedAddress(true);
         option.setOpenGps(true);
-        option.setIsNeedLocationDescribe(true);
-        option.setIsNeedLocationPoiList(true);
-        option.setIgnoreKillProcess(false);
-        option.SetIgnoreCacheException(false);
-        option.setEnableSimulateGps(false);
-        locationClient.setLocOption(option);
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+        mLocationClient.setLocOption(option);
     }
 
     private void startLoadData() {
-        String url = urlUtils.WEATHER_URL + getString(R.string.default_city);
+        if (TextUtils.isEmpty(mCurrCity)) {
+            readDataFromFile();
+            return;
+        }
+        String url = urlUtils.WEATHER_URL + mCurrCity;
         OkHttpUtils.getAsyn(url, new OkHttpUtils.ResultCallback<String>() {
 
             @Override
             public void onError(Request request, Exception e) {
+                readDataFromFile();
+                Toast.makeText(WeatherActivity.this,
+                        getString(R.string.refresh_net_error), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onResponse(String response) {
+                writeDataToFile(response);
                 parseWeatherData(response);
             }
         });
+    }
+
+    private void writeDataToFile(String data) {
+        FileOutputStream outputStream;
+        try {
+            outputStream = openFileOutput(mFlieName, Context.MODE_PRIVATE);
+            outputStream.write(data.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readDataFromFile() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    FileInputStream fis;
+                    fis = openFileInput(mFlieName);
+                    byte[] buffer = new byte[fis.available()];
+                    fis.read(buffer);
+                    fis.close();
+                    final String fileContent = EncodingUtils.getString(buffer, "UTF-8");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            parseWeatherData(fileContent);
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void parseWeatherData(String response) {
@@ -142,17 +214,36 @@ public class WeatherActivity extends AppCompatActivity {
         }
     }
 
+    private void sendResultMessage(int what) {
+        if (mHandler != null) {
+            Message msg = Message.obtain();
+            msg.what = what;
+            mHandler.sendMessage(msg);
+        }
+    }
+
     @Override
     protected void onDestroy() {
-        locationClient.stop();
+        mLocationClient.stop();
+        if (mHandler != null) {
+            mHandler.removeMessages(GET_LOCATION_ERROR);
+            mHandler.removeMessages(GET_LOCATION_FINISH);
+            mHandler = null;
+        }
         super.onDestroy();
     }
 
     private class MyBdlocationListener implements BDLocationListener {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
-            String city = bdLocation.getCity();
-            Log.i("WeatherActivity", "current===city==" + city);
+            if (bdLocation != null && !TextUtils.isEmpty(bdLocation.getCity())) {
+                mCurrCity = bdLocation.getCity();
+                mCurrCity = mCurrCity.substring(0, mCurrCity.length() - 1);
+                sendResultMessage(GET_LOCATION_FINISH);
+            } else {
+                sendResultMessage(GET_LOCATION_ERROR);
+            }
+
         }
     }
 }

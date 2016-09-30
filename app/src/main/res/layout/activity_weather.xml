@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/weather_bg"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true" >
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
-    <include layout="@layout/navigation_toolbar"/>
+    <include layout="@layout/navigation_toolbar" />
 
     <TextView
         android:id="@+id/tv_weather_local"
@@ -17,11 +17,12 @@
         android:layout_marginTop="@dimen/activity_weather_tip_margintop"
         android:textColor="@color/white"
         android:textSize="@dimen/activity_weather_tip_textsize" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_weather_content_margintop"
-        android:layout_below="@id/tv_weather_local">
+        android:layout_below="@id/tv_weather_local"
+        android:layout_marginTop="@dimen/activity_weather_content_margintop">
 
         <ImageView
             android:id="@+id/iv_weather_icon"
@@ -66,15 +67,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:scrollbars="none"
-        android:layout_marginBottom="@dimen/activity_weather_horizontal_marginbottom">
+        android:layout_marginBottom="@dimen/activity_weather_horizontal_marginbottom"
+        android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/ll_weather_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-        </LinearLayout>
+            android:orientation="horizontal"></LinearLayout>
     </HorizontalScrollView>
-
 </RelativeLayout>
