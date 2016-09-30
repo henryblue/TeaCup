@@ -2,6 +2,7 @@
 A Material Design app for entertainment
 
 ##functional list
+
 - fine interface
 - read fresh news
 - read excellent article
@@ -31,6 +32,15 @@ Most data are fetched from network while some of them are cached for offline.
 - Glide for image loading.
 - jsoup for parse html.
 
+Data sources:
+
+- [煎蛋网](http://jandan.net/)
+- [豆瓣读书](https://book.douban.com/)
+- [豆瓣读书](https://book.douban.com/)
+- [片刻网](http://www.pianke.me/index/)
+- [落网](http://www.luoo.net/)
+- [糗事百科](http://www.qiushibaike.com/)
+- [悦听有声](http://www.weknow.cn/)
 
 ### UI
 
