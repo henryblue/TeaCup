@@ -52,7 +52,6 @@
         https://github.com/henry-blue/TeaCup</string>
 
     <string name="share_header">分享到</string>
-    <string name="update_dialog">升级</string>
     <string name="alert_dialog">提醒</string>
     <string name="music_tips_not_wifi">您当前正在使用移动网络, 继续播放将消耗流量, 如果继续请到设置里修改.</string>
     <string name="main_tips_not_wifi">您当前正在使用移动网络, 是否需要继续?</string>
