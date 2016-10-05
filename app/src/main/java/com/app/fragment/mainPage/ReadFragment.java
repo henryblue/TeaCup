@@ -257,14 +257,6 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         sendParseDataMessage(REFRESH_START);
     }
 
-    public void sendParseDataMessage(int message) {
-        if (mHandler != null) {
-            Message msg = Message.obtain();
-            msg.what = message;
-            mHandler.sendMessage(msg);
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -323,14 +315,17 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             intent.putExtra("readTopicUrl", cadInfo.getMoreUrl());
             startActivity(intent);
         }
+
         @Override
         public void onLoadMore(int typePos) {
             switch (typePos) {
                 case 0:
-                    enterMorePage(typePos, mTopicDatas.get(typePos).getCadContent(), ListReadTopicActivity.class);
+                    enterMorePage(typePos, mTopicDatas.get(typePos).getCadContent(),
+                            ListReadTopicActivity.class);
                     break;
                 case 1:
-                    enterMorePage(typePos, mTopicDatas.get(typePos).getCadContent(), ListReadCollectionActivity.class);
+                    enterMorePage(typePos, mTopicDatas.get(typePos).getCadContent(),
+                            ListReadCollectionActivity.class);
                     break;
                 default:
                     break;

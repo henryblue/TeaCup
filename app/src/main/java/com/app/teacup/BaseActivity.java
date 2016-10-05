@@ -1,13 +1,14 @@
-package com.app.fragment;
+package com.app.teacup;
+
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseActivity extends AppCompatActivity {
 
     public static final int REFRESH_START = 0;
     public static final int REFRESH_FINISH = 1;
@@ -20,7 +21,7 @@ public abstract class BaseFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (((Activity)getContext()).isFinishing()){
+            if (isFinishing()){
                 return;
             }
 
@@ -47,8 +48,16 @@ public abstract class BaseFragment extends Fragment {
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    public void sendParseDataMessage(int message) {
+        if (mHandler != null) {
+            Message msg = Message.obtain();
+            msg.what = message;
+            mHandler.sendMessage(msg);
+        }
     }
 
     protected abstract void onLoadDataError();
@@ -61,17 +70,19 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract void onRefreshStart();
 
-    public void sendParseDataMessage(int message) {
-        if (mHandler != null) {
-            Message msg = Message.obtain();
-            msg.what = message;
-            mHandler.sendMessage(msg);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    protected void onDestroy() {
         if (mHandler != null) {
             mHandler.removeMessages(REFRESH_START);
             mHandler.removeMessages(REFRESH_FINISH);
@@ -80,5 +91,6 @@ public abstract class BaseFragment extends Fragment {
             mHandler.removeMessages(LOAD_DATA_ERROR);
             mHandler = null;
         }
+        super.onDestroy();
     }
 }

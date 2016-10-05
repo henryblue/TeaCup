@@ -155,14 +155,6 @@ public class DoubanMeiziFragment extends BaseFragment implements SwipeRefreshLay
         });
     }
 
-    public void sendParseDataMessage(int message) {
-        if (mHandler != null) {
-            Message msg = Message.obtain();
-            msg.what = message;
-            mHandler.sendMessage(msg);
-        }
-    }
-
     private void parsePhotoData(String response) {
         Document document = Jsoup.parse(response);
         Element main = document.getElementById("main");

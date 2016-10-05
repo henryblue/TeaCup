@@ -32,10 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 
-public class WeatherActivity extends AppCompatActivity {
-
-    private static final int GET_LOCATION_FINISH = 1;
-    private static final int GET_LOCATION_ERROR = 2;
+public class WeatherActivity extends BaseActivity {
 
     private String mFlieName = "WeatherCacheInfo.json";
     private ImageView mWeatherIcon;
@@ -49,25 +46,6 @@ public class WeatherActivity extends AppCompatActivity {
     private LocationClient mLocationClient = null;
     public BDLocationListener myListener = new MyBdlocationListener();
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case GET_LOCATION_FINISH:
-                    startLoadData();
-                    break;
-                case GET_LOCATION_ERROR:
-                    Toast.makeText(WeatherActivity.this,
-                            getString(R.string.location_error), Toast.LENGTH_SHORT).show();
-                    startLoadData();
-                    break;
-             default:
-                 break;
-            }
-            super.handleMessage(msg);
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +56,33 @@ public class WeatherActivity extends AppCompatActivity {
         mLocationClient.start();
         initView();
         initToolBar();
+    }
+
+    @Override
+    protected void onLoadDataError() {
+        Toast.makeText(WeatherActivity.this,
+                getString(R.string.location_error), Toast.LENGTH_SHORT).show();
+        startLoadData();
+    }
+
+    @Override
+    protected void onLoadDataFinish() {
+        startLoadData();
+    }
+
+    @Override
+    protected void onRefreshError() {
+
+    }
+
+    @Override
+    protected void onRefreshFinish() {
+
+    }
+
+    @Override
+    protected void onRefreshStart() {
+
     }
 
     private void initLocation() {
@@ -204,32 +209,8 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void sendResultMessage(int what) {
-        if (mHandler != null) {
-            Message msg = Message.obtain();
-            msg.what = what;
-            mHandler.sendMessage(msg);
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         mLocationClient.stop();
-        if (mHandler != null) {
-            mHandler.removeMessages(GET_LOCATION_ERROR);
-            mHandler.removeMessages(GET_LOCATION_FINISH);
-            mHandler = null;
-        }
         super.onDestroy();
     }
 
@@ -239,9 +220,9 @@ public class WeatherActivity extends AppCompatActivity {
             if (bdLocation != null && !TextUtils.isEmpty(bdLocation.getCity())) {
                 mCurrCity = bdLocation.getCity();
                 mCurrCity = mCurrCity.substring(0, mCurrCity.length() - 1);
-                sendResultMessage(GET_LOCATION_FINISH);
+                sendParseDataMessage(LOAD_DATA_FINISH);
             } else {
-                sendResultMessage(GET_LOCATION_ERROR);
+                sendParseDataMessage(LOAD_DATA_ERROR);
             }
 
         }

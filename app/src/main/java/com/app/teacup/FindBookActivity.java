@@ -7,20 +7,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -43,12 +39,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FindBookActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class FindBookActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    private static final int REFRESH_START = 0;
-    private static final int REFRESH_FINISH = 1;
-    private static final int LOAD_DATA_ERROR = 3;
-    private static final int READ_DATA_FROM_FILE_FINISH = 4;
     private static final String filename = "findBook.json";
 
     private ArrayList<FindBookInfo> mDatas;
@@ -57,39 +49,6 @@ public class FindBookActivity extends AppCompatActivity implements SwipeRefreshL
     private SwipeRefreshLayout mRefreshLayout;
     private FindRecycleAdapter mAdapter;
     private XRecyclerView recyclerView;
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case REFRESH_START:
-                    initLoadData();
-                    break;
-                case REFRESH_FINISH:
-                    recyclerView.refreshComplete();
-                    mRefreshLayout.setRefreshing(false);
-                    mAdapter.reSetData(mDatas);
-                    break;
-                case LOAD_DATA_ERROR:
-                    recyclerView.refreshComplete();
-                    mRefreshLayout.setRefreshing(false);
-                    if (mDatas.size() <= 0) {
-                        readDataFromFile();
-                    } else {
-                        mAdapter.reSetData(mDatas);
-                    }
-                    break;
-                case READ_DATA_FROM_FILE_FINISH:
-                    Toast.makeText(FindBookActivity.this, getString(R.string.refresh_net_error),
-                            Toast.LENGTH_SHORT).show();
-                    mAdapter.reSetData(mDatas);
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
     private void initLoadData() {
         SharedPreferences pref = getSharedPreferences("config",
@@ -112,14 +71,6 @@ public class FindBookActivity extends AppCompatActivity implements SwipeRefreshL
                 sendParseDataMessage(LOAD_DATA_ERROR);
             }
         });
-    }
-
-    public void sendParseDataMessage(int message) {
-        if (mHandler != null) {
-            Message msg = Message.obtain();
-            msg.what = message;
-            mHandler.sendMessage(msg);
-        }
     }
 
     private void parseDataFromJson(String response) {
@@ -182,7 +133,7 @@ public class FindBookActivity extends AppCompatActivity implements SwipeRefreshL
                     fis.close();
                     String fileContent = EncodingUtils.getString(buffer, "UTF-8");
                     parseDataFromJson(fileContent);
-                    sendParseDataMessage(READ_DATA_FROM_FILE_FINISH);
+                    sendParseDataMessage(REFRESH_ERROR);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -201,6 +152,41 @@ public class FindBookActivity extends AppCompatActivity implements SwipeRefreshL
         setupFAB();
     }
 
+    @Override
+    protected void onLoadDataError() {
+        recyclerView.refreshComplete();
+        mRefreshLayout.setRefreshing(false);
+        if (mDatas.size() <= 0) {
+            readDataFromFile();
+        } else {
+            mAdapter.reSetData(mDatas);
+        }
+    }
+
+    @Override
+    protected void onLoadDataFinish() {
+
+    }
+
+    @Override
+    protected void onRefreshError() {
+        Toast.makeText(FindBookActivity.this, getString(R.string.refresh_net_error),
+                Toast.LENGTH_SHORT).show();
+        mAdapter.reSetData(mDatas);
+    }
+
+    @Override
+    protected void onRefreshFinish() {
+        recyclerView.refreshComplete();
+        mRefreshLayout.setRefreshing(false);
+        mAdapter.reSetData(mDatas);
+    }
+
+    @Override
+    protected void onRefreshStart() {
+        initLoadData();
+    }
+
     private void initToolBar() {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.activity_navigation_toolbar);
         if (mToolbar != null) {
@@ -209,17 +195,6 @@ public class FindBookActivity extends AppCompatActivity implements SwipeRefreshL
         setSupportActionBar(mToolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private void setupRefreshLayout() {
@@ -333,17 +308,5 @@ public class FindBookActivity extends AppCompatActivity implements SwipeRefreshL
     @Override
     public void onRefresh() {
         sendParseDataMessage(REFRESH_START);
-    }
-
-    @Override
-    public void onDestroy() {
-        if (mHandler != null) {
-            mHandler.removeMessages(REFRESH_FINISH);
-            mHandler.removeMessages(REFRESH_START);
-            mHandler.removeMessages(LOAD_DATA_ERROR);
-            mHandler.removeMessages(READ_DATA_FROM_FILE_FINISH);
-            mHandler = null;
-        }
-        super.onDestroy();
     }
 }

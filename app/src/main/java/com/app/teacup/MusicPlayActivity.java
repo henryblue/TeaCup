@@ -25,9 +25,7 @@ public class MusicPlayActivity extends Activity implements View.OnClickListener 
     private CircularMusicProgressBar mProgressBar;
     private TextView mPlayTitle;
     private TextView mPlayAuthor;
-    private ImageButton mPreButton;
     private ImageButton mPlayButton;
-    private ImageButton mNextButton;
 
     private int mCurrPlayPos;
     private List<MusicDetail> mMusicList;
@@ -61,9 +59,9 @@ public class MusicPlayActivity extends Activity implements View.OnClickListener 
         mProgressBar = (CircularMusicProgressBar) view.findViewById(R.id.album_art);
         mPlayTitle = (TextView) view.findViewById(R.id.tv_music_play_title);
         mPlayAuthor = (TextView) view.findViewById(R.id.tv_music_play_user);
-        mPreButton = (ImageButton) view.findViewById(R.id.ib_pre);
+        ImageButton mPreButton = (ImageButton) view.findViewById(R.id.ib_pre);
         mPlayButton = (ImageButton) view.findViewById(R.id.ib_play);
-        mNextButton = (ImageButton) view.findViewById(R.id.ib_next);
+        ImageButton mNextButton = (ImageButton) view.findViewById(R.id.ib_next);
 
         mPreButton.setOnClickListener(this);
         mPlayButton.setOnClickListener(this);

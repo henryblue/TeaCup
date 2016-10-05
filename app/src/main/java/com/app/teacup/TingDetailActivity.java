@@ -1,13 +1,9 @@
 package com.app.teacup;
 
 
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -35,10 +31,7 @@ import java.util.List;
 import me.drakeet.materialdialog.MaterialDialog;
 
 
-public class TingDetailActivity extends AppCompatActivity {
-
-    private static final int LOAD_DATA_FINISH = 0;
-    private static final int LOAD_DATA_ERROR = 1;
+public class TingDetailActivity extends BaseActivity {
 
     private MusicInfo mMusicInfo;
     private TextView mDetail;
@@ -46,24 +39,6 @@ public class TingDetailActivity extends AppCompatActivity {
     private MiniMusicView mMusicView;
     private String mAudioUrl;
     private List<String> mDatas;
-
-    @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case LOAD_DATA_FINISH:
-                    initData();
-                    break;
-                case LOAD_DATA_ERROR:
-                    Toast.makeText(TingDetailActivity.this, getString(R.string.refresh_net_error),
-                            Toast.LENGTH_SHORT).show();
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +48,32 @@ public class TingDetailActivity extends AppCompatActivity {
         initToolBar();
         initView();
         startLoadData();
+    }
+
+    @Override
+    protected void onLoadDataError() {
+        Toast.makeText(TingDetailActivity.this, getString(R.string.refresh_net_error),
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onLoadDataFinish() {
+        initData();
+    }
+
+    @Override
+    protected void onRefreshError() {
+
+    }
+
+    @Override
+    protected void onRefreshFinish() {
+
+    }
+
+    @Override
+    protected void onRefreshStart() {
+
     }
 
     private void initToolBar() {
@@ -179,23 +180,15 @@ public class TingDetailActivity extends AppCompatActivity {
             @Override
             public void onFinish(String response) {
                 parseMusicData(response);
-                sendParseMessage(LOAD_DATA_FINISH);
+                sendParseDataMessage(LOAD_DATA_FINISH);
             }
 
             @Override
             public void onError(Exception e) {
                 e.printStackTrace();
-                sendParseMessage(LOAD_DATA_ERROR);
+                sendParseDataMessage(LOAD_DATA_ERROR);
             }
         });
-    }
-
-    private void sendParseMessage(int what) {
-        if (mHandler != null) {
-            Message msg = Message.obtain();
-            msg.what = what;
-            mHandler.sendMessage(msg);
-        }
     }
 
     private void parseMusicData(String response) {
@@ -222,12 +215,6 @@ public class TingDetailActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mHandler != null) {
-            mHandler.removeMessages(LOAD_DATA_FINISH);
-            mHandler.removeMessages(LOAD_DATA_ERROR);
-            mHandler = null;
-        }
-
         if (mMusicView != null) {
             mMusicView.stopPlayMusic();
         }

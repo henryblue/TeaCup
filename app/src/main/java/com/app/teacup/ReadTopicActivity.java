@@ -2,15 +2,11 @@ package com.app.teacup;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -29,37 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ReadTopicActivity extends AppCompatActivity {
-
-    private static final int LOAD_DATA_FINISH = 0;
-    private static final int LOAD_DATA_ERROR = 1;
-    private static final String TAG = "readTopicActivity";
+public class ReadTopicActivity extends BaseActivity {
 
     private List<ReadTopicInfo> mDatas;
     private XRecyclerView mRecyclerView;
     private ReadTopicRecyclerAdapter mAdapter;
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case LOAD_DATA_FINISH:
-                    mRecyclerView.refreshComplete();
-                    mRefreshLayout.setRefreshing(false);
-                    initData();
-                    break;
-                case LOAD_DATA_ERROR:
-                    Toast.makeText(ReadTopicActivity.this, getString(R.string.not_have_more_data),
-                            Toast.LENGTH_SHORT).show();
-                    mRecyclerView.refreshComplete();
-                    mRefreshLayout.setRefreshing(false);
-                    break;
-                default:
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    };
     private SwipeRefreshLayout mRefreshLayout;
 
     @Override
@@ -69,6 +39,36 @@ public class ReadTopicActivity extends AppCompatActivity {
         initView();
         initToolBar();
         setupRefreshLayout();
+    }
+
+    @Override
+    protected void onLoadDataError() {
+        Toast.makeText(ReadTopicActivity.this, getString(R.string.not_have_more_data),
+                Toast.LENGTH_SHORT).show();
+        mRecyclerView.refreshComplete();
+        mRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    protected void onLoadDataFinish() {
+        mRecyclerView.refreshComplete();
+        mRefreshLayout.setRefreshing(false);
+        initData();
+    }
+
+    @Override
+    protected void onRefreshError() {
+
+    }
+
+    @Override
+    protected void onRefreshFinish() {
+
+    }
+
+    @Override
+    protected void onRefreshStart() {
+
     }
 
     private void setupRefreshLayout() {
@@ -96,24 +96,16 @@ public class ReadTopicActivity extends AppCompatActivity {
                 @Override
                 public void onFinish(String response) {
                     parseData(response);
-                    sendLoadStateMessage(LOAD_DATA_FINISH);
+                    sendParseDataMessage(LOAD_DATA_FINISH);
                 }
 
                 @Override
                 public void onError(Exception e) {
-                    sendLoadStateMessage(LOAD_DATA_ERROR);
+                    sendParseDataMessage(LOAD_DATA_ERROR);
                 }
             });
         }
 
-    }
-
-    private void sendLoadStateMessage(int what) {
-        if (mHandler != null) {
-            Message msg = Message.obtain();
-            msg.what = what;
-            mHandler.sendMessage(msg);
-        }
     }
 
     private void parseData(String response) {
@@ -213,24 +205,4 @@ public class ReadTopicActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mHandler != null) {
-            mHandler.removeMessages(LOAD_DATA_ERROR);
-            mHandler.removeMessages(LOAD_DATA_FINISH);
-            mHandler = null;
-        }
-    }
 }

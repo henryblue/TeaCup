@@ -3,14 +3,10 @@ package com.app.teacup;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.TypedValue;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -31,10 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ReadDetailActivity extends AppCompatActivity {
-
-    private static final int LOAD_DATA_FINISH = 0;
-    private static final int LOAD_DATA_ERROR = 1;
+public class ReadDetailActivity extends BaseActivity {
 
     private LinearLayout mLinearLayout;
     private SwipeRefreshLayout mRefreshLayout;
@@ -42,26 +35,6 @@ public class ReadDetailActivity extends AppCompatActivity {
     private TextView mAuthor;
     private List<String> mDatas;
     private String msAuthor;
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case LOAD_DATA_FINISH:
-                    mRefreshLayout.setRefreshing(false);
-                    initData();
-                    break;
-                case LOAD_DATA_ERROR:
-                    mRefreshLayout.setRefreshing(false);
-                    Toast.makeText(ReadDetailActivity.this, getString(R.string.not_have_more_data),
-                            Toast.LENGTH_SHORT).show();
-                    break;
-                default:
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    };
 
     private void initData() {
         if (mDatas.isEmpty()) {
@@ -151,6 +124,34 @@ public class ReadDetailActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onLoadDataError() {
+        mRefreshLayout.setRefreshing(false);
+        Toast.makeText(ReadDetailActivity.this, getString(R.string.not_have_more_data),
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onLoadDataFinish() {
+        mRefreshLayout.setRefreshing(false);
+        initData();
+    }
+
+    @Override
+    protected void onRefreshError() {
+
+    }
+
+    @Override
+    protected void onRefreshFinish() {
+
+    }
+
+    @Override
+    protected void onRefreshStart() {
+
+    }
+
     private void startLoadData() {
         String readUrl = getIntent().getStringExtra("readDetailUrl");
         if (!TextUtils.isEmpty(readUrl)) {
@@ -158,24 +159,16 @@ public class ReadDetailActivity extends AppCompatActivity {
                 @Override
                 public void onFinish(String response) {
                     parseData(response);
-                    sendLoadStateMessage(LOAD_DATA_FINISH);
+                    sendParseDataMessage(LOAD_DATA_FINISH);
                 }
 
                 @Override
                 public void onError(Exception e) {
-                    sendLoadStateMessage(LOAD_DATA_ERROR);
+                    sendParseDataMessage(LOAD_DATA_ERROR);
                 }
             });
         }
 
-    }
-
-    private void sendLoadStateMessage(int what) {
-        if (mHandler != null) {
-            Message msg = Message.obtain();
-            msg.what = what;
-            mHandler.sendMessage(msg);
-        }
     }
 
     private void parseData(String response) {
@@ -254,24 +247,4 @@ public class ReadDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mHandler != null) {
-            mHandler.removeMessages(LOAD_DATA_ERROR);
-            mHandler.removeMessages(LOAD_DATA_FINISH);
-            mHandler = null;
-        }
-    }
 }
