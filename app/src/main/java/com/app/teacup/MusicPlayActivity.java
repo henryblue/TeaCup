@@ -156,6 +156,7 @@ public class MusicPlayActivity extends Activity implements View.OnClickListener 
                         mMaterialDialog.dismiss();
                     }
                 });
+        mMaterialDialog.setCanceledOnTouchOutside(true);
         mMaterialDialog.show();
     }
 

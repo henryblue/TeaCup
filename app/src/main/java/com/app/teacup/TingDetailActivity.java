@@ -150,6 +150,7 @@ public class TingDetailActivity extends BaseActivity {
                         mMaterialDialog.dismiss();
                     }
                 });
+        mMaterialDialog.setCanceledOnTouchOutside(true);
         mMaterialDialog.show();
     }
 
