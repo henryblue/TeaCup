@@ -2,6 +2,7 @@ package com.app.teacup;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -45,5 +46,13 @@ public class ShowPhotoActivity extends Activity {
                 }
             }
         }
+
+        showPhoto.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                
+                return false;
+            }
+        });
     }
 }
