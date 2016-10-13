@@ -63,6 +63,8 @@
     <string name="cache_size">缓存大小: </string>
     <string name="clean_cache_finish">缓存清理完成</string>
     <string name="location_error">定位失败!请打开gps和网络尝试</string>
+    <string name="file_save_tip">"文件已经保存到: "</string>
+    <string name="file_not_find_tip">文件不存在!</string>
 
     <string-array name="tab_name">
         <item>新鲜事</item>

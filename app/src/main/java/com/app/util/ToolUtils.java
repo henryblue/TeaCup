@@ -9,6 +9,13 @@ import android.util.DisplayMetrics;
 import com.app.teacup.R;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class ToolUtils {
 
@@ -110,6 +117,52 @@ public class ToolUtils {
             return dir.delete();
         } else {
             return false;
+        }
+    }
+
+    private static byte [] getHash(String password) {
+        MessageDigest digest = null ;
+        try {
+            digest = MessageDigest. getInstance( "SHA-256");
+        } catch (NoSuchAlgorithmException e1) {
+            e1.printStackTrace();
+        }
+        digest.reset();
+        return digest.digest(password.getBytes());
+    }
+
+    //SHA-256加密算法
+    public static String SHA256Encrypt(String strForEncrypt) {
+        byte [] data = getHash(strForEncrypt);
+        return String.format( "%0" + (data.length * 2) + "X", new BigInteger(1, data)).toLowerCase();
+    }
+
+    public static void copyFile(String oldPath, String newPath) {
+        try {
+            int byteRead;
+            File oldFile = new File(oldPath);
+            if (oldFile.exists()) {
+                InputStream inStream = new FileInputStream(oldPath);
+                FileOutputStream fs = new FileOutputStream(newPath);
+                byte[] buffer = new byte[1444];
+                while ( (byteRead = inStream.read(buffer)) != -1) {
+                    fs.write(buffer, 0, byteRead);
+                }
+                inStream.close();
+            }
+        }
+        catch (Exception e) {
+            System.out.println("复制单个文件操作出错");
+            e.printStackTrace();
+        }
+    }
+
+    public static void changeFilePermission(File file) {
+        try {
+            String command = "chmod 666 " + file.getAbsolutePath();
+            Runtime.getRuntime().exec(command);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
