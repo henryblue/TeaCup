@@ -154,7 +154,6 @@ public class NewsDetailActivity extends BaseActivity {
 
     private void startLoadData() {
         String newsUrl = getIntent().getStringExtra("newsDetailUrl");
-        mLinearLayout.removeAllViews();
         if (!TextUtils.isEmpty(newsUrl)) {
             HttpUtils.sendHttpRequest(newsUrl, new HttpUtils.HttpCallBackListener() {
                 @Override
