@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="title" format="string" />
+    <attr name="appBg" format="reference" />
     <declare-styleable name="SettingItemView">
         <attr name="setting_title" format="reference|string"/>
         <attr name="setting_content" format="reference|string" />

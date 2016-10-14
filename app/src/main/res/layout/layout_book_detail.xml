@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="@color/colorPrimary"
+            app:contentScrim="?attr/appBg"
             app:expandedTitleMarginEnd="@dimen/layout_book_detail_CollapsingToolbarLayout_MarginEnd"
             app:expandedTitleMarginStart="@dimen/layout_book_detail_CollapsingToolbarLayout_MarginStart"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">

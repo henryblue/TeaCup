@@ -7,11 +7,12 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlNormal">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
+        <item name="appBg">@color/colorPrimary</item>
     </style>
 
     <style name="MenuStyle" parent="@style/Widget.AppCompat.Light.PopupMenu.Overflow">
         <item name="overlapAnchor">false</item>
-        <item name="android:popupBackground">@color/colorPrimary</item>
+        <item name="android:popupBackground">?attr/appBg</item>
         <item name="android:dropDownVerticalOffset">0dip</item>
     </style>
 

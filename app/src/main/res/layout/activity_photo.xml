@@ -13,7 +13,7 @@
         android:id="@+id/photo_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="?attr/appBg"
         app:tabIndicatorColor="@color/yellow"
         app:tabSelectedTextColor="@color/white"
         app:tabTextColor="@color/alpha_white"
