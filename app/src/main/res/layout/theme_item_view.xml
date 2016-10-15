@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="?android:attr/selectableItemBackground"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/theme_item_rl_height">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/setting_item_ll_marginLeft"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/tv_theme_img"
+            android:layout_width="@dimen/theme_item_ll_img_size"
+            android:layout_height="@dimen/theme_item_ll_img_size"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/tv_theme_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/theme_item_ll_title_marginLeft"
+            android:textSize="@dimen/theme_item_ll_title_textSize" />
+    </LinearLayout>
+
+
+    <CheckBox
+        android:id="@+id/cb_is_update"
+        android:layout_width="@dimen/theme_item_checkBox_width"
+        android:layout_height="@dimen/theme_item_checkBox_height"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:button="@drawable/checkbox"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:layout_marginLeft="@dimen/setting_item_view_marginLeft"
+        android:layout_marginRight="@dimen/setting_item_view_marginRight"
+        android:background="#55000000"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

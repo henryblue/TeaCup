@@ -25,6 +25,7 @@ import com.app.fragment.mainPage.NewsFragment;
 import com.app.fragment.mainPage.ReadFragment;
 import com.app.fragment.mainPage.TingFragment;
 import com.app.util.HttpUtils;
+import com.app.util.ToolUtils;
 
 import java.util.ArrayList;
 
@@ -39,12 +40,15 @@ public class MainActivity extends AppCompatActivity {
     public static boolean mIsLoadPhoto;
     public static boolean mIsPlayMusic;
     public static boolean mIsWIFIState;
+
     private ConnectionChangeReceiver mNetSateReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ToolUtils.onActivityCreateSetTheme(MainActivity.this);
         setContentView(R.layout.activity_main);
+
         mIsWIFIState = HttpUtils.isWifi(MainActivity.this);
         //注册网络监听
         registerReceiver();
@@ -147,6 +151,10 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.navigation_item_weather:
                                 enterOtherActivity(WeatherActivity.class);
                                 break;
+                            case R.id.navigation_item_theme:
+                                Intent intent = new Intent(MainActivity.this, ThemeChangeActivity.class);
+                                startActivityForResult(intent, 0);
+                                break;
                             case R.id.navigation_item_about:
                                 enterOtherActivity(AboutActivity.class);
                                 break;
@@ -205,6 +213,17 @@ public class MainActivity extends AppCompatActivity {
         shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text));
         shareIntent.setType("text/plain");
         startActivity(Intent.createChooser(shareIntent, getString(R.string.share_header)));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
+            boolean isChangeTheme = data.getBooleanExtra("isChangeTheme", false);
+            if (isChangeTheme) {
+                ToolUtils.changeToTheme(MainActivity.this, false);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

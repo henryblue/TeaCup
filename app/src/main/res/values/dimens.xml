@@ -313,4 +313,11 @@
     <dimen name="list_item_read_topic_title_margin">8dp</dimen>
     <dimen name="list_item_read_topic_title_size">15sp</dimen>
     <dimen name="list_item_read_topic_detail_size">13sp</dimen>
+
+    <dimen name="theme_item_ll_title_textSize">17sp</dimen>
+    <dimen name="theme_item_ll_title_marginLeft">10dp</dimen>
+    <dimen name="theme_item_ll_img_size">20dp</dimen>
+    <dimen name="theme_item_checkBox_width">50dp</dimen>
+    <dimen name="theme_item_checkBox_height">30dp</dimen>
+    <dimen name="theme_item_rl_height">70dp</dimen>
 </resources>

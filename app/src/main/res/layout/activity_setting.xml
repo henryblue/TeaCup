@@ -33,6 +33,5 @@
         app:hide_checkbox="true"
         app:setting_title="@string/clean_cache" />
 
-
 </LinearLayout>
 

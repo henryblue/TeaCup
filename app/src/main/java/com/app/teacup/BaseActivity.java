@@ -8,6 +8,8 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.app.util.ToolUtils;
+
 public abstract class BaseActivity extends AppCompatActivity {
 
     public static final int REFRESH_START = 0;
@@ -50,6 +52,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ToolUtils.onActivityCreateSetTheme(this);
     }
 
     public void sendParseDataMessage(int message) {

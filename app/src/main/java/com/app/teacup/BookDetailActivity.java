@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import com.app.bean.book.FindBookInfo;
 import com.app.fragment.DetailFragment;
+import com.app.util.ToolUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -30,6 +31,7 @@ public class BookDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ToolUtils.onActivityCreateSetTheme(this);
         setContentView(R.layout.layout_book_detail);
         initToolBar();
         initView();

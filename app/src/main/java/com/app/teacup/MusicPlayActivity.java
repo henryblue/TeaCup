@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.bean.Music.MusicDetail;
+import com.app.util.ToolUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hrb.library.MiniMusicView;
@@ -35,6 +36,7 @@ public class MusicPlayActivity extends Activity implements View.OnClickListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ToolUtils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_music_play);
         initView();
         initData();

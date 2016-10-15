@@ -1,8 +1,13 @@
 package com.app.util;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Environment;
+import android.support.v4.content.IntentCompat;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 
@@ -17,7 +22,12 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import static android.app.Activity.RESULT_OK;
+
 public class ToolUtils {
+
+    private static int[] mStyles = {R.style.AppTheme, R.style.greenTheme, R.style.pinkTheme,
+            R.style.grayTheme, R.style.tealTheme, R.style.redTheme, R.style.purpleTheme};
 
     public static int getScreenHeight(Context context) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
@@ -164,5 +174,23 @@ public class ToolUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void changeToTheme(Activity activity, boolean isChange) {
+        if (isChange) {
+            Intent reIntent = new Intent();
+            reIntent.putExtra("isChangeTheme", isChange);
+            activity.setResult(RESULT_OK, reIntent);
+        }
+        activity.finish();
+        Intent intent = new Intent(activity, activity.getClass());
+        activity.startActivity(intent);
+        activity.overridePendingTransition(0, 0);
+    }
+
+    public static void onActivityCreateSetTheme(Context context) {
+        SharedPreferences pf = context.getSharedPreferences("config", Context.MODE_PRIVATE);
+        int pos = pf.getInt("themePos", 0);
+        context.setTheme(mStyles[pos]);
     }
 }

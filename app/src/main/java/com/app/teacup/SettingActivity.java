@@ -23,6 +23,7 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ToolUtils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_setting);
         mSps = getSharedPreferences("config", MODE_PRIVATE);
         initToolBar();
@@ -34,22 +35,23 @@ public class SettingActivity extends AppCompatActivity {
         mWarmSetting = (SettingItemView) findViewById(R.id.siv_warm_data_stream);
         mPlayMusic = (SettingItemView) findViewById(R.id.siv_play_music);
         mCleanCache = (SettingItemView) findViewById(R.id.siv_clean_cache);
+
         try {
             String cacheSize = ToolUtils.getTotalCacheSize(SettingActivity.this);
             mCleanCache.setContent(getString(R.string.cache_size) + cacheSize);
         } catch (Exception e) {
-            e.printStackTrace();
+            mCleanCache.setContent(getString(R.string.cache_size) + "0.00 B");
         }
 
         mSaveData.setChecked(mSps.getBoolean("loadPhoto", false));
         mWarmSetting.setChecked(mSps.getBoolean("warmData", false));
         mPlayMusic.setChecked(mSps.getBoolean("playMusic", false));
-
+        final SharedPreferences.Editor edit = mSps.edit();
         //save data stream
         mSaveData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences.Editor edit = mSps.edit();
+
                 if (mSaveData.isChecked()) {
                     edit.putBoolean("loadPhoto", false);
                 } else {
@@ -64,7 +66,6 @@ public class SettingActivity extends AppCompatActivity {
         mWarmSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences.Editor edit = mSps.edit();
                 if (mWarmSetting.isChecked()) {
                     edit.putBoolean("warmData", false);
                 } else {
@@ -79,7 +80,6 @@ public class SettingActivity extends AppCompatActivity {
         mPlayMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences.Editor edit = mSps.edit();
                 if (mPlayMusic.isChecked()) {
                     edit.putBoolean("playMusic", false);
                 } else {

@@ -13,6 +13,7 @@ import com.app.fragment.photo.DoubanMeiziFragment;
 import com.app.fragment.photo.GaoxiaoFragment;
 import com.app.fragment.photo.JiandanMeiziFragment;
 import com.app.fragment.photo.QiubaiFragment;
+import com.app.util.ToolUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class PhotoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ToolUtils.onActivityCreateSetTheme(this);
         setContentView(R.layout.activity_photo);
         initView();
         initToolBar();

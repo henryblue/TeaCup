@@ -34,7 +34,7 @@ import java.io.IOException;
 
 public class WeatherActivity extends BaseActivity {
 
-    private String mFlieName = "WeatherCacheInfo.json";
+    private String mFileName = "WeatherCacheInfo.json";
     private ImageView mWeatherIcon;
     private TextView mWeatherLocal;
     private TextView mWeatherTemp;
@@ -119,7 +119,7 @@ public class WeatherActivity extends BaseActivity {
     private void writeDataToFile(String data) {
         FileOutputStream outputStream;
         try {
-            outputStream = openFileOutput(mFlieName, Context.MODE_PRIVATE);
+            outputStream = openFileOutput(mFileName, Context.MODE_PRIVATE);
             outputStream.write(data.getBytes());
             outputStream.close();
         } catch (Exception e) {
@@ -133,7 +133,7 @@ public class WeatherActivity extends BaseActivity {
             public void run() {
                 try {
                     FileInputStream fis;
-                    fis = openFileInput(mFlieName);
+                    fis = openFileInput(mFileName);
                     byte[] buffer = new byte[fis.available()];
                     fis.read(buffer);
                     fis.close();

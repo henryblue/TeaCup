@@ -65,6 +65,7 @@
     <string name="location_error">定位失败!请打开gps和网络尝试</string>
     <string name="file_save_tip">"文件已经保存到: "</string>
     <string name="file_not_find_tip">文件不存在!</string>
+    <string name="set_theme">切换主题</string>
 
     <string-array name="tab_name">
         <item>新鲜事</item>
@@ -77,5 +78,14 @@
         <item>豆瓣妹子</item>
         <item>搞笑图片</item>
         <item>糗百18</item>
+    </string-array>
+    <string-array name="theme_style">
+        <item>胖次蓝</item>
+        <item>旱苗绿</item>
+        <item>少女粉</item>
+        <item>大叔灰</item>
+        <item>水鸭青</item>
+        <item>姨妈红</item>
+        <item>基佬紫</item>
     </string-array>
 </resources>

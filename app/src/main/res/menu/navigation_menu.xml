@@ -23,6 +23,11 @@
             android:title="@string/item_weather" />
 
         <item
+            android:id="@+id/navigation_item_theme"
+            android:icon="@drawable/theme"
+            android:title="@string/set_theme" />
+
+        <item
             android:id="@+id/navigation_item_about"
             android:icon="@drawable/about"
             android:title="@string/item_about" />
