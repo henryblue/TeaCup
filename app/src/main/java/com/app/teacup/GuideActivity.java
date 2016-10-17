@@ -1,7 +1,9 @@
 package com.app.teacup;
 
+import android.animation.ArgbEvaluator;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -20,8 +22,8 @@ public class GuideActivity extends Activity {
     private static final int[] mImageUris = {R.drawable.guide_1,
             R.drawable.guide_2, R.drawable.guide_3, R.drawable.guide_4};
 
-    private static final int[] mBgColors = {R.color.colorPrimaryDark,
-    R.color.orange, R.color.blue, R.color.green};
+    private static final String[] mBgColors = {"#0288d1",
+    "#ffccbc", "#88303f9f", "#388e3c"};
 
     private List<View> mViewList = new ArrayList<>();
     private ViewPager mViewPager;
@@ -68,11 +70,26 @@ public class GuideActivity extends Activity {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                ArgbEvaluator evaluator = new ArgbEvaluator();
+                int bgColor;
+                if (position == 0) {
+                    bgColor = (int) evaluator.evaluate(positionOffset, Color.parseColor(mBgColors[0]),
+                            Color.parseColor(mBgColors[1]));
+                } else if (position == 1){
+                    bgColor = (int) evaluator.evaluate(positionOffset, Color.parseColor(mBgColors[1]),
+                            Color.parseColor(mBgColors[2]));
+                } else if (position == 2) {
+                    bgColor = (int) evaluator.evaluate(positionOffset, Color.parseColor(mBgColors[2]),
+                            Color.parseColor(mBgColors[3]));
+                } else {
+                    bgColor = Color.parseColor(mBgColors[3]);
+                }
+
+                mViewPager.setBackgroundColor(bgColor);
             }
 
             @Override
             public void onPageSelected(int position) {
-                colorChange(position);
                 if (position == mImageUris.length - 1) {
                     mImgView.setVisibility(View.VISIBLE);
                     mLayoutDot.setVisibility(View.GONE);
@@ -93,10 +110,6 @@ public class GuideActivity extends Activity {
 
             }
         });
-    }
-
-    private void colorChange(int position) {
-        mViewPager.setBackgroundResource(mBgColors[position]);
     }
 
     private class GuidePagerAdapter extends PagerAdapter {

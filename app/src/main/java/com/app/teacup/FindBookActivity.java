@@ -24,12 +24,13 @@ import com.app.adapter.FindRecycleAdapter;
 import com.app.bean.book.Book;
 import com.app.bean.book.BookInfo;
 import com.app.bean.book.FindBookInfo;
-import com.app.util.HttpUtils;
 import com.app.util.JsonUtils;
+import com.app.util.OkHttpUtils;
 import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.squareup.okhttp.Request;
 
 import org.apache.http.util.EncodingUtils;
 
@@ -58,17 +59,18 @@ public class FindBookActivity extends BaseActivity implements SwipeRefreshLayout
             url = urlUtils.DOUBAN_URL_ADDR;
         }
         mDatas.clear();
-        HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
+        OkHttpUtils.getAsyn(url, new OkHttpUtils.ResultCallback<String>() {
+
             @Override
-            public void onFinish(String response) {
-                parseDataFromJson(response);
-                writeDataToFile(response);
-                sendParseDataMessage(REFRESH_FINISH);
+            public void onError(Request request, Exception e) {
+                sendParseDataMessage(LOAD_DATA_ERROR);
             }
 
             @Override
-            public void onError(Exception e) {
-                sendParseDataMessage(LOAD_DATA_ERROR);
+            public void onResponse(String response) {
+                parseDataFromJson(response);
+                writeDataToFile(response);
+                sendParseDataMessage(REFRESH_FINISH);
             }
         });
     }
