@@ -13,7 +13,6 @@
     <string name="item_news">新鲜事</string>
     <string name="item_read">阅读</string>
     <string name="item_weather">天气</string>
-    <string name="item_about">关于</string>
     <string name="input_hint">请输入需要添加的书名</string>
     <string name="add_book">添加</string>
     <string name="ok">确定</string>

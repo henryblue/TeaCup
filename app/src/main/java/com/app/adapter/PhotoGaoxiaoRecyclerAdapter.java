@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.app.bean.PhotoInfo;
 import com.app.teacup.MainActivity;
 import com.app.teacup.R;
+import com.app.ui.MoreTextView;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -70,7 +71,7 @@ public class PhotoGaoxiaoRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         }
 
         myHolder.mTitle.setText(mDatas.get(position).getTitle());
-        myHolder.mContent.setText(mDatas.get(position).getContent());
+        myHolder.mContent.setContent(mDatas.get(position).getContent());
 
         if (mListener != null) {
             myHolder.mPhotoImg.setOnClickListener(new View.OnClickListener() {
@@ -110,13 +111,13 @@ public class PhotoGaoxiaoRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private class PhotoViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mTitle;
-        private TextView mContent;
+        private MoreTextView mContent;
         private ImageView mPhotoImg;
 
         public PhotoViewHolder(View itemView) {
             super(itemView);
             mPhotoImg = (ImageView) itemView.findViewById(R.id.iv_photo);
-            mContent = (TextView) itemView.findViewById(R.id.tv_content);
+            mContent = (MoreTextView) itemView.findViewById(R.id.tv_content);
             mTitle = (TextView) itemView.findViewById(R.id.tv_title);
         }
 

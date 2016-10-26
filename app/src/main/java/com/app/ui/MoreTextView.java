@@ -26,6 +26,7 @@ public class MoreTextView extends LinearLayout implements View.OnClickListener {
     private String mSpread;
     private int mState;
     private int mDefaultSize = 15;
+    private int mMaxLines;
     private boolean mIsChanged;
 
     public MoreTextView(Context context) {
@@ -52,11 +53,12 @@ public class MoreTextView extends LinearLayout implements View.OnClickListener {
         mSpread = context.getResources().getString(R.string.desc_spread);
         mState = COLLAPSIBLE_STATE_SPREAD;
         mIsChanged = false;
-        mTextContent.setMaxLines(DEFAULT_MAX_LINE_COUNT + 1);
+        mMaxLines = DEFAULT_MAX_LINE_COUNT;
     }
 
     private void setAttributeSet(Context context, AttributeSet attrs) {
         if (attrs == null) {
+            mTextContent.setMaxLines(mMaxLines);
             return;
         }
         TypedArray typeArray = context.obtainStyledAttributes(attrs,
@@ -72,6 +74,8 @@ public class MoreTextView extends LinearLayout implements View.OnClickListener {
 
         color = typeArray.getColor(R.styleable.MoreTextView_desc_textColor, Color.BLACK);
         mTextDesc.setTextColor(color);
+        mMaxLines = typeArray.getInt(R.styleable.MoreTextView_maxLines, DEFAULT_MAX_LINE_COUNT);
+        mTextContent.setMaxLines(mMaxLines);
         typeArray.recycle();
     }
 
@@ -102,8 +106,8 @@ public class MoreTextView extends LinearLayout implements View.OnClickListener {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        if (mTextContent.getLineCount() <= DEFAULT_MAX_LINE_COUNT) {
-            mTextContent.setMaxLines(DEFAULT_MAX_LINE_COUNT + 1);
+        if (mTextContent.getLineCount() <= mMaxLines) {
+            mTextContent.setMaxLines(mMaxLines);
             mTextDesc.setVisibility(View.GONE);
         } else {
             post(new InnerRunnable());
@@ -120,7 +124,7 @@ public class MoreTextView extends LinearLayout implements View.OnClickListener {
     }
     private void changedLayout() {
         if (mState == COLLAPSIBLE_STATE_SPREAD) {
-            mTextContent.setMaxLines(DEFAULT_MAX_LINE_COUNT);
+            mTextContent.setMaxLines(mMaxLines);
             mTextDesc.setVisibility(View.VISIBLE);
             mTextDesc.setText(mSpread);
             mIsChanged = true;

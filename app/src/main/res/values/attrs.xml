@@ -17,6 +17,7 @@
         <attr name="textColor" format="reference|color" />
         <attr name="desc_textSize" format="dimension" />
         <attr name="desc_textColor" format="reference|color" />
+        <attr name="maxLines" format="integer" />
     </declare-styleable>
 
 </resources>

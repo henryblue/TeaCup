@@ -109,6 +109,7 @@
     <dimen name="photo_gaoxiao_content_marginTop">5dp</dimen>
     <dimen name="photo_gaoxiao_content_marginRight">16dp</dimen>
     <dimen name="photo_gaoxiao_content_textSize">17sp</dimen>
+    <dimen name="photo_gaoxiao_photo_height">220dp</dimen>
     <dimen name="photo_gaoxiao_photo_marginTop">8dp</dimen>
     <dimen name="photo_gaoxiao_photo_marginBottom">8dp</dimen>
     <dimen name="photo_gaoxiao_photo_marginLeft">16dp</dimen>
