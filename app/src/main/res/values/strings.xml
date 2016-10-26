@@ -66,6 +66,8 @@
     <string name="file_save_tip">"文件已经保存到: "</string>
     <string name="file_not_find_tip">文件不存在!</string>
     <string name="set_theme">切换主题</string>
+    <string name="desc_shrinkup">收起</string>
+    <string name="desc_spread">全文</string>
 
     <string-array name="tab_name">
         <item>新鲜事</item>

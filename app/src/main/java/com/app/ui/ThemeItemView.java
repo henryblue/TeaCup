@@ -45,6 +45,9 @@ public class ThemeItemView extends RelativeLayout {
 	}
 
 	private void setAttributeSet(Context context, AttributeSet attrs) {
+		if (attrs == null) {
+			return;
+		}
 		TypedArray typeArray = context.obtainStyledAttributes(attrs,
 				R.styleable.ThemeItemView);
 		final String title = typeArray

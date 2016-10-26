@@ -12,5 +12,11 @@
         <attr name="theme_background" format="reference|color" />
         <attr name="theme_checkbox" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="MoreTextView">
+        <attr name="textSize" format="dimension" />
+        <attr name="textColor" format="reference|color" />
+        <attr name="desc_textSize" format="dimension" />
+        <attr name="desc_textColor" format="reference|color" />
+    </declare-styleable>
 
 </resources>

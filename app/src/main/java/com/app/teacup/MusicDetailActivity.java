@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.app.bean.Music.MusicDetail;
 import com.app.bean.Music.MusicDetailInfo;
 import com.app.bean.Music.MusicInfo;
+import com.app.ui.MoreTextView;
 import com.app.util.HttpUtils;
 import com.app.util.urlUtils;
 import com.bumptech.glide.Glide;
@@ -34,7 +35,7 @@ public class MusicDetailActivity extends BaseActivity {
     private MusicDetailInfo mDetailInfo;
     private TextView mMusicTitle;
     private TextView mMusicType;
-    private TextView mMusicContent;
+    private MoreTextView mMusicContent;
     private LinearLayout mPlayList;
     private TextView mMusicTotal;
 
@@ -121,7 +122,7 @@ public class MusicDetailActivity extends BaseActivity {
 
         mMusicTitle = (TextView) findViewById(R.id.tv_music_title);
         mMusicType = (TextView) findViewById(R.id.tv_music_type);
-        mMusicContent = (TextView) findViewById(R.id.tv_music_content);
+        mMusicContent = (MoreTextView) findViewById(R.id.tv_music_content);
         mMusicTotal = (TextView) findViewById(R.id.tv_music_total);
         mPlayList = (LinearLayout) findViewById(R.id.ll_play_list);
     }
@@ -129,7 +130,7 @@ public class MusicDetailActivity extends BaseActivity {
     private void initData() {
         mMusicTitle.setText(mMusicInfo.getTitle());
         mMusicType.setText(mDetailInfo.getType());
-        mMusicContent.setText(mDetailInfo.getContent());
+        mMusicContent.setContent(mDetailInfo.getContent());
         int total = mDetailInfo.getMusicList().size();
         String musicTotal = String.format("   %d%s", total, getString(R.string.music_total_end));
         mMusicTotal.setText(musicTotal);

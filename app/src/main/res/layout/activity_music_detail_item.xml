@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <TextView
@@ -22,14 +23,15 @@
         android:textSize="@dimen/muisic_detail_type_textsize"
         android:textColor="@color/gray"/>
 
-    <TextView
+    <com.app.ui.MoreTextView
         android:id="@+id/tv_music_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:lineSpacingMultiplier="1.3"
-        android:layout_margin="@dimen/muisic_detail_content_margin"
-        android:textColor="@color/black"
-        android:textSize="@dimen/muisic_detail_content_textsize"/>
+        app:textColor="@color/black"
+        app:textSize="@dimen/muisic_detail_content_textsize"
+        app:desc_textSize="@dimen/muisic_detail_content_textsize"
+        app:desc_textColor="?attr/appBg"
+        android:layout_margin="@dimen/muisic_detail_content_margin" />
 
     <TextView
         android:id="@+id/tv_music_total"

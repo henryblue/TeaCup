@@ -43,6 +43,9 @@ public class SettingItemView extends RelativeLayout {
 	}
 
 	private void setAttributeSet(Context context, AttributeSet attrs) {
+		if (attrs == null) {
+			return;
+		}
 		TypedArray typeArray = context.obtainStyledAttributes(attrs,
 				R.styleable.SettingItemView);
 		final String title = typeArray
