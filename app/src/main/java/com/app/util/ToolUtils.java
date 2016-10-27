@@ -5,9 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Environment;
-import android.support.v4.content.IntentCompat;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
 
@@ -162,7 +160,6 @@ public class ToolUtils {
             }
         }
         catch (Exception e) {
-            System.out.println("复制单个文件操作出错");
             e.printStackTrace();
         }
     }

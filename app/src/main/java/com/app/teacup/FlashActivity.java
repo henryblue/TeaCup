@@ -5,12 +5,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.WindowManager;
+
+import com.app.util.ToolUtils;
 
 public class FlashActivity extends Activity {
+
+    private static final int LAUNCHER_TIME = 1500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,
+                WindowManager.LayoutParams. FLAG_FULLSCREEN);
+        ToolUtils.onActivityCreateSetTheme(FlashActivity.this);
         setContentView(R.layout.layout_flash_activity);
     }
 
@@ -23,7 +31,7 @@ public class FlashActivity extends Activity {
             public void run() {
                 enterMainPage();
             }
-        }, 1000);
+        }, LAUNCHER_TIME);
     }
 
     private void enterMainPage() {

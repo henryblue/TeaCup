@@ -1,5 +1,12 @@
 <resources>
 
+    <style name="default_animation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/anim_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/anim_stay</item>
+        <item name="android:activityCloseEnterAnimation">@anim/anim_stay</item>
+        <item name="android:activityCloseExitAnimation">@anim/anim_out</item>
+    </style>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -8,6 +15,7 @@
         <item name="colorControlNormal">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
         <item name="appBg">@color/colorPrimary</item>
+        <item name="android:windowAnimationStyle">@style/default_animation</item>
     </style>
 
     <style name="greenTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -17,6 +25,7 @@
         <item name="colorControlNormal">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
         <item name="appBg">@color/colorGreen</item>
+        <item name="android:windowAnimationStyle">@style/default_animation</item>
     </style>
 
     <style name="pinkTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -26,6 +35,7 @@
         <item name="colorControlNormal">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
         <item name="appBg">@color/colorPink</item>
+        <item name="android:windowAnimationStyle">@style/default_animation</item>
     </style>
 
     <style name="grayTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -35,6 +45,7 @@
         <item name="colorControlNormal">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
         <item name="appBg">@color/colorGray</item>
+        <item name="android:windowAnimationStyle">@style/default_animation</item>
     </style>
 
     <style name="tealTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -44,6 +55,7 @@
         <item name="colorControlNormal">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
         <item name="appBg">@color/colorTeal</item>
+        <item name="android:windowAnimationStyle">@style/default_animation</item>
     </style>
 
     <style name="redTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -53,6 +65,7 @@
         <item name="colorControlNormal">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
         <item name="appBg">@color/colorRed</item>
+        <item name="android:windowAnimationStyle">@style/default_animation</item>
     </style>
 
     <style name="purpleTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -62,6 +75,7 @@
         <item name="colorControlNormal">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
         <item name="appBg">@color/colorPurple</item>
+        <item name="android:windowAnimationStyle">@style/default_animation</item>
     </style>
 
     <style name="MenuStyle" parent="@style/Widget.AppCompat.Light.PopupMenu.Overflow">
