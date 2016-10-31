@@ -67,6 +67,8 @@
     <string name="set_theme">切换主题</string>
     <string name="desc_shrinkup">收起</string>
     <string name="desc_spread">全文</string>
+    <string name="news_delete1">无聊图</string>
+    <string name="news_delete2">后没品</string>
 
     <string-array name="tab_name">
         <item>新鲜事</item>

@@ -12,7 +12,6 @@
     <RelativeLayout
         android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_marginLeft="@dimen/item_news_view_rl_marginLeft"
         android:layout_marginRight="@dimen/item_news_view_rl_marginRight"
         android:layout_height="@dimen/item_news_view_rl_height">
 
@@ -40,6 +39,7 @@
             android:textSize="@dimen/item_news_view_rl_tv_label_textSize"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/item_news_view_rl_tv_label_marginBottom"
+            android:maxLines="3"
             android:layout_alignLeft="@id/tv_news_title"/>
     </RelativeLayout>
 

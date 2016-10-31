@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -158,6 +159,7 @@ public class NewsDetailActivity extends BaseActivity {
             HttpUtils.sendHttpRequest(newsUrl, new HttpUtils.HttpCallBackListener() {
                 @Override
                 public void onFinish(String response) {
+                    Log.i("NewsDetailActivity", response);
                     parseData(response);
                     sendParseDataMessage(LOAD_DATA_FINISH);
                 }
@@ -174,15 +176,12 @@ public class NewsDetailActivity extends BaseActivity {
     private void parseData(String response) {
         Document document = Jsoup.parse(response);
         if (document != null) {
-            Element maincontent = document.getElementById("maincontent");
+            Element maincontent = document.getElementById("content");
             if (maincontent != null) {
-                Element postinfo = maincontent.getElementsByClass("postinfo").get(0);
+                Element postinfo = maincontent.getElementsByClass("post").get(0);
                 if (postinfo != null) {
-                    msAuthor = postinfo.ownText();
-                }
-                Element entry = maincontent.getElementsByClass("entry").get(0);
-                if (entry != null) {
-                    Elements ps = entry.getElementsByTag("p");
+                    msAuthor = postinfo.getElementsByClass("time_s").get(0).text();
+                    Elements ps = postinfo.getElementsByTag("p");
                     if (ps != null) {
                         for (Element p : ps) {
                             String element = null;

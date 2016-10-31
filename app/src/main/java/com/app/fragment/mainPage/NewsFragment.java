@@ -4,10 +4,10 @@ package com.app.fragment.mainPage;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -202,7 +202,7 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
-                parseNewsData(response);
+                parseNextData(response);
                 sendParseDataMessage(LOAD_DATA_FINISH);
             }
 
@@ -216,26 +216,72 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private void parseNewsData(String response) {
         Document document = Jsoup.parse(response);
         if (document != null) {
-            Element wrapper = document.getElementById("mainwrapper");
-            if (wrapper != null) {
-                Element content = wrapper.getElementById("maincontent");
+            Element body = document.getElementById("body");
+            if (body != null) {
+                Element content = body.getElementById("content");
                 if (content != null) {
-                    Elements columns = content.getElementsByClass("posthit");
+                    Elements columns = content.getElementsByClass("list-post");
                     if (columns != null) {
                         for (Element column : columns) {
+                            Element indexs = column.getElementsByClass("indexs").get(0);
+                            String text = indexs.getElementsByTag("h2").get(0).text();
+                            if (text.contains(getString(R.string.news_delete1))
+                                    || text.contains(getString(R.string.news_delete2))) {
+                                continue;
+                            }
                             NewsInfo info = new NewsInfo();
-                            Element thumb_s = column.getElementsByClass("thumb_s").get(0);
+                            info.setTitle(text);
+                            Element thumb_s = column.getElementsByClass("thumbs_b").get(0);
                             Element a = thumb_s.getElementsByTag("a").get(0);
                             String href = a.attr("href");
                             info.setNextUrl(href);
                             Element img = a.getElementsByTag("img").get(0);
                             String imgUrl = img.attr("data-original");
+                            if (TextUtils.isEmpty(imgUrl)) {
+                                imgUrl = img.attr("src");
+                            }
                             info.setImgUrl("http:" + imgUrl);
-                            Element thetitle = column.getElementsByClass("thetitle").get(0);
-                            String text = thetitle.getElementsByTag("a").get(0).text();
+
+                            String tip = indexs.getElementsByClass("time_s").get(0).text();
+                            info.setLabel(tip);
+                            mNewsDatas.add(info);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void parseNextData(String response) {
+        Document document = Jsoup.parse(response);
+        if (document != null) {
+            Element body = document.getElementById("body");
+            if (body != null) {
+                Element content = body.getElementById("content");
+                if (content != null) {
+                    Elements divs = content.getElementsByClass("column");
+                    if (divs != null) {
+                        for (Element div : divs) {
+                            Element post = div.getElementsByClass("post").get(0);
+                            String text = post.getElementsByClass("title2").get(0).text();
+                            if (text.contains(getString(R.string.news_delete1))
+                                    || text.contains(getString(R.string.news_delete2))) {
+                                continue;
+                            }
+                            NewsInfo info = new NewsInfo();
                             info.setTitle(text);
-                            Element indexs = column.getElementsByClass("indexs").get(0);
-                            String tip = indexs.text();
+                            Element thumbs_b = post.getElementsByClass("thumbs_b").get(0);
+                            Element a = thumbs_b.getElementsByTag("a").get(0);
+                            String href = a.attr("href");
+                            info.setNextUrl(href);
+                            Element img = a.getElementsByTag("img").get(0);
+                            String imgUrl = img.attr("data-original");
+                            if (TextUtils.isEmpty(imgUrl)) {
+                                imgUrl = img.attr("src");
+                            }
+                            info.setImgUrl("http:" + imgUrl);
+
+                            String tip = post.getElementsByClass("time_s").get(0).text();
                             info.setLabel(tip);
                             mNewsDatas.add(info);
                         }
