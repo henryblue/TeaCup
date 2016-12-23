@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -157,11 +158,12 @@ public class JiandanMeiziFragment extends BaseFragment implements SwipeRefreshLa
         for (Element element : commentlist) {
             Elements li = element.getElementsByTag("li");
             for (Element li1 : li) {
-                Elements a = li1.getElementsByTag("a");
+                Element test = li1.getElementsByClass("text").get(0);
+                Elements a = test.getElementsByTag("a");
                 for (Element a1 : a) {
                     String imgUrl = a1.attr("href");
                     if (imgUrl.contains(".jpg")) {
-                        mImgUrl.add(imgUrl);
+                        mImgUrl.add("http:" + imgUrl);
                     }
                 }
             }
