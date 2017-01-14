@@ -51,8 +51,8 @@ Use Baidu maps to locate.
 
 ## Libraries created for this project
 
-- [MiniMusicView](https://github.com/henry-blue/MiniMusicView)
-- [jiecaovideoplayer](https://github.com/lipangit/JieCaoVideoPlayer)
+- [MiniMusicView](https://github.com/henryblue/MiniMusicView)
+- [MxVideoPlayer](https://github.com/henryblue/MxVideoPlayer)
 - [okhttp](https://github.com/square/okhttp)
 - [xrecyclerview](https://github.com/jianghejie/XRecyclerView)
 - [circleimageview](https://github.com/hdodenhof/CircleImageView)
