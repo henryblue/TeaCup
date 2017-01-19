@@ -6,8 +6,8 @@
 
     <include layout="@layout/item_ting_radio_view" />
 
-    <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
-        android:id="@+id/jps_video_player"
+    <hb.xvideoplayer.MxVideoPlayerWidget
+        android:id="@+id/mx_video_player"
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_ting_view_player_height"
         android:visibility="gone"/>

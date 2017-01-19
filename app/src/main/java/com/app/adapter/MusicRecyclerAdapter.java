@@ -18,7 +18,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
+import hb.xvideoplayer.MxVideoPlayerWidget;
 
 public class MusicRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -62,19 +62,19 @@ public class MusicRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         String url = info.getImgUrl();
         final TingViewHolder myHolder = (TingViewHolder) holder;
         myHolder.mLayout.setVisibility(View.GONE);
-        myHolder.mJcVideoPlayer.setVisibility(View.GONE);
-        myHolder.mJcVideoPlayer.release();
+        myHolder.mMxVideoPlayer.setVisibility(View.GONE);
+        myHolder.mMxVideoPlayer.release();
         String strType = info.getHappyNum();
         if (strType.startsWith("http://")) {
-            myHolder.mJcVideoPlayer.setVisibility(View.VISIBLE);
-            myHolder.mJcVideoPlayer.setUp(strType
-                    , JCVideoPlayerStandard.SCREEN_LAYOUT_LIST, info.getTitle());
+            myHolder.mMxVideoPlayer.setVisibility(View.VISIBLE);
+            myHolder.mMxVideoPlayer.startPlay(strType
+                    , MxVideoPlayerWidget.SCREEN_LAYOUT_LIST, info.getTitle());
                 Glide.with(mContext).load(url).asBitmap()
                         .error(R.drawable.photo_loaderror)
                         .placeholder(R.drawable.main_load_bg)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .dontAnimate()
-                        .into(myHolder.mJcVideoPlayer.thumbImageView);
+                        .into(myHolder.mMxVideoPlayer.mThumbImageView);
             return;
         } else {
             myHolder.mLayout.setVisibility(View.VISIBLE);
@@ -191,7 +191,7 @@ public class MusicRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         private ImageView mPhotoImg;
         private TextView mContent;
         private TextView mDetail;
-        private JCVideoPlayerStandard mJcVideoPlayer;
+        private MxVideoPlayerWidget mMxVideoPlayer;
 
         public TingViewHolder(View itemView) {
             super(itemView);
@@ -200,7 +200,7 @@ public class MusicRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             mTitle = (TextView) itemView.findViewById(R.id.tv_ting_title);
             mContent = (TextView) itemView.findViewById(R.id.tv_ting_content);
             mDetail = (TextView) itemView.findViewById(R.id.tv_ting_detail);
-            mJcVideoPlayer = (JCVideoPlayerStandard) itemView.findViewById(R.id.jps_video_player);
+            mMxVideoPlayer = (MxVideoPlayerWidget) itemView.findViewById(R.id.mx_video_player);
         }
 
     }

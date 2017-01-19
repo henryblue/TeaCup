@@ -4,13 +4,11 @@ package com.app.fragment.mainPage;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +17,6 @@ import android.widget.Toast;
 import com.app.adapter.MusicRecyclerAdapter;
 import com.app.bean.Music.MusicInfo;
 import com.app.fragment.BaseFragment;
-import com.app.teacup.MusicDetailActivity;
 import com.app.teacup.R;
 import com.app.teacup.TingDetailActivity;
 import com.app.util.HttpUtils;
@@ -32,13 +29,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerManager;
+import hb.xvideoplayer.MxVideoPlayer;
 
 /**
  * 数据来源于悦耳有声
@@ -119,7 +113,7 @@ public class TingFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     @Override
     public void onPause() {
         super.onPause();
-        JCVideoPlayer.releaseAllVideos();
+        MxVideoPlayer.releaseAllVideos();
     }
 
     private void setupRefreshLayout() {
