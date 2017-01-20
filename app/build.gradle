@@ -44,7 +44,7 @@ dependencies {
     compile 'com.jcodecraeer:xrecyclerview:1.2.7'
     compile 'de.hdodenhof:circleimageview:1.3.0'
     compile 'org.apache.httpcomponents:httpcore:4.4.4'
-    compile 'com.henryblue.mxvideoplayer:xvideoplayer:1.0.1'
+    compile 'com.henryblue.mxvideoplayer:xvideoplayer:1.0.2'
     compile 'com.squareup.okhttp:okhttp:2.7.0'
     compile 'me.drakeet.materialdialog:library:1.3.1'
     compile files('libs/gson-2.3.1.jar')
