@@ -180,9 +180,14 @@ public class MusicPlayActivity extends Activity implements View.OnClickListener 
         }
 
         @Override
-        public void onError() {
+        public void onError(int what, int extra) {
             Toast.makeText(MusicPlayActivity.this,
                     getString(R.string.load_music_error), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onInfo(int what, int extra) {
+
         }
 
         @Override

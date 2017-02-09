@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_video_view_height"
+    android:layout_marginBottom="@dimen/item_video_view_marginBottom"
+    android:layout_marginTop="@dimen/item_video_view_marginTop"
+    android:foreground="?android:attr/selectableItemBackgroundBorderless"
+    app:cardElevation="@dimen/item_video_view_elevation"
+    tools:targetApi="lollipop">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="5dp">
+
+        <RelativeLayout
+            android:id="@+id/top_container"
+            android:layout_width="match_parent"
+            android:layout_height="30dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/video_author_img"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/weather_bg" />
+
+            <TextView
+                android:id="@+id/video_author_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@id/video_author_img"
+                android:text="author name"
+                android:textColor="@color/deep_gray"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/video_publish_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:text="2分钟前"
+                android:textColor="@color/gray"
+                android:textSize="11sp" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_below="@id/top_container"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/video_img"
+                android:layout_width="90dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/header" />
+
+            <ImageView
+                android:id="@+id/video_index"
+                android:layout_width="30dp"
+                android:layout_height="15dp"
+                android:src="@drawable/weather_bg"
+                android:scaleType="centerCrop"/>
+            
+            <TextView
+                android:id="@+id/video_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:maxLines="1"
+                android:layout_toRightOf="@id/video_img"
+                android:textColor="@color/deep_gray"
+                android:textSize="14sp"
+                android:text="video name"/>
+
+            <TextView
+                android:id="@+id/video_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/video_name"
+                android:layout_below="@id/video_name"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/deep_gray"
+                android:maxLines="4"
+                android:textSize="13sp"
+                android:text="video name \n video content \n video \n video.."/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

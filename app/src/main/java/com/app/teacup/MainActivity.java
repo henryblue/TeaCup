@@ -23,7 +23,7 @@ import com.app.adapter.PagerAdapter;
 import com.app.fragment.mainPage.MusicFragment;
 import com.app.fragment.mainPage.NewsFragment;
 import com.app.fragment.mainPage.ReadFragment;
-import com.app.fragment.mainPage.TingFragment;
+import com.app.fragment.mainPage.VideoFragment;
 import com.app.util.HttpUtils;
 import com.app.util.ToolUtils;
 
@@ -110,14 +110,14 @@ public class MainActivity extends AppCompatActivity {
         setupDrawerContent(mNavigationView);
 
         ArrayList<Fragment> mFragmentLists = new ArrayList<>();
-        TingFragment mTingFragment = new TingFragment();
+        VideoFragment mVideoFragment = new VideoFragment();
         ReadFragment mReadFragment = new ReadFragment();
         MusicFragment mMusicFragment = new MusicFragment();
         NewsFragment newsFragment = new NewsFragment();
         mFragmentLists.add(newsFragment);
         mFragmentLists.add(mReadFragment);
         mFragmentLists.add(mMusicFragment);
-        mFragmentLists.add(mTingFragment);
+        mFragmentLists.add(mVideoFragment);
 
         ViewPager mViewPager = (ViewPager) findViewById(R.id.main_view_pager);
         PagerAdapter mPagerAdapter = new PagerAdapter(getSupportFragmentManager(),

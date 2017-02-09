@@ -2,27 +2,26 @@ package com.app.fragment.mainPage;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.app.adapter.MusicRecyclerAdapter;
-import com.app.bean.Music.MusicInfo;
+import com.app.adapter.VideoRecyclerAdapter;
+import com.app.bean.video.VideoInfo;
 import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
-import com.app.teacup.TingDetailActivity;
 import com.app.util.HttpUtils;
+import com.app.util.OkHttpUtils;
 import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.squareup.okhttp.Request;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -35,27 +34,27 @@ import java.util.List;
 import hb.xvideoplayer.MxVideoPlayer;
 
 /**
- * 数据来源于悦耳有声
+ * 数据来源于第一弹
  * @author henry-blue
  */
-public class TingFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class VideoFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    private List<MusicInfo> mMusicDatas;
+    private List<VideoInfo> mVideoDatas;
     private SwipeRefreshLayout mRefreshLayout;
     private XRecyclerView mRecyclerView;
-    private MusicRecyclerAdapter mMusicRecyclerAdapter;
+    private VideoRecyclerAdapter mVideoRecyclerAdapter;
     private int mPageNum = 1;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mMusicDatas = new ArrayList<>();
+        mVideoDatas = new ArrayList<>();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.ting_fragment, container, false);
+        View view = inflater.inflate(R.layout.video_fragment, container, false);
         initView(view);
         setupRecycleView();
         setupRefreshLayout();
@@ -65,7 +64,6 @@ public class TingFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private void initView(View view) {
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
         mRecyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
-
     }
 
     private void setupRecycleView() {
@@ -85,7 +83,7 @@ public class TingFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
             @Override
             public void onLoadMore() {
-                if (mMusicDatas.size() <= 0) {
+                if (mVideoDatas.size() <= 0) {
                     mRecyclerView.loadMoreComplete();
                 } else {
                     startLoadData();
@@ -93,19 +91,11 @@ public class TingFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             }
         });
 
-        mMusicRecyclerAdapter = new MusicRecyclerAdapter(getContext(), mMusicDatas, 1);
-        mRecyclerView.setAdapter(mMusicRecyclerAdapter);
-        mMusicRecyclerAdapter.setOnItemClickListener(new MusicRecyclerAdapter.OnItemClickListener() {
+        mVideoRecyclerAdapter = new VideoRecyclerAdapter(getContext(), mVideoDatas);
+        mRecyclerView.setAdapter(mVideoRecyclerAdapter);
+        mVideoRecyclerAdapter.setOnItemClickListener(new VideoRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(getContext(), TingDetailActivity.class);
-                intent.putExtra("ting", mMusicDatas.get(position));
-                ActivityOptionsCompat options =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                                view.findViewById(R.id.iv_ting_img),
-                                getString(R.string.transition_ting_img));
-
-                ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
             }
         });
     }
@@ -135,34 +125,35 @@ public class TingFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     }
 
     private void startRefreshData() {
-        mMusicDatas.clear();
-        HttpUtils.sendHttpRequest(urlUtils.TING_YUETING_URL, new HttpUtils.HttpCallBackListener() {
+        mVideoDatas.clear();
+        OkHttpUtils.getAsyn(urlUtils.VIDEO_DIYIDAN_URL, new OkHttpUtils.ResultCallback<String>() {
+
             @Override
-            public void onFinish(String response) {
-                parseMusicData(response);
-                sendParseDataMessage(REFRESH_FINISH);
+            public void onError(Request request, Exception e) {
+                sendParseDataMessage(REFRESH_ERROR);
             }
 
             @Override
-            public void onError(Exception e) {
-                sendParseDataMessage(REFRESH_ERROR);
+            public void onResponse(String response) {
+                parseVideoData(response);
+                sendParseDataMessage(REFRESH_FINISH);
             }
         });
     }
 
     private void startLoadData() {
         mPageNum++;
-        if (mPageNum > 10) {
+        if (mPageNum > 15) {
             mRecyclerView.loadMoreComplete();
             Toast.makeText(getContext(), getString(R.string.not_have_more_data),
                     Toast.LENGTH_SHORT).show();
             return;
         }
-        String url = urlUtils.TING_NEXT_URL_HEAD + mPageNum;
+        String url = urlUtils.VIDEO_DIYIDAN_URL_NEXT + mPageNum;
         HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
-                parseMusicData(response);
+                parseVideoData(response);
                 sendParseDataMessage(LOAD_DATA_FINISH);
             }
 
@@ -173,28 +164,26 @@ public class TingFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         });
     }
 
-    private void parseMusicData(String response) {
+    private void parseVideoData(String response) {
         Document document = Jsoup.parse(response);
         if (document != null) {
-            Element home = document.getElementsByClass("home").get(0);
-            Element content = home.getElementById("content");
-            Elements posts = content.getElementsByClass("post");
-            for (Element post : posts) {
-                MusicInfo info = new MusicInfo();
-                Element posTitle = post.getElementsByClass("post-title").get(0);
-                String nextUrl = posTitle.getElementsByTag("a").get(0).attr("href");
-                info.setNextUrl(nextUrl);
-                info.setTitle(posTitle.text());
-                String detail = post.getElementsByClass("post-meta").get(0).text();
-                info.setInfoNum(detail);
-                Element posContent = post.getElementsByClass("post-content").get(0);
-                Element thumb = posContent.getElementsByClass("post-thumbnail").get(0);
-                String imgUrl = thumb.getElementsByTag("img").get(0).attr("src");
-                String[] urlSplit = imgUrl.split("\\?");
-                info.setImgUrl(urlSplit[0]);
-                String text = posContent.getElementsByClass("post-text").get(0).text();
-                info.setHappyNum(text);
-                mMusicDatas.add(info);
+            Element content = document.getElementsByClass("content").get(0);
+            Element contentLeft = content.getElementsByClass("content_left").get(0);
+            Element postListBlockDiv = contentLeft.getElementsByClass("post_list_block_div").get(0);
+            Element list = postListBlockDiv.getElementsByClass("hot-list").get(0);
+            Elements lis = list.getElementsByTag("li");
+            for (Element li : lis) {
+                Element yuanTop = li.getElementsByClass("yuan_top").get(0);
+                Element yuanImg = yuanTop.getElementsByClass("yuan_img").get(0);
+                Element imgInfo = yuanImg.getElementsByTag("img").get(0);
+                String authorName = imgInfo.attr("alt");
+                String authorImgUrl = imgInfo.attr("src");
+                Log.i("itemitem", "parseVideoData: authorName==" + authorName + "=authorImgUrl==" + authorImgUrl);
+
+                String publishTime = yuanImg.getElementsByTag("span").text();
+                Log.i("itemitem", "parseVideoData: publishTime==" + publishTime);
+
+
             }
         }
     }
@@ -208,7 +197,7 @@ public class TingFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     @Override
     protected void onLoadDataFinish() {
         mRecyclerView.loadMoreComplete();
-        mMusicRecyclerAdapter.reSetData(mMusicDatas);
+        mVideoRecyclerAdapter.reSetData(mVideoDatas);
     }
 
     @Override
@@ -222,7 +211,7 @@ public class TingFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     protected void onRefreshFinish() {
         mRecyclerView.refreshComplete();
         mRefreshLayout.setRefreshing(false);
-        mMusicRecyclerAdapter.reSetData(mMusicDatas);
+        mVideoRecyclerAdapter.reSetData(mVideoDatas);
     }
 
     @Override

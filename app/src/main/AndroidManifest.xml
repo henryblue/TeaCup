@@ -59,7 +59,6 @@
         <activity android:name=".ListReadCollectionActivity" />
         <activity android:name=".ListReadTopicActivity" />
         <activity android:name=".FindBookActivity" />
-        <activity android:name=".TingDetailActivity" />
         <activity android:name=".AboutActivity" />
         <activity android:name=".SettingActivity" />
         <activity android:name=".ThemeChangeActivity" />

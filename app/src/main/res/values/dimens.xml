@@ -277,18 +277,6 @@
     <dimen name="item_read_view_rl_num_marginBottom">10dp</dimen>
     <dimen name="item_read_view_rl_num_size">13sp</dimen>
 
-    <dimen name="item_ting_radio_view_height">150dp</dimen>
-    <dimen name="item_ting_radio_view_ll_marginLeft">8dp</dimen>
-    <dimen name="item_ting_radio_view_title_size">16sp</dimen>
-    <dimen name="item_ting_radio_view_content_size">14sp</dimen>
-    <dimen name="item_ting_radio_view_detail_size">13sp</dimen>
-    <dimen name="item_ting_radio_view_content_marginBottom">8dp</dimen>
-    <dimen name="item_ting_radio_view_content_marginTop">8dp</dimen>
-    <dimen name="item_ting_radio_view_img_height">106dp</dimen>
-    <dimen name="item_ting_radio_view_img_marginRight">8dp</dimen>
-    <dimen name="item_ting_view_marginBottom">10dp</dimen>
-    <dimen name="item_ting_view_player_height">230dp</dimen>
-
     <dimen name="list_item_read_collection_height">170dp</dimen>
     <dimen name="list_item_read_collection_marginBottom">10dp</dimen>
     <dimen name="list_item_read_collection_title_size">18sp</dimen>
@@ -320,4 +308,10 @@
     <dimen name="theme_item_checkBox_width">50dp</dimen>
     <dimen name="theme_item_checkBox_height">30dp</dimen>
     <dimen name="theme_item_rl_height">70dp</dimen>
+
+    <dimen name="item_video_view_height">150dp</dimen>
+    <dimen name="item_video_view_marginTop">2dp</dimen>
+    <dimen name="item_video_view_marginBottom">8dp</dimen>
+    <dimen name="item_video_view_elevation">1dp</dimen>
+
 </resources>

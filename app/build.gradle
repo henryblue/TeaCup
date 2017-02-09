@@ -33,7 +33,6 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile(name: 'circularMusicProgressbar', ext: 'aar')
-    compile(name: 'miniMusicView', ext: 'aar')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile 'com.android.support:support-v4:24.2.1'
@@ -47,6 +46,7 @@ dependencies {
     compile 'com.henryblue.mxvideoplayer:xvideoplayer:1.0.2'
     compile 'com.squareup.okhttp:okhttp:2.7.0'
     compile 'me.drakeet.materialdialog:library:1.3.1'
+    compile 'com.henryblue.minimusicview:library:0.9.8'
     compile files('libs/gson-2.3.1.jar')
     compile files('libs/jsoup-1.9.2.jar')
     compile files('libs/BaiduLBS_Android.jar')

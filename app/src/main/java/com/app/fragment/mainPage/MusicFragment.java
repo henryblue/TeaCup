@@ -4,7 +4,6 @@ package com.app.fragment.mainPage;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -92,7 +91,7 @@ public class MusicFragment extends BaseFragment implements SwipeRefreshLayout.On
             }
         });
 
-        mMusicRecyclerAdapter = new MusicRecyclerAdapter(getContext(), mMusicDatas, 0);
+        mMusicRecyclerAdapter = new MusicRecyclerAdapter(getContext(), mMusicDatas);
         mRecyclerView.setAdapter(mMusicRecyclerAdapter);
         mMusicRecyclerAdapter.setOnItemClickListener(new MusicRecyclerAdapter.OnItemClickListener() {
             @Override

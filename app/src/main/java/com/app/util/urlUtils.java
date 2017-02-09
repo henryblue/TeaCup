@@ -30,7 +30,7 @@ public class urlUtils {
 
     public static final String NEWS_JIANDAN_URL = "http://jandan.net";
     public static final String NEWS_NEXT_URL = "http://jandan.net/page/";
-    public static final String TING_YUETING_URL = "http://www.weknow.cn";
-    public static final String TING_NEXT_URL_HEAD = "http://www.weknow.cn/page/";
+    public static final String VIDEO_DIYIDAN_URL = "http://www.diyidan.com/main/area/120001/1";
+    public static final String VIDEO_DIYIDAN_URL_NEXT = "http://www.diyidan.com/main/area/120001/";
 
 }
