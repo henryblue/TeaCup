@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.app.bean.video.VideoInfo;
+import com.app.bean.fanju.FanjuInfo;
 import com.app.teacup.MainActivity;
 import com.app.teacup.R;
 import com.bumptech.glide.Glide;
@@ -21,10 +21,10 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class VideoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FanjuRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
-    private List<VideoInfo> mDatas;
+    private List<FanjuInfo> mDatas;
     private OnItemClickListener mListener;
     private LayoutInflater mLayoutInflater;
 
@@ -32,7 +32,7 @@ public class VideoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         void onItemClick(View view, int position);
     }
 
-    public VideoRecyclerAdapter(Context context, List<VideoInfo> datas) {
+    public FanjuRecyclerAdapter(Context context, List<FanjuInfo> datas) {
         mContext = context;
         mDatas = datas;
         mLayoutInflater = LayoutInflater.from(context);
@@ -40,13 +40,13 @@ public class VideoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new VideoViewHolder(mLayoutInflater.inflate(R.layout.item_video_view, parent, false));
+            return new VideoViewHolder(mLayoutInflater.inflate(R.layout.item_fanju_view, parent, false));
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         VideoViewHolder viewHolder = (VideoViewHolder) holder;
-        VideoInfo info = mDatas.get(position);
+        FanjuInfo info = mDatas.get(position);
         viewHolder.mAuthorName.setText(info.getAuthorName());
         viewHolder.mPublishTime.setText(info.getPublishTime());
         viewHolder.mVideoContent.setText(info.getVideoContent());
@@ -64,7 +64,7 @@ public class VideoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    private void loadImageResource(VideoInfo info, VideoViewHolder viewHolder) {
+    private void loadImageResource(FanjuInfo info, VideoViewHolder viewHolder) {
         Glide.with(mContext).load(info.getAuthorImgUrl()).asBitmap()
                 .error(R.drawable.photo_loaderror)
                 .placeholder(R.drawable.main_load_bg)
@@ -90,7 +90,7 @@ public class VideoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    public void reSetData(List<VideoInfo> list) {
+    public void reSetData(List<FanjuInfo> list) {
         mDatas = list;
         notifyDataSetChanged();
     }
@@ -130,7 +130,7 @@ public class VideoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         @Override
         public void onClick(View v) {
             if (mListener != null) {
-                mListener.onItemClick(v, getAdapterPosition());
+                mListener.onItemClick(v, getLayoutPosition() - 1);
             }
         }
     }

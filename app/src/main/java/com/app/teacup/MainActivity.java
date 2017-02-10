@@ -18,12 +18,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.app.fragment.mainPage.FanjuFragment;
 import com.app.receiver.ConnectionChangeReceiver;
 import com.app.adapter.PagerAdapter;
 import com.app.fragment.mainPage.MusicFragment;
 import com.app.fragment.mainPage.NewsFragment;
 import com.app.fragment.mainPage.ReadFragment;
-import com.app.fragment.mainPage.VideoFragment;
 import com.app.util.HttpUtils;
 import com.app.util.ToolUtils;
 
@@ -110,14 +110,14 @@ public class MainActivity extends AppCompatActivity {
         setupDrawerContent(mNavigationView);
 
         ArrayList<Fragment> mFragmentLists = new ArrayList<>();
-        VideoFragment mVideoFragment = new VideoFragment();
+        FanjuFragment mFanjuFragment = new FanjuFragment();
         ReadFragment mReadFragment = new ReadFragment();
         MusicFragment mMusicFragment = new MusicFragment();
         NewsFragment newsFragment = new NewsFragment();
         mFragmentLists.add(newsFragment);
         mFragmentLists.add(mReadFragment);
         mFragmentLists.add(mMusicFragment);
-        mFragmentLists.add(mVideoFragment);
+        mFragmentLists.add(mFanjuFragment);
 
         ViewPager mViewPager = (ViewPager) findViewById(R.id.main_view_pager);
         PagerAdapter mPagerAdapter = new PagerAdapter(getSupportFragmentManager(),

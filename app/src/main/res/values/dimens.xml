@@ -314,4 +314,7 @@
     <dimen name="item_video_view_marginBottom">8dp</dimen>
     <dimen name="item_video_view_elevation">1dp</dimen>
 
+    <dimen name="item_fanju_video_cv_margin">8dp</dimen>
+    <dimen name="item_fanju_video_cv_marginBottom">12dp</dimen>
+
 </resources>

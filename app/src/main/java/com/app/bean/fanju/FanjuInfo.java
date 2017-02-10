@@ -1,7 +1,7 @@
-package com.app.bean.video;
+package com.app.bean.fanju;
 
 
-public class VideoInfo {
+public class FanjuInfo {
     private String authorName;
     private String authorImgUrl;
     private String publishTime;

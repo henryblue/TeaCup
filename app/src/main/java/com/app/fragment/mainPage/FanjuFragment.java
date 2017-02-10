@@ -2,19 +2,22 @@ package com.app.fragment.mainPage;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.app.adapter.VideoRecyclerAdapter;
-import com.app.bean.video.VideoInfo;
+import com.app.adapter.FanjuRecyclerAdapter;
+import com.app.bean.fanju.FanjuInfo;
 import com.app.fragment.BaseFragment;
+import com.app.teacup.FanjuVideoActivity;
 import com.app.teacup.R;
 import com.app.util.OkHttpUtils;
 import com.app.util.urlUtils;
@@ -36,13 +39,13 @@ import hb.xvideoplayer.MxVideoPlayer;
  * 数据来源于第一弹
  * @author henry-blue
  */
-public class VideoFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class FanjuFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    private static final String TAG = "VideoFragment";
-    private List<VideoInfo> mVideoDatas;
+    private static final String TAG = "FanjuFragment";
+    private List<FanjuInfo> mVideoDatas;
     private SwipeRefreshLayout mRefreshLayout;
     private XRecyclerView mRecyclerView;
-    private VideoRecyclerAdapter mVideoRecyclerAdapter;
+    private FanjuRecyclerAdapter mFanjuRecyclerAdapter;
     private int mPageNum = 1;
 
     @Override
@@ -54,7 +57,7 @@ public class VideoFragment extends BaseFragment implements SwipeRefreshLayout.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.video_fragment, container, false);
+        View view = inflater.inflate(R.layout.fanju_fragment, container, false);
         initView(view);
         setupRecycleView();
         setupRefreshLayout();
@@ -91,11 +94,23 @@ public class VideoFragment extends BaseFragment implements SwipeRefreshLayout.On
             }
         });
 
-        mVideoRecyclerAdapter = new VideoRecyclerAdapter(getContext(), mVideoDatas);
-        mRecyclerView.setAdapter(mVideoRecyclerAdapter);
-        mVideoRecyclerAdapter.setOnItemClickListener(new VideoRecyclerAdapter.OnItemClickListener() {
+        mFanjuRecyclerAdapter = new FanjuRecyclerAdapter(getContext(), mVideoDatas);
+        mRecyclerView.setAdapter(mFanjuRecyclerAdapter);
+        mFanjuRecyclerAdapter.setOnItemClickListener(new FanjuRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                FanjuInfo fanjuInfo = mVideoDatas.get(position);
+                String videoIndexUrl = fanjuInfo.getVideoIndexUrl();
+
+                if (TextUtils.isEmpty(videoIndexUrl)) {
+
+                } else {
+                    Intent intent = new Intent(getContext(), FanjuVideoActivity.class);
+                    intent.putExtra("fanjuVideoUrl", fanjuInfo.getNextUrl());
+                    intent.putExtra("fanjuVideoName", fanjuInfo.getVideoName());
+                    intent.putExtra("fanjuVideoImgUrl", fanjuInfo.getVideoImgUrl());
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -179,22 +194,22 @@ public class VideoFragment extends BaseFragment implements SwipeRefreshLayout.On
                 Element list = postListBlockDiv.getElementsByClass("hot-list").get(0);
                 Elements lis = list.getElementsByTag("li");
                 for (Element li : lis) {
-                    VideoInfo videoInfo = new VideoInfo();
+                    FanjuInfo fanjuInfo = new FanjuInfo();
                     String originUrl = li.attr("onclick");
                     String[] split = originUrl.split("'");
                     String nextUrl = "http://www.diyidan.com" + split[1];
-                    videoInfo.setNextUrl(nextUrl);
+                    fanjuInfo.setNextUrl(nextUrl);
 
                     Element yuanTop = li.getElementsByClass("yuan_top").get(0);
                     Element yuanImg = yuanTop.getElementsByClass("yuan_img").get(0);
                     Element imgInfo = yuanImg.getElementsByTag("img").get(0);
                     String authorName = imgInfo.attr("alt");
                     String authorImgUrl = imgInfo.attr("src");
-                    videoInfo.setAuthorName(authorName);
-                    videoInfo.setAuthorImgUrl(authorImgUrl);
+                    fanjuInfo.setAuthorName(authorName);
+                    fanjuInfo.setAuthorImgUrl(authorImgUrl);
 
                     String publishTime = yuanImg.getElementsByTag("span").text();
-                    videoInfo.setPublishTime(publishTime);
+                    fanjuInfo.setPublishTime(publishTime);
 
                     Element yuanMiddle = li.getElementsByClass("yuan_middle").get(0);
                     Element shengImg = yuanMiddle.getElementsByClass("sheng_img").get(0);
@@ -202,17 +217,17 @@ public class VideoFragment extends BaseFragment implements SwipeRefreshLayout.On
                     if (markBg.size() > 0) {
                         String indexUrl = markBg.get(0).getElementsByClass("yuan_mask")
                                 .get(0).attr("src");
-                        videoInfo.setVideoIndexUrl("http:" + indexUrl);
+                        fanjuInfo.setVideoIndexUrl("http:" + indexUrl);
                     }
                     Element midImgInfo = shengImg.getElementsByTag("img").get(0);
                     String videoName = midImgInfo.attr("alt");
                     String videoImgUrl = midImgInfo.attr("src");
                     String videoContent = yuanMiddle.getElementsByClass("yuan_con").get(0)
                             .getElementsByClass("ie2").get(0).text();
-                    videoInfo.setVideoName(videoName);
-                    videoInfo.setVideoImgUrl(videoImgUrl);
-                    videoInfo.setVideoContent(videoContent);
-                    mVideoDatas.add(videoInfo);
+                    fanjuInfo.setVideoName(videoName);
+                    fanjuInfo.setVideoImgUrl(videoImgUrl);
+                    fanjuInfo.setVideoContent(videoContent);
+                    mVideoDatas.add(fanjuInfo);
                 }
                 return true;
             } catch (Exception e) {
@@ -238,7 +253,7 @@ public class VideoFragment extends BaseFragment implements SwipeRefreshLayout.On
     @Override
     protected void onLoadDataFinish() {
         mRecyclerView.loadMoreComplete();
-        mVideoRecyclerAdapter.reSetData(mVideoDatas);
+        mFanjuRecyclerAdapter.reSetData(mVideoDatas);
     }
 
     @Override
@@ -252,7 +267,7 @@ public class VideoFragment extends BaseFragment implements SwipeRefreshLayout.On
     protected void onRefreshFinish() {
         mRecyclerView.refreshComplete();
         mRefreshLayout.setRefreshing(false);
-        mVideoRecyclerAdapter.reSetData(mVideoDatas);
+        mFanjuRecyclerAdapter.reSetData(mVideoDatas);
     }
 
     @Override
