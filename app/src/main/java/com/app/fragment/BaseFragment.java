@@ -14,6 +14,7 @@ public abstract class BaseFragment extends Fragment {
     public static final int REFRESH_ERROR = 2;
     public static final int LOAD_DATA_FINISH = 3;
     public static final int LOAD_DATA_ERROR = 4;
+    public static final int LOAD_DATA_NONE = 5;
 
     @SuppressLint("HandlerLeak")
     public Handler mHandler = new Handler() {
@@ -40,6 +41,9 @@ public abstract class BaseFragment extends Fragment {
                 case LOAD_DATA_ERROR:
                     onLoadDataError();
                     break;
+                case LOAD_DATA_NONE:
+                    onLoadDataNone();
+                    break;
                 default:
                     break;
             }
@@ -60,6 +64,9 @@ public abstract class BaseFragment extends Fragment {
     protected abstract void onRefreshFinish();
 
     protected abstract void onRefreshStart();
+
+    public void onLoadDataNone() {
+    }
 
     public void sendParseDataMessage(int message) {
         if (mHandler != null) {

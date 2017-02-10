@@ -16,7 +16,6 @@ import com.app.adapter.VideoRecyclerAdapter;
 import com.app.bean.video.VideoInfo;
 import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
-import com.app.util.HttpUtils;
 import com.app.util.OkHttpUtils;
 import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -39,6 +38,7 @@ import hb.xvideoplayer.MxVideoPlayer;
  */
 public class VideoFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    private static final String TAG = "VideoFragment";
     private List<VideoInfo> mVideoDatas;
     private SwipeRefreshLayout mRefreshLayout;
     private XRecyclerView mRecyclerView;
@@ -150,42 +150,83 @@ public class VideoFragment extends BaseFragment implements SwipeRefreshLayout.On
             return;
         }
         String url = urlUtils.VIDEO_DIYIDAN_URL_NEXT + mPageNum;
-        HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
+        OkHttpUtils.getAsyn(url, new OkHttpUtils.ResultCallback<String>() {
+
             @Override
-            public void onFinish(String response) {
-                parseVideoData(response);
-                sendParseDataMessage(LOAD_DATA_FINISH);
+            public void onError(Request request, Exception e) {
+                sendParseDataMessage(LOAD_DATA_ERROR);
             }
 
             @Override
-            public void onError(Exception e) {
-                sendParseDataMessage(LOAD_DATA_ERROR);
+            public void onResponse(String response) {
+                boolean isSuccess = parseVideoData(response);
+                if (isSuccess) {
+                    sendParseDataMessage(LOAD_DATA_FINISH);
+                } else {
+                    sendParseDataMessage(LOAD_DATA_NONE);
+                }
             }
         });
     }
 
-    private void parseVideoData(String response) {
+    private boolean parseVideoData(String response) {
         Document document = Jsoup.parse(response);
         if (document != null) {
-            Element content = document.getElementsByClass("content").get(0);
-            Element contentLeft = content.getElementsByClass("content_left").get(0);
-            Element postListBlockDiv = contentLeft.getElementsByClass("post_list_block_div").get(0);
-            Element list = postListBlockDiv.getElementsByClass("hot-list").get(0);
-            Elements lis = list.getElementsByTag("li");
-            for (Element li : lis) {
-                Element yuanTop = li.getElementsByClass("yuan_top").get(0);
-                Element yuanImg = yuanTop.getElementsByClass("yuan_img").get(0);
-                Element imgInfo = yuanImg.getElementsByTag("img").get(0);
-                String authorName = imgInfo.attr("alt");
-                String authorImgUrl = imgInfo.attr("src");
-                Log.i("itemitem", "parseVideoData: authorName==" + authorName + "=authorImgUrl==" + authorImgUrl);
+            try {
+                Element content = document.getElementsByClass("content").get(0);
+                Element contentLeft = content.getElementsByClass("content_left").get(0);
+                Element postListBlockDiv = contentLeft.getElementsByClass("post_list_block_div").get(0);
+                Element list = postListBlockDiv.getElementsByClass("hot-list").get(0);
+                Elements lis = list.getElementsByTag("li");
+                for (Element li : lis) {
+                    VideoInfo videoInfo = new VideoInfo();
+                    String originUrl = li.attr("onclick");
+                    String[] split = originUrl.split("'");
+                    String nextUrl = "http://www.diyidan.com" + split[1];
+                    videoInfo.setNextUrl(nextUrl);
 
-                String publishTime = yuanImg.getElementsByTag("span").text();
-                Log.i("itemitem", "parseVideoData: publishTime==" + publishTime);
+                    Element yuanTop = li.getElementsByClass("yuan_top").get(0);
+                    Element yuanImg = yuanTop.getElementsByClass("yuan_img").get(0);
+                    Element imgInfo = yuanImg.getElementsByTag("img").get(0);
+                    String authorName = imgInfo.attr("alt");
+                    String authorImgUrl = imgInfo.attr("src");
+                    videoInfo.setAuthorName(authorName);
+                    videoInfo.setAuthorImgUrl(authorImgUrl);
 
+                    String publishTime = yuanImg.getElementsByTag("span").text();
+                    videoInfo.setPublishTime(publishTime);
 
+                    Element yuanMiddle = li.getElementsByClass("yuan_middle").get(0);
+                    Element shengImg = yuanMiddle.getElementsByClass("sheng_img").get(0);
+                    Elements markBg = shengImg.getElementsByClass("mark_bg");
+                    if (markBg.size() > 0) {
+                        String indexUrl = markBg.get(0).getElementsByClass("yuan_mask")
+                                .get(0).attr("src");
+                        videoInfo.setVideoIndexUrl("http:" + indexUrl);
+                    }
+                    Element midImgInfo = shengImg.getElementsByTag("img").get(0);
+                    String videoName = midImgInfo.attr("alt");
+                    String videoImgUrl = midImgInfo.attr("src");
+                    String videoContent = yuanMiddle.getElementsByClass("yuan_con").get(0)
+                            .getElementsByClass("ie2").get(0).text();
+                    videoInfo.setVideoName(videoName);
+                    videoInfo.setVideoImgUrl(videoImgUrl);
+                    videoInfo.setVideoContent(videoContent);
+                    mVideoDatas.add(videoInfo);
+                }
+                return true;
+            } catch (Exception e) {
+                Log.i(TAG, "parseVideoData: ====parse data error:===" + e.getMessage());
+                return false;
             }
         }
+        return false;
+    }
+
+    @Override
+    public void onLoadDataNone() {
+        super.onLoadDataNone();
+        mRecyclerView.loadMoreComplete();
     }
 
     @Override
