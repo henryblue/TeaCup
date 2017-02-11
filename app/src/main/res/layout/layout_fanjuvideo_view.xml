@@ -3,25 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_color"
+    android:clipChildren = "false"
+    android:clipToPadding = "false"
     android:orientation="vertical">
 
-    <include layout="@layout/navigation_toolbar" />
+    <hb.xvideoplayer.MxVideoPlayerWidget
+        android:id="@+id/fanju_video_player"
+        android:layout_width="match_parent"
+        android:layout_height="225dp" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srl_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <hb.xvideoplayer.MxVideoPlayerWidget
-                android:id="@+id/fanju_video_player"
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/xiangguan_textview"
@@ -29,7 +29,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
                 android:text="相关推荐"
                 android:textColor="@color/deep_gray"
                 android:textSize="18sp"

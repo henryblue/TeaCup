@@ -1,6 +1,8 @@
 package com.app.teacup;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -8,6 +10,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +31,7 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
+import hb.xvideoplayer.MxTvPlayerWidget;
 import hb.xvideoplayer.MxVideoPlayer;
 import hb.xvideoplayer.MxVideoPlayerWidget;
 
@@ -45,8 +50,14 @@ public class FanjuVideoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_fanjuvideo_view);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.BLACK);
+            window.setNavigationBarColor(Color.TRANSPARENT);
+        }
+
         initView();
-        initToolBar();
         setupRefreshLayout();
     }
 
@@ -152,10 +163,10 @@ public class FanjuVideoActivity extends BaseActivity {
             mRefreshLayout.setEnabled(false);
         }
         if (!TextUtils.isEmpty(mVideoPlayUrl)) {
-            loadVideoBackgroundImg();
-            mxVideoPlayerWidget.setVisibility(View.VISIBLE);
+            //loadVideoBackgroundImg();
             mxVideoPlayerWidget.startPlay(mVideoPlayUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL,
                     getIntent().getStringExtra("fanjuVideoName"));
+            mxVideoPlayerWidget.mStartButton.performClick();
             mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.VISIBLE,
                     View.INVISIBLE, View.VISIBLE, View.INVISIBLE);
         }
@@ -180,32 +191,14 @@ public class FanjuVideoActivity extends BaseActivity {
         }
     }
 
-    private void loadVideoBackgroundImg() {
-        String imgUrl = getIntent().getStringExtra("fanjuVideoImgUrl");
-        if (!MainActivity.mIsLoadPhoto) {
-            Glide.with(this).load(imgUrl).asBitmap()
-                    .error(R.drawable.photo_loaderror)
-                    .placeholder(R.drawable.main_load_bg)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .dontAnimate()
-                    .into(mxVideoPlayerWidget.mThumbImageView);
-        } else {
-            if (MainActivity.mIsWIFIState) {
-                Glide.with(this).load(imgUrl).asBitmap()
-                        .error(R.drawable.photo_loaderror)
-                        .placeholder(R.drawable.main_load_bg)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .dontAnimate()
-                        .into(mxVideoPlayerWidget.mThumbImageView);
-            }
-        }
-    }
-
     private void initView() {
         mDatas = new ArrayList<>();
         mRecyclerView = (XRecyclerView) findViewById(R.id.base_recycler_view);
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.srl_refresh);
         mxVideoPlayerWidget = (MxVideoPlayerWidget) findViewById(R.id.fanju_video_player);
+        mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
+                View.INVISIBLE, View.VISIBLE, View.INVISIBLE);
+
         mXiangGuanText = (TextView) findViewById(R.id.xiangguan_textview);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         layoutManager.setOrientation(GridLayoutManager.VERTICAL);
@@ -213,16 +206,6 @@ public class FanjuVideoActivity extends BaseActivity {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setLoadingMoreEnabled(false);
         mRecyclerView.setPullRefreshEnabled(false);
-    }
-
-    private void initToolBar() {
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.activity_navigation_toolbar);
-        if (mToolbar != null) {
-            mToolbar.setTitle(getIntent().getStringExtra("fanjuVideoName"));
-        }
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
