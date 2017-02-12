@@ -22,8 +22,8 @@
     <color name="colorGreen">#4caf50</color>
     <color name="colorGreenDark">#4caf50</color>
 
-    <color name="colorPink">#e91e63</color>
-    <color name="colorPinkDark">#c2185b</color>
+    <color name="colorPink">#ff80ab</color>
+    <color name="colorPinkDark">#ff4081</color>
     <color name="pinkAccent">#FF5252</color>
 
     <color name="colorGray">#607d8b</color>

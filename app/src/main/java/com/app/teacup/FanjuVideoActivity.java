@@ -5,22 +5,20 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.adapter.FanjuVideoRecyclerAdapter;
 import com.app.bean.fanju.FanjuVideoInfo;
+import com.app.ui.MoreTextView;
 import com.app.util.OkHttpUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.squareup.okhttp.Request;
 
 import org.jsoup.Jsoup;
@@ -31,7 +29,6 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-import hb.xvideoplayer.MxTvPlayerWidget;
 import hb.xvideoplayer.MxVideoPlayer;
 import hb.xvideoplayer.MxVideoPlayerWidget;
 
@@ -39,12 +36,14 @@ import hb.xvideoplayer.MxVideoPlayerWidget;
 public class FanjuVideoActivity extends BaseActivity {
 
     private List<FanjuVideoInfo> mDatas;
-    private XRecyclerView mRecyclerView;
-    private FanjuVideoRecyclerAdapter mAdapter;
+    private LinearLayout mVideoContainer;
     private SwipeRefreshLayout mRefreshLayout;
     private MxVideoPlayerWidget mxVideoPlayerWidget;
     private String mVideoPlayUrl;
     private TextView mXiangGuanText;
+    private MoreTextView mContentView;
+    private String mVideoContent = "";
+    private TextView mVideoIntroduce;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +136,13 @@ public class FanjuVideoActivity extends BaseActivity {
 
             Element videoSection = document.getElementsByClass("video_section").get(0);
             Element contentVideo = videoSection.getElementsByClass("content_video").get(0);
+            Element shareVideo = contentVideo.getElementsByClass("share_video").get(0);
+            Element intrVideo = shareVideo.getElementsByClass("intr_video").get(0);
+            Elements pElements = intrVideo.getElementsByTag("p");
+            for (Element p : pElements) {
+                mVideoContent += p.text() + "\n";
+            }
+
             Element recVideo = contentVideo.getElementById("rec_video");
             Element replyVideo = recVideo.getElementsByClass("reply_video").get(0);
             Elements lis = replyVideo.getElementsByTag("ul").get(0).getElementsByTag("li");
@@ -163,7 +169,6 @@ public class FanjuVideoActivity extends BaseActivity {
             mRefreshLayout.setEnabled(false);
         }
         if (!TextUtils.isEmpty(mVideoPlayUrl)) {
-            //loadVideoBackgroundImg();
             mxVideoPlayerWidget.startPlay(mVideoPlayUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL,
                     getIntent().getStringExtra("fanjuVideoName"));
             mxVideoPlayerWidget.mStartButton.performClick();
@@ -171,41 +176,71 @@ public class FanjuVideoActivity extends BaseActivity {
                     View.INVISIBLE, View.VISIBLE, View.INVISIBLE);
         }
 
+        if (!TextUtils.isEmpty(mVideoContent)) {
+            mVideoIntroduce.setVisibility(View.VISIBLE);
+            mContentView.setVisibility(View.VISIBLE);
+            mContentView.setContent(mVideoContent);
+        }
+
         if (!mDatas.isEmpty()) {
             mXiangGuanText.setVisibility(View.VISIBLE);
-            if (mAdapter == null) {
-                mAdapter = new FanjuVideoRecyclerAdapter(FanjuVideoActivity.this, mDatas);
-                mRecyclerView.setAdapter(mAdapter);
-                mAdapter.setOnItemClickListener(new FanjuVideoRecyclerAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        FanjuVideoInfo fanjuInfo = mDatas.get(position);
-                        Intent intent = new Intent(FanjuVideoActivity.this, FanjuVideoActivity.class);
-                        intent.putExtra("fanjuVideoUrl", fanjuInfo.getNextUrl());
-                        intent.putExtra("fanjuVideoName", fanjuInfo.getVideoName());
-                        intent.putExtra("fanjuVideoImgUrl", fanjuInfo.getImgeUrl());
+            addVideoInfoToContainer();
+        }
+    }
+
+    private void addVideoInfoToContainer() {
+        for (final FanjuVideoInfo info : mDatas) {
+            View view = View.inflate(FanjuVideoActivity.this, R.layout.item_fanju_video_view, null);
+            TextView videoName = (TextView) view.findViewById(R.id.fanju_video_name);
+            videoName.setText(info.getVideoName());
+            ImageView videoImg = (ImageView) view.findViewById(R.id.fanju_video_img);
+            loadImageResource(videoImg, info.getImgeUrl());
+            mVideoContainer.addView(view);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(FanjuVideoActivity.this, FanjuVideoActivity.class);
+                        intent.putExtra("fanjuVideoUrl", info.getNextUrl());
+                        intent.putExtra("fanjuVideoName", info.getVideoName());
                         startActivity(intent);
-                    }
-                });
+                }
+            });
+        }
+    }
+
+    private void loadImageResource(ImageView videoImg, String imgUrl) {
+        if (!MainActivity.mIsLoadPhoto) {
+            Glide.with(this).load(imgUrl).asBitmap()
+                    .error(R.drawable.photo_loaderror)
+                    .placeholder(R.drawable.main_load_bg)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .dontAnimate()
+                    .into(videoImg);
+        } else {
+            if (MainActivity.mIsWIFIState) {
+                Glide.with(this).load(imgUrl).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.main_load_bg)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .into(videoImg);
+            } else {
+                videoImg.setImageResource(R.drawable.main_load_bg);
             }
         }
     }
 
     private void initView() {
         mDatas = new ArrayList<>();
-        mRecyclerView = (XRecyclerView) findViewById(R.id.base_recycler_view);
+        mVideoIntroduce = (TextView) findViewById(R.id.tv_video_intr);
+        mContentView = (MoreTextView) findViewById(R.id.fanjuvideo_content);
+        mVideoContainer = (LinearLayout) findViewById(R.id.fanju_video_container);
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.srl_refresh);
         mxVideoPlayerWidget = (MxVideoPlayerWidget) findViewById(R.id.fanju_video_player);
         mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
                 View.INVISIBLE, View.VISIBLE, View.INVISIBLE);
 
         mXiangGuanText = (TextView) findViewById(R.id.xiangguan_textview);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
-        layoutManager.setOrientation(GridLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setLoadingMoreEnabled(false);
-        mRecyclerView.setPullRefreshEnabled(false);
     }
 
     @Override
