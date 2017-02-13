@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/item_fanju_news_marginTop"
+    android:layout_marginBottom="@dimen/item_fanju_news_marginBottom"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_fanju_news_rl_height"
+        android:layout_marginLeft="@dimen/item_fanju_news_rl_marginLeft"
+        android:layout_marginTop="@dimen/item_fanju_news_rl_marginTop">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/fanju_news_author_img"
+            android:layout_width="@dimen/item_fanju_news_imageView_width"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/fanju_news_author_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/item_fanju_news_tv_name_marginLeft"
+            android:layout_toRightOf="@id/fanju_news_author_img"
+            android:ellipsize="end"
+            android:textColor="@color/black"
+            android:textSize="@dimen/item_fanju_news_tv_name_textSize" />
+
+        <TextView
+            android:id="@+id/fanju_news_publish_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/item_fanju_news_tv_time_marginRight"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/item_fanju_news_tv_time_textSize" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/fanju_news_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+</LinearLayout>
+

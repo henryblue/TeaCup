@@ -1,10 +1,13 @@
 package com.app.teacup;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -15,10 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.bean.fanju.FanjuVideoInfo;
-import com.app.ui.MoreTextView;
 import com.app.util.OkHttpUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.okhttp.Request;
 
 import org.jsoup.Jsoup;
@@ -41,9 +44,10 @@ public class FanjuVideoActivity extends BaseActivity {
     private MxVideoPlayerWidget mxVideoPlayerWidget;
     private String mVideoPlayUrl;
     private TextView mXiangGuanText;
-    private MoreTextView mContentView;
+    private TextView mContentView;
     private String mVideoContent = "";
     private TextView mVideoIntroduce;
+    private FloatingActionButton mSearchBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,7 +183,10 @@ public class FanjuVideoActivity extends BaseActivity {
         if (!TextUtils.isEmpty(mVideoContent)) {
             mVideoIntroduce.setVisibility(View.VISIBLE);
             mContentView.setVisibility(View.VISIBLE);
-            mContentView.setContent(mVideoContent);
+            mContentView.setText(mVideoContent);
+            if (mVideoContent.contains("http://www.diyidan.com")) {
+                mSearchBtn.setVisibility(View.VISIBLE);
+            }
         }
 
         if (!mDatas.isEmpty()) {
@@ -233,7 +240,7 @@ public class FanjuVideoActivity extends BaseActivity {
     private void initView() {
         mDatas = new ArrayList<>();
         mVideoIntroduce = (TextView) findViewById(R.id.tv_video_intr);
-        mContentView = (MoreTextView) findViewById(R.id.fanjuvideo_content);
+        mContentView = (TextView) findViewById(R.id.fanjuvideo_content);
         mVideoContainer = (LinearLayout) findViewById(R.id.fanju_video_container);
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.srl_refresh);
         mxVideoPlayerWidget = (MxVideoPlayerWidget) findViewById(R.id.fanju_video_player);
@@ -241,6 +248,44 @@ public class FanjuVideoActivity extends BaseActivity {
                 View.INVISIBLE, View.VISIBLE, View.INVISIBLE);
 
         mXiangGuanText = (TextView) findViewById(R.id.xiangguan_textview);
+        mSearchBtn = (FloatingActionButton) findViewById(R.id.fanju_btn_search);
+        mSearchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSearchDialog();
+            }
+        });
+    }
+
+    private void showSearchDialog() {
+        final MaterialEditText editText = new MaterialEditText(FanjuVideoActivity.this);
+        editText.setHint(R.string.input_http);
+        editText.setMetTextColor(Color.parseColor("#009688"));
+        editText.setPrimaryColor(Color.parseColor("#009688"));
+        editText.setMaxCharacters(100);
+        editText.setErrorColor(Color.parseColor("#ff0000"));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(FanjuVideoActivity.this)
+                .setTitle(R.string.search_video)
+                .setView(editText, 30, 20, 20, 20)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        doSearch(editText.getText().toString());
+                    }
+                });
+        builder.create().show();
+    }
+
+    private void doSearch(String url) {
+        if (url.startsWith("http") && (url.endsWith("detail/1") || url.endsWith("channel=share"))) {
+            Intent intent = new Intent(FanjuVideoActivity.this, FanjuVideoActivity.class);
+            intent.putExtra("fanjuVideoUrl", url);
+            intent.putExtra("fanjuVideoName", "");
+            startActivity(intent);
+        } else {
+            Toast.makeText(FanjuVideoActivity.this, "解析地址失败", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

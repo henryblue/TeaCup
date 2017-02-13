@@ -159,11 +159,6 @@
     <dimen name="activity_new_detail_margin">10dp</dimen>
     <dimen name="activity_new_detail_author_textSize">14sp</dimen>
 
-    <dimen name="activity_read_detail_title_margin">10dp</dimen>
-    <dimen name="activity_read_detail_author_margin">10dp</dimen>
-    <dimen name="activity_read_detail_author_textSize">14sp</dimen>
-    <dimen name="activity_read_detail_title_textSize">20sp</dimen>
-
     <dimen name="item_news_header_height">170dp</dimen>
     <dimen name="item_news_header_ll_marginBootm">16dp</dimen>
 
@@ -177,25 +172,6 @@
     <dimen name="item_news_view_rl_tv_textSize">16sp</dimen>
     <dimen name="item_news_view_rl_tv_label_textSize">13sp</dimen>
     <dimen name="item_news_view_rl_tv_label_marginBottom">8dp</dimen>
-
-    <dimen name="item_read_collection_height">198dp</dimen>
-    <dimen name="item_read_collection_marginBottom">15dp</dimen>
-    <dimen name="item_read_collection_title_textSize">18sp</dimen>
-    <dimen name="item_read_collection_title_margin">8dp</dimen>
-    <dimen name="item_read_collection_ll_height">118dp</dimen>
-    <dimen name="item_read_collection_ll_marginTop">4dp</dimen>
-    <dimen name="item_read_collection_ll_marginRight">8dp</dimen>
-    <dimen name="item_read_collection_iv_width">100dp</dimen>
-    <dimen name="item_read_collection_iv_height">105dp</dimen>
-    <dimen name="item_read_collection_iv_marginLeft">8dp</dimen>
-    <dimen name="item_read_collection_tv_marginLeft">8dp</dimen>
-    <dimen name="item_read_collection_tv_textSize">15sp</dimen>
-    <dimen name="item_read_collection_tv_come_marginBottom">8dp</dimen>
-    <dimen name="item_read_collection_tv_come_marginLeft">8dp</dimen>
-    <dimen name="item_read_collection_tv_come_textSize">13sp</dimen>
-    <dimen name="item_read_collection_tv_detail_marginBottom">8dp</dimen>
-    <dimen name="item_read_collection_tv_detail_marginRight">8dp</dimen>
-    <dimen name="item_read_collection_tv_detail_textSize">13sp</dimen>
 
     <dimen name="activity_about_tv_textSize">16sp</dimen>
     <dimen name="activity_about_tv_margin">10dp</dimen>
@@ -221,61 +197,6 @@
     <dimen name="setting_item_view_marginLeft">10dp</dimen>
     <dimen name="setting_item_view_marginRight">10dp</dimen>
     <dimen name="setting_item_rl_height">75dp</dimen>
-
-    <dimen name="read_topic_view_height">355dp</dimen>
-    <dimen name="read_topic_view_marginBottom">8dp</dimen>
-    <dimen name="read_topic_view_marginTop">8dp</dimen>
-    <dimen name="read_topic_view_marginLeft">10dp</dimen>
-    <dimen name="read_topic_view_marginRight">10dp</dimen>
-    <dimen name="read_topic_view_title_height">35dp</dimen>
-    <dimen name="read_topic_view_title_textSize">16sp</dimen>
-    <dimen name="read_topic_view_title1_marginLeft">15dp</dimen>
-    <dimen name="read_topic_view_title1_textSize">15sp</dimen>
-    <dimen name="read_topic_view_more_marginLeft">15dp</dimen>
-    <dimen name="read_topic_view_more_textSize">15sp</dimen>
-    <dimen name="read_topic_view_ll_height">155dp</dimen>
-    <dimen name="read_topic_view_ll_marginTop">35dp</dimen>
-    <dimen name="read_topic_view_ll1_marginRight">5dp</dimen>
-    <dimen name="read_topic_view_ll1_marginLeft">5dp</dimen>
-    <dimen name="read_topic_view_img_height">110dp</dimen>
-    <dimen name="read_topic_view_text_margin">5dp</dimen>
-    <dimen name="read_topic_view_text_size">14sp</dimen>
-    <dimen name="read_topic_view_text_time_size">12sp</dimen>
-
-    <dimen name="item_read_topic_rl_height">205dp</dimen>
-    <dimen name="item_read_topic_rl_marginBottom">5dp</dimen>
-    <dimen name="item_read_topic_read_title_size">18sp</dimen>
-    <dimen name="item_read_topic_read_title_margin">8dp</dimen>
-    <dimen name="item_read_topic_read_author_margin">8dp</dimen>
-    <dimen name="item_read_topic_read_author_size">14sp</dimen>
-    <dimen name="item_read_topic_ll_height">118dp</dimen>
-    <dimen name="item_read_topic_ll_marginRight">8dp</dimen>
-    <dimen name="item_read_topic_ll_img_width">100dp</dimen>
-    <dimen name="item_read_topic_ll_img_height">105dp</dimen>
-    <dimen name="item_read_topic_ll_img_marginLeft">8dp</dimen>
-    <dimen name="item_read_topic_ll_content_marginLeft">8dp</dimen>
-    <dimen name="item_read_topic_ll_content_textSize">15sp</dimen>
-
-    <dimen name="item_read_view_cardView_height">180dp</dimen>
-    <dimen name="item_read_view_cardView_marginTop">3dp</dimen>
-    <dimen name="item_read_view_cardView_marginBottom">3dp</dimen>
-    <dimen name="item_read_view_title_marginLeft">10dp</dimen>
-    <dimen name="item_read_view_title_marginTop">8dp</dimen>
-    <dimen name="item_read_view_title_size">16sp</dimen>
-    <dimen name="item_read_view_rl_marginLeft">10dp</dimen>
-    <dimen name="item_read_view_rl_iv_width">110dp</dimen>
-    <dimen name="item_read_view_rl_iv_height">85dp</dimen>
-    <dimen name="item_read_view_rl_content_marginLeft">8dp</dimen>
-    <dimen name="item_read_view_rl_content_marginTop">5dp</dimen>
-    <dimen name="item_read_view_rl_content_marginBottom">5dp</dimen>
-    <dimen name="item_read_view_rl_content_marginRight">10dp</dimen>
-    <dimen name="item_read_view_rl_content_size">14sp</dimen>
-    <dimen name="item_read_view_rl_author_marginLeft">10dp</dimen>
-    <dimen name="item_read_view_rl_author_marginBottom">10dp</dimen>
-    <dimen name="item_read_view_rl_author_size">13sp</dimen>
-    <dimen name="item_read_view_rl_num_marginRight">10dp</dimen>
-    <dimen name="item_read_view_rl_num_marginBottom">10dp</dimen>
-    <dimen name="item_read_view_rl_num_size">13sp</dimen>
 
     <dimen name="list_item_read_collection_height">170dp</dimen>
     <dimen name="list_item_read_collection_marginBottom">10dp</dimen>
@@ -316,5 +237,45 @@
 
     <dimen name="item_fanju_video_cv_margin">8dp</dimen>
     <dimen name="item_fanju_video_cv_marginBottom">12dp</dimen>
+
+    <dimen name="item_fanju_video_paddingBottom">8dp</dimen>
+    <dimen name="item_fanju_video_height">90dp</dimen>
+    <dimen name="item_fanju_video_imageView_width">120dp</dimen>
+    <dimen name="item_fanju_video_imageView_height">90dp</dimen>
+    <dimen name="item_fanju_video_textView_height">90dp</dimen>
+    <dimen name="item_fanju_video_textView_marginLeft">8dp</dimen>
+    <dimen name="item_fanju_video_textView_marginRight">4dp</dimen>
+    <dimen name="item_fanju_video_textView_textSize">16sp</dimen>
+
+    <dimen name="layout_fanjuvideo_videoplayer_height">225dp</dimen>
+    <dimen name="layout_fanjuvideo_frameLayout_marginTop">8dp</dimen>
+    <dimen name="layout_fanjuvideo_textView_intr_marginLeft">8dp</dimen>
+    <dimen name="layout_fanjuvideo_textView_intr_textSize">18sp</dimen>
+    <dimen name="layout_fanjuvideo_textView_content_margin">8dp</dimen>
+    <dimen name="layout_fanjuvideo_textView_content_textSize">14sp</dimen>
+    <dimen name="layout_fanjuvideo_textview_relate_textSize">18sp</dimen>
+    <dimen name="layout_fanjuvideo_fabtn_marginBottom">8dp</dimen>
+    <dimen name="layout_fanjuvideo_fabtn_marginRight">8dp</dimen>
+    <dimen name="layout_fanjuvideo_fabtn_elevation">3dp</dimen>
+    <dimen name="layout_fanjuvideo_fabtn_translationZ">16dp</dimen>
+
+    <dimen name="item_fanju_news_item_textSize">15sp</dimen>
+    <dimen name="item_fanju_news_marginTop">5dp</dimen>
+    <dimen name="item_fanju_news_marginBottom">5dp</dimen>
+    <dimen name="item_fanju_news_rl_height">30dp</dimen>
+    <dimen name="item_fanju_news_rl_marginLeft">8dp</dimen>
+    <dimen name="item_fanju_news_rl_marginTop">5dp</dimen>
+    <dimen name="item_fanju_news_imageView_width">30dp</dimen>
+    <dimen name="item_fanju_news_tv_name_marginLeft">5dp</dimen>
+    <dimen name="item_fanju_news_tv_name_textSize">16sp</dimen>
+    <dimen name="item_fanju_news_tv_time_marginRight">10dp</dimen>
+    <dimen name="item_fanju_news_tv_time_textSize">15sp</dimen>
+
+    <dimen name="layout_fanju_news_fl_marginTop">8dp</dimen>
+    <dimen name="layout_fanju_news_faBtn_marginBottom">8dp</dimen>
+    <dimen name="layout_fanju_news_faBtn_marginRight">8dp</dimen>
+    <dimen name="layout_fanju_news_faBtn_elevation">3dp</dimen>
+    <dimen name="layout_fanju_news_faBtn_translationZ">16dp</dimen>
+
 
 </resources>

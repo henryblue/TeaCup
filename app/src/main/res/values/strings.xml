@@ -14,7 +14,9 @@
     <string name="item_read">阅读</string>
     <string name="item_weather">天气</string>
     <string name="input_hint">请输入需要添加的书名</string>
+    <string name="input_http">请输入视频地址</string>
     <string name="add_book">添加</string>
+    <string name="search_video">搜索</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
     <string name="transition_book_img">transition_book_img</string>
@@ -45,7 +47,7 @@
     <string name="about_for_last">请放下内心的匆忙, 端起手边的茶杯, 留一杯茶的时间给自己.</string>
 
     <string name="about_for_me">作者: henry li\n博客: http://blog.csdn.net/lbcab\n数据来源:\n
-        落网音乐\n&#160;片刻网\n&#160;煎蛋网\n&#160;豆瓣网\n&#160;糗事百科\n&#160;悦听有声网</string>
+        落网音乐\n&#160;片刻网\n&#160;煎蛋网\n&#160;豆瓣网\n&#160;糗事百科\n&#160;第一弹</string>
 
     <string name="share_text">茶杯\n留一杯茶的时间给自己,读一篇文章或听一首歌,放下内心的匆忙.\n
         https://github.com/henry-blue/TeaCup</string>
@@ -69,6 +71,8 @@
     <string name="desc_spread">全文</string>
     <string name="news_delete1">无聊图</string>
     <string name="news_delete2">后没品</string>
+    <string name="video_introduce">视频介绍</string>
+    <string name="related_recommend">相关推荐</string>
 
     <string-array name="tab_name">
         <item>新鲜事</item>

@@ -2,26 +2,27 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="90dp"
-    android:paddingBottom="8dp">
+    android:background="?android:attr/selectableItemBackground"
+    android:layout_height="@dimen/item_fanju_video_height"
+    android:paddingBottom="@dimen/item_fanju_video_paddingBottom">
 
     <ImageView
         android:id="@+id/fanju_video_img"
-        android:layout_width="120dp"
-        android:layout_height="90dp"
+        android:layout_width="@dimen/item_fanju_video_imageView_width"
+        android:layout_height="@dimen/item_fanju_video_imageView_height"
         android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/fanju_video_name"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="4dp"
+        android:layout_height="@dimen/item_fanju_video_textView_height"
+        android:layout_marginLeft="@dimen/item_fanju_video_textView_marginLeft"
+        android:layout_marginRight="@dimen/item_fanju_video_textView_marginRight"
         android:layout_toRightOf="@id/fanju_video_img"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="4"
         android:textColor="@android:color/black"
-        android:textSize="16sp" />
+        android:textSize="@dimen/item_fanju_video_textView_textSize" />
 
 </RelativeLayout>

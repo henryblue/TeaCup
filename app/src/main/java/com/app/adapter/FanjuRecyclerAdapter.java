@@ -4,7 +4,6 @@ package com.app.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,9 +76,7 @@ public class FanjuRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .dontAnimate()
                 .into(viewHolder.mVideoImg);
-        Log.i("itemitem", "loadImageResource: ===============load====");
         if (!TextUtils.isEmpty(info.getVideoIndexUrl())) {
-            Log.i("itemitem", "loadImageResource: ===================" + info.getVideoIndexUrl());
             viewHolder.mVideoIndex.setVisibility(View.VISIBLE);
             Glide.with(mContext).load(info.getVideoIndexUrl()).asBitmap()
                     .error(R.drawable.photo_loaderror)

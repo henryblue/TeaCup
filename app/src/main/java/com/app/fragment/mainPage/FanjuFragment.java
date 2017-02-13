@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.app.adapter.FanjuRecyclerAdapter;
 import com.app.bean.fanju.FanjuInfo;
 import com.app.fragment.BaseFragment;
+import com.app.teacup.FanjuNewsActivity;
 import com.app.teacup.FanjuVideoActivity;
 import com.app.teacup.R;
 import com.app.util.OkHttpUtils;
@@ -103,7 +104,13 @@ public class FanjuFragment extends BaseFragment implements SwipeRefreshLayout.On
                 String videoIndexUrl = fanjuInfo.getVideoIndexUrl();
 
                 if (TextUtils.isEmpty(videoIndexUrl)) {
-
+                    Intent intent = new Intent(getContext(), FanjuNewsActivity.class);
+                    intent.putExtra("fanjuNewsUrl", fanjuInfo.getNextUrl());
+                    intent.putExtra("fanjuNewsTitle", fanjuInfo.getVideoName());
+                    intent.putExtra("fanjuNewsUserImgUrl", fanjuInfo.getAuthorImgUrl());
+                    intent.putExtra("fanjuNewsUserName", fanjuInfo.getAuthorName());
+                    intent.putExtra("fanjuNewsUserTime", fanjuInfo.getPublishTime());
+                    startActivity(intent);
                 } else {
                     Intent intent = new Intent(getContext(), FanjuVideoActivity.class);
                     intent.putExtra("fanjuVideoUrl", fanjuInfo.getNextUrl());
@@ -150,8 +157,12 @@ public class FanjuFragment extends BaseFragment implements SwipeRefreshLayout.On
 
             @Override
             public void onResponse(String response) {
-                parseVideoData(response);
-                sendParseDataMessage(REFRESH_FINISH);
+                boolean isSuccess = parseVideoData(response);
+                if (isSuccess) {
+                    sendParseDataMessage(REFRESH_FINISH);
+                } else {
+                    startLoadData();
+                }
             }
         });
     }
@@ -241,17 +252,20 @@ public class FanjuFragment extends BaseFragment implements SwipeRefreshLayout.On
     @Override
     public void onLoadDataNone() {
         super.onLoadDataNone();
+        mRefreshLayout.setRefreshing(false);
         mRecyclerView.loadMoreComplete();
     }
 
     @Override
     protected void onLoadDataError() {
         Toast.makeText(getContext(), getString(R.string.refresh_net_error), Toast.LENGTH_SHORT).show();
+        mRefreshLayout.setRefreshing(false);
         mRecyclerView.loadMoreComplete();
     }
 
     @Override
     protected void onLoadDataFinish() {
+        mRefreshLayout.setRefreshing(false);
         mRecyclerView.loadMoreComplete();
         mFanjuRecyclerAdapter.reSetData(mVideoDatas);
     }

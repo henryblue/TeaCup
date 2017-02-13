@@ -11,61 +11,81 @@
     <hb.xvideoplayer.MxVideoPlayerWidget
         android:id="@+id/fanju_video_player"
         android:layout_width="match_parent"
-        android:layout_height="225dp" />
+        android:layout_height="@dimen/layout_fanjuvideo_videoplayer_height" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/srl_refresh"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="@dimen/layout_fanjuvideo_frameLayout_marginTop">
 
-        <ScrollView
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/srl_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_video_intr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:text="视频介绍"
-                    android:textColor="@color/deep_gray"
-                    android:textSize="18sp"
-                    android:visibility="gone" />
-
-                <com.app.ui.MoreTextView
-                    android:id="@+id/fanjuvideo_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    app:desc_textColor="?attr/appBg"
-                    app:desc_textSize="14sp"
-                    app:textColor="@color/black"
-                    app:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/xiangguan_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:text="相关推荐"
-                    android:textColor="@color/deep_gray"
-                    android:textSize="18sp"
-                    android:visibility="gone" />
+                android:layout_height="match_parent">
 
                 <LinearLayout
-                    android:id="@+id/fanju_video_container"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical" />
-            </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-        </ScrollView>
+                    <TextView
+                        android:id="@+id/tv_video_intr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/layout_fanjuvideo_textView_intr_marginLeft"
+                        android:text="@string/video_introduce"
+                        android:textColor="@color/deep_gray"
+                        android:textSize="@dimen/layout_fanjuvideo_textView_intr_textSize"
+                        android:visibility="gone" />
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+                    <TextView
+                        android:id="@+id/fanjuvideo_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/layout_fanjuvideo_textView_content_margin"
+                        android:textColor="@color/black"
+                        android:textIsSelectable="true"
+                        android:textSize="@dimen/layout_fanjuvideo_textView_content_textSize" />
+
+                    <TextView
+                        android:id="@+id/xiangguan_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="@string/related_recommend"
+                        android:textColor="@color/deep_gray"
+                        android:textSize="@dimen/layout_fanjuvideo_textview_relate_textSize"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/fanju_video_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical" />
+                </LinearLayout>
+
+            </ScrollView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fanju_btn_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="@dimen/layout_fanjuvideo_fabtn_marginBottom"
+            android:layout_marginRight="@dimen/layout_fanjuvideo_fabtn_marginRight"
+            android:src="@drawable/search"
+            app:backgroundTint="@color/yellow"
+            app:borderWidth="0dp"
+            app:elevation="@dimen/layout_fanjuvideo_fabtn_elevation"
+            app:pressedTranslationZ="@dimen/layout_fanjuvideo_fabtn_translationZ"
+            app:rippleColor="@color/deepYellow"
+            android:visibility="gone"/>
+    </FrameLayout>
+
 </LinearLayout>

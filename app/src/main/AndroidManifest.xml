@@ -54,15 +54,11 @@
         <activity android:name=".MusicDetailActivity" />
         <activity android:name=".MusicPlayActivity" />
         <activity android:name=".NewsDetailActivity" />
-        <activity android:name=".ReadDetailActivity" />
-        <activity android:name=".ReadTopicActivity" />
-        <activity android:name=".ReadCollectionActivity" />
-        <activity android:name=".ListReadCollectionActivity" />
-        <activity android:name=".ListReadTopicActivity" />
         <activity android:name=".FindBookActivity" />
         <activity android:name=".AboutActivity" />
         <activity android:name=".SettingActivity" />
         <activity android:name=".ThemeChangeActivity" />
+        <activity android:name=".FanjuNewsActivity" />
         <activity
             android:name=".FanjuVideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
