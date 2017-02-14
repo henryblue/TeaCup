@@ -14,7 +14,7 @@
     <string name="item_read">阅读</string>
     <string name="item_weather">天气</string>
     <string name="input_hint">请输入需要添加的书名</string>
-    <string name="input_http">请输入视频地址</string>
+    <string name="input_http">请输入/粘贴视频地址</string>
     <string name="add_book">添加</string>
     <string name="search_video">搜索</string>
     <string name="ok">确定</string>
@@ -73,6 +73,7 @@
     <string name="news_delete2">后没品</string>
     <string name="video_introduce">视频介绍</string>
     <string name="related_recommend">相关推荐</string>
+    <string name="parse_url_error">解析地址失败, 请重试</string>
 
     <string-array name="tab_name">
         <item>新鲜事</item>

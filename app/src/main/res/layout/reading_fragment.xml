@@ -4,6 +4,11 @@
     android:layout_height="match_parent"
     android:background="@color/background_color">
 
+    <Button
+        android:id="@+id/video_button_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="gjdifuhg"/>
     <include layout="@layout/common_recycler_view" />
     
 </RelativeLayout>

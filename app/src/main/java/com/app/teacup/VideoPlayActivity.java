@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -27,7 +28,6 @@ import com.squareup.okhttp.Request;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +36,9 @@ import hb.xvideoplayer.MxVideoPlayer;
 import hb.xvideoplayer.MxVideoPlayerWidget;
 
 
-public class FanjuVideoActivity extends BaseActivity {
+public class VideoPlayActivity extends BaseActivity {
 
+    private static final String TAG = "VideoPlayActivity";
     private List<FanjuVideoInfo> mDatas;
     private LinearLayout mVideoContainer;
     private SwipeRefreshLayout mRefreshLayout;
@@ -66,7 +67,7 @@ public class FanjuVideoActivity extends BaseActivity {
 
     @Override
     protected void onLoadDataError() {
-        Toast.makeText(FanjuVideoActivity.this, getString(R.string.not_have_more_data),
+        Toast.makeText(VideoPlayActivity.this, getString(R.string.not_have_more_data),
                 Toast.LENGTH_SHORT).show();
         mRefreshLayout.setRefreshing(false);
     }
@@ -111,7 +112,7 @@ public class FanjuVideoActivity extends BaseActivity {
 
     private void startRefreshData() {
         mDatas.clear();
-        String videoUrl = getIntent().getStringExtra("fanjuVideoUrl");
+        String videoUrl = "http://www.1zdm.com/play/3953f18033.html";
         if (!TextUtils.isEmpty(videoUrl)) {
             OkHttpUtils.getAsyn(videoUrl, new OkHttpUtils.ResultCallback<String>() {
 
@@ -122,83 +123,92 @@ public class FanjuVideoActivity extends BaseActivity {
 
                 @Override
                 public void onResponse(String response) {
-                    parseData(response);
-                    sendParseDataMessage(LOAD_DATA_FINISH);
+                    parseBaseData(response);
                 }
             });
         }
-
     }
 
-    private void parseData(String response) {
+    private void parseBaseData(String response) {
         Document document = Jsoup.parse(response);
-        if (document != null) {
-            Element userVideo = document.getElementsByClass("user_video").get(0);
-            Element videoFrame = userVideo.getElementsByClass("video_frame").get(0);
-            Element danMu = videoFrame.getElementsByClass("danmu-div").get(0);
-            mVideoPlayUrl = danMu.getElementsByTag("video").get(0).attr("src");
+        try {
+            if (document != null) {
+                Element container = document.getElementsByClass("container").get(3);
+                Element fluid = container.getElementsByClass("container-fluid").get(0);
+                Element player = fluid.getElementById("player");
+                Element playerSwf = player.getElementById("player_swf");
+                String htmlUrl = playerSwf.attr("src");
+                if (!TextUtils.isEmpty("https://vs.6no.cc/xml.class.php?guhuo=en6vxGy1hr6YgKRudQO0O0OO0O0O&referer=https://vs.6no.cc/player/player.swf")) {
+                    OkHttpUtils.getAsyn(htmlUrl, new OkHttpUtils.ResultCallback<String>() {
 
-            Element videoSection = document.getElementsByClass("video_section").get(0);
-            Element contentVideo = videoSection.getElementsByClass("content_video").get(0);
-            Element shareVideo = contentVideo.getElementsByClass("share_video").get(0);
-            Element intrVideo = shareVideo.getElementsByClass("intr_video").get(0);
-            Elements pElements = intrVideo.getElementsByTag("p");
-            for (Element p : pElements) {
-                mVideoContent += p.text() + "\n";
-            }
+                        @Override
+                        public void onError(Request request, Exception e) {
+                            sendParseDataMessage(LOAD_DATA_ERROR);
+                        }
 
-            Element recVideo = contentVideo.getElementById("rec_video");
-            Element replyVideo = recVideo.getElementsByClass("reply_video").get(0);
-            Elements lis = replyVideo.getElementsByTag("ul").get(0).getElementsByTag("li");
-            for (Element li : lis) {
-                FanjuVideoInfo info = new FanjuVideoInfo();
-                Element a = li.getElementsByTag("a").get(0);
-                String nextUrl = "http://www.diyidan.com" + a.attr("href");
-                Element img = a.getElementsByTag("img").get(0);
-                String title = img.attr("alt");
-                String imgUrl = img.attr("src");
-                info.setNextUrl(nextUrl);
-                info.setVideoName(title);
-                info.setImgeUrl(imgUrl);
-                mDatas.add(info);
+                        @Override
+                        public void onResponse(String response) {
+                            parseVideoData(response);
+                            sendParseDataMessage(LOAD_DATA_FINISH);
+                        }
+                    });
+                }
             }
+        } catch (Exception e) {
+            Log.i(TAG, "parseBaseData: ====error===" + e.getMessage());
+        }
+    }
+
+    private void parseVideoData(String response) {
+        Document document = Jsoup.parse(response);
+        Log.i(TAG, "parseVideoData: ===response=" +response);
+        try {
+//            if (document != null) {
+//                Element a1 = document.getElementById("a1");
+//                Element object = a1.getElementsByTag("object").get(0);
+//                Element ckplayer = object.getElementsByTag("embed").get(0);
+//                String videoXmlUrl = ckplayer.attr("flashvars");
+//                Log.i(TAG, "parseVideoData: ====videoXmlUrl===" + videoXmlUrl);
+//            }
+        } catch (Exception e) {
+            Log.i(TAG, "parseVideoData: ====error===" + e.getMessage());
         }
     }
 
     private void initData() {
-        if (mDatas.isEmpty() && TextUtils.isEmpty(mVideoPlayUrl)) {
-            Toast.makeText(FanjuVideoActivity.this, getString(R.string.refresh_net_error),
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            mRefreshLayout.setEnabled(false);
-        }
-        if (!TextUtils.isEmpty(mVideoPlayUrl)) {
-            mxVideoPlayerWidget.startPlay(mVideoPlayUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL,
-                    getIntent().getStringExtra("fanjuVideoName"));
-            mxVideoPlayerWidget.mStartButton.performClick();
-            mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.VISIBLE,
-                    View.INVISIBLE, View.VISIBLE, View.INVISIBLE);
-        }
-
-        if (!TextUtils.isEmpty(mVideoContent)) {
-            mVideoIntroduce.setVisibility(View.VISIBLE);
-            mContentView.setVisibility(View.VISIBLE);
-            mContentView.setText(mVideoContent);
-            if (mVideoContent.contains("http://www.diyidan.com") ||
-                    mVideoContent.contains("http://website.diyidan.net")) {
-                mSearchBtn.setVisibility(View.VISIBLE);
-            }
-        }
-
-        if (!mDatas.isEmpty()) {
-            mXiangGuanText.setVisibility(View.VISIBLE);
-            addVideoInfoToContainer();
-        }
+//        if (mDatas.isEmpty() && TextUtils.isEmpty(mVideoPlayUrl)) {
+//            Toast.makeText(VideoPlayActivity.this, getString(R.string.refresh_net_error),
+//                    Toast.LENGTH_SHORT).show();
+//        } else {
+//            mRefreshLayout.setEnabled(false);
+//        }
+//        if (!TextUtils.isEmpty(mVideoPlayUrl)) {
+//            mxVideoPlayerWidget.startPlay(mVideoPlayUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL,
+//                    getIntent().getStringExtra("fanjuVideoName"));
+//            mxVideoPlayerWidget.mStartButton.performClick();
+//            mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.VISIBLE,
+//                    View.INVISIBLE, View.VISIBLE, View.INVISIBLE);
+//        }
+//
+//        if (!TextUtils.isEmpty(mVideoContent)) {
+//            mVideoIntroduce.setVisibility(View.VISIBLE);
+//            mContentView.setVisibility(View.VISIBLE);
+//            mContentView.setText(mVideoContent);
+//            if (mVideoContent.contains("http://www.diyidan.com") ||
+//                    mVideoContent.contains("http://website.diyidan.net")) {
+//                mSearchBtn.setVisibility(View.VISIBLE);
+//            }
+//        }
+//
+//        if (!mDatas.isEmpty()) {
+//            mXiangGuanText.setVisibility(View.VISIBLE);
+//            addVideoInfoToContainer();
+//        }
     }
 
     private void addVideoInfoToContainer() {
         for (final FanjuVideoInfo info : mDatas) {
-            View view = View.inflate(FanjuVideoActivity.this, R.layout.item_fanju_video_view, null);
+            View view = View.inflate(VideoPlayActivity.this, R.layout.item_fanju_video_view, null);
             TextView videoName = (TextView) view.findViewById(R.id.fanju_video_name);
             videoName.setText(info.getVideoName());
             ImageView videoImg = (ImageView) view.findViewById(R.id.fanju_video_img);
@@ -207,7 +217,7 @@ public class FanjuVideoActivity extends BaseActivity {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(FanjuVideoActivity.this, FanjuVideoActivity.class);
+                    Intent intent = new Intent(VideoPlayActivity.this, VideoPlayActivity.class);
                         intent.putExtra("fanjuVideoUrl", info.getNextUrl());
                         intent.putExtra("fanjuVideoName", info.getVideoName());
                         startActivity(intent);
@@ -259,14 +269,14 @@ public class FanjuVideoActivity extends BaseActivity {
     }
 
     private void showSearchDialog() {
-        final MaterialEditText editText = new MaterialEditText(FanjuVideoActivity.this);
+        final MaterialEditText editText = new MaterialEditText(VideoPlayActivity.this);
         editText.setHint(R.string.input_http);
         editText.setMetTextColor(Color.parseColor("#009688"));
         editText.setPrimaryColor(Color.parseColor("#009688"));
         editText.setMaxCharacters(100);
         editText.setErrorColor(Color.parseColor("#ff0000"));
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(FanjuVideoActivity.this)
+        AlertDialog.Builder builder = new AlertDialog.Builder(VideoPlayActivity.this)
                 .setTitle(R.string.search_video)
                 .setView(editText, 30, 20, 20, 20)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -280,12 +290,12 @@ public class FanjuVideoActivity extends BaseActivity {
 
     private void doSearch(String url) {
         if (url.startsWith("http") && (url.endsWith("detail/1") || url.endsWith("channel=share"))) {
-            Intent intent = new Intent(FanjuVideoActivity.this, FanjuVideoActivity.class);
+            Intent intent = new Intent(VideoPlayActivity.this, VideoPlayActivity.class);
             intent.putExtra("fanjuVideoUrl", url);
             intent.putExtra("fanjuVideoName", "");
             startActivity(intent);
         } else if (url.startsWith("http") && url.endsWith("detail/1#anchor_1")) {
-            Intent intent = new Intent(FanjuVideoActivity.this, FanjuNewsActivity.class);
+            Intent intent = new Intent(VideoPlayActivity.this, FanjuNewsActivity.class);
             intent.putExtra("fanjuNewsUrl", url);
             intent.putExtra("fanjuNewsTitle", "");
             intent.putExtra("fanjuNewsUserImgUrl", "");
@@ -293,7 +303,7 @@ public class FanjuVideoActivity extends BaseActivity {
             intent.putExtra("fanjuNewsUserTime", "");
             startActivity(intent);
         } else {
-            Toast.makeText(FanjuVideoActivity.this,
+            Toast.makeText(VideoPlayActivity.this,
                     R.string.parse_url_error, Toast.LENGTH_SHORT).show();
         }
     }
