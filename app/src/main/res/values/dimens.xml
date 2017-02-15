@@ -277,5 +277,21 @@
     <dimen name="layout_fanju_news_faBtn_elevation">3dp</dimen>
     <dimen name="layout_fanju_news_faBtn_translationZ">16dp</dimen>
 
+    <dimen name="layout_movie_play_mvpw_height">225dp</dimen>
+    <dimen name="layout_movie_play_srl_marginTop">8dp</dimen>
+    <dimen name="layout_movie_play_depend_tv_margin">8dp</dimen>
+    <dimen name="layout_movie_play_depend_tv_textSize">18sp</dimen>
+    <dimen name="layout_movie_play_depend_rv_marginLeft">8dp</dimen>
+
+    <dimen name="item_movie_play_rl_height">90dp</dimen>
+    <dimen name="item_movie_play_rl_paddingBottom">8dp</dimen>
+    <dimen name="item_movie_play_iv_width">100dp</dimen>
+    <dimen name="item_movie_play_iv_height">90dp</dimen>
+    <dimen name="item_movie_play_tv_name_marginLeft">8dp</dimen>
+    <dimen name="item_movie_play_tv_name_marginRight">8dp</dimen>
+    <dimen name="item_movie_play_tv_name_marginTop">8dp</dimen>
+    <dimen name="item_movie_play_tv_name_textSize">16sp</dimen>
+    <dimen name="item_movie_play_tv_time_marginBottom">8dp</dimen>
+    <dimen name="item_movie_play_tv_time_textSize">15sp</dimen>
 
 </resources>

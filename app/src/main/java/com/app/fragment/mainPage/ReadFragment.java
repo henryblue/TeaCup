@@ -2,7 +2,6 @@ package com.app.fragment.mainPage;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,12 +9,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
-import com.app.teacup.VideoPlayActivity;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -49,14 +46,6 @@ public class ReadFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private void initView(View view) {
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
         mRecyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
-        Button btn = (Button) view.findViewById(R.id.video_button_ll);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), VideoPlayActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void setupRefreshLayout() {

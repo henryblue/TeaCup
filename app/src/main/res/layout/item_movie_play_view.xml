@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="?android:attr/selectableItemBackground"
+    android:layout_height="@dimen/item_movie_play_rl_height"
+    android:paddingBottom="@dimen/item_movie_play_rl_paddingBottom">
+
+    <ImageView
+        android:id="@+id/moive_play_img"
+        android:layout_width="@dimen/item_movie_play_iv_width"
+        android:layout_height="@dimen/item_movie_play_iv_height"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/movie_play_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/moive_play_img"
+        android:layout_marginLeft="@dimen/item_movie_play_tv_name_marginLeft"
+        android:layout_marginRight="@dimen/item_movie_play_tv_name_marginRight"
+        android:layout_marginTop="@dimen/item_movie_play_tv_name_marginTop"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/item_movie_play_tv_name_textSize" />
+
+    <TextView
+        android:id="@+id/movie_play_addTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/movie_play_name"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/item_movie_play_tv_time_marginBottom"
+        android:textColor="@color/font_color"
+        android:textSize="@dimen/item_movie_play_tv_time_textSize"
+        android:maxLines="1"
+        android:ellipsize="end" />
+</RelativeLayout>
