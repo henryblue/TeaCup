@@ -25,8 +25,7 @@ public class urlUtils {
     public static final String QIUBAI18_URL = "http://www.qiushibaike18.com/";
     public static final String QIUBAI18_NEXT_URL = "http://www.qiushibaike18.com/page/";
 
-    public static final String READ_URL = "http://www.pianke.me/read/";
-    public static final String READ_URL_NEXT_HEAD = "http://www.pianke.me";
+    public static final String MOVIE_URL = "http://www.1zdm.com";
 
     public static final String NEWS_JIANDAN_URL = "http://jandan.net";
     public static final String NEWS_NEXT_URL = "http://jandan.net/page/";

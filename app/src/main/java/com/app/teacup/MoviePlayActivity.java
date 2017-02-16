@@ -87,8 +87,9 @@ public class MoviePlayActivity extends BaseActivity {
         if (!TextUtils.isEmpty(mVideoUrl)) {
             String videoName = getIntent().getStringExtra("moviePlayName");
             mxVideoPlayerWidget.startPlay(mVideoUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL, videoName);
-            mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.VISIBLE,
-                    View.INVISIBLE, View.VISIBLE, View.INVISIBLE);
+        } else {
+            Toast.makeText(MoviePlayActivity.this, getString(R.string.parse_url_error),
+                    Toast.LENGTH_SHORT).show();
         }
 
         if (!mDatas.isEmpty()) {
@@ -281,6 +282,7 @@ public class MoviePlayActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        destroyWebView();
         MxVideoPlayer.releaseAllVideos();
     }
 
