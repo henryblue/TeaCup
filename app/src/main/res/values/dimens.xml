@@ -309,4 +309,8 @@
     <dimen name="movie_detail_block_tip_textSize">16sp</dimen>
     <dimen name="movie_detail_iv_top_height">150dp</dimen>
 
+    <dimen name="tv_series_textView_item_margin">8dp</dimen>
+    <dimen name="tv_series_textView_item_textSize">17sp</dimen>
+    <dimen name="tv_series_textView_item_width">65dp</dimen>
+    <dimen name="tv_series_textView_item_height">45dp</dimen>
 </resources>

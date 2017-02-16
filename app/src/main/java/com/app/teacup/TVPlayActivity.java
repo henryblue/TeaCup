@@ -19,12 +19,18 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.adapter.MoviePlayRecyclerAdapter;
+import com.app.adapter.TvPlayRecyclerAdapter;
 import com.app.bean.movie.MoviePlayInfo;
+import com.app.bean.movie.TvItemInfo;
 import com.app.util.OkHttpUtils;
+import com.app.util.urlUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.squareup.okhttp.Request;
 
 import org.jsoup.Jsoup;
@@ -39,22 +45,26 @@ import hb.xvideoplayer.MxVideoPlayer;
 import hb.xvideoplayer.MxVideoPlayerWidget;
 
 
-public class MoviePlayActivity extends BaseActivity {
+public class TVPlayActivity extends BaseActivity {
 
-    private static final String TAG = "MoviePlayActivity";
+    private static final String TAG = "TVPlayActivity";
     private List<MoviePlayInfo> mDatas;
+    private List<TvItemInfo> mTvDatas;
     private SwipeRefreshLayout mRefreshLayout;
     private WebView mWebView;
     private String mVideoUrl;
     private MxVideoPlayerWidget mxVideoPlayerWidget;
     private TextView mDependText;
+    private TextView mTvText;
     private RecyclerView mRecyclerView;
+    private LinearLayout mMoreContainer;
     private boolean mIsInitData = false;
+    public static int mPlayIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_movie_play_view);
+        setContentView(R.layout.layout_tv_play_view);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -67,11 +77,14 @@ public class MoviePlayActivity extends BaseActivity {
 
     private void initView() {
         mDatas = new ArrayList<>();
-        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.movie_srl_refresh);
-        mWebView = (WebView) findViewById(R.id.movie_base_webView);
-        mxVideoPlayerWidget = (MxVideoPlayerWidget) findViewById(R.id.movie_video_player);
-        mDependText = (TextView) findViewById(R.id.movie_depend_textview);
-        mRecyclerView = (RecyclerView) findViewById(R.id.movie_base_recyclerView);
+        mTvDatas = new ArrayList<>();
+        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.tv_srl_refresh);
+        mWebView = (WebView) findViewById(R.id.tv_base_webView);
+        mxVideoPlayerWidget = (MxVideoPlayerWidget) findViewById(R.id.tv_video_player);
+        mTvText = (TextView) findViewById(R.id.tv_series_textView);
+        mDependText = (TextView) findViewById(R.id.tv_depend_textview);
+        mMoreContainer = (LinearLayout) findViewById(R.id.tv_base_container);
+        mRecyclerView = (RecyclerView) findViewById(R.id.tv_numbers_recyclerView);
 
         mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
                 View.INVISIBLE, View.INVISIBLE, View.INVISIBLE);
@@ -82,7 +95,7 @@ public class MoviePlayActivity extends BaseActivity {
             return;
         }
         if (mDatas.isEmpty() && TextUtils.isEmpty(mVideoUrl)) {
-            Toast.makeText(MoviePlayActivity.this, getString(R.string.refresh_net_error),
+            Toast.makeText(TVPlayActivity.this, getString(R.string.refresh_net_error),
                     Toast.LENGTH_SHORT).show();
         } else {
             mRefreshLayout.setEnabled(false);
@@ -92,35 +105,85 @@ public class MoviePlayActivity extends BaseActivity {
             String videoName = getIntent().getStringExtra("moviePlayName");
             mxVideoPlayerWidget.startPlay(mVideoUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL, videoName);
         } else {
-            Toast.makeText(MoviePlayActivity.this, getString(R.string.parse_url_error),
+            Toast.makeText(TVPlayActivity.this, getString(R.string.parse_url_error),
                     Toast.LENGTH_SHORT).show();
         }
 
+        if (!mTvDatas.isEmpty()) {
+            mTvText.setVisibility(View.VISIBLE);
+            setupRecyclerView();
+        }
         if (!mDatas.isEmpty()) {
             mDependText.setVisibility(View.VISIBLE);
-            setupRecyclerView();
+            for (int i = 0; i < mDatas.size(); i++) {
+                loadViewToContainer(i);
+            }
         }
     }
 
     private void setupRecyclerView() {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        MoviePlayRecyclerAdapter adapter = new MoviePlayRecyclerAdapter(MoviePlayActivity.this, mDatas);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecyclerView.setLayoutManager(manager);
+        final TvPlayRecyclerAdapter adapter = new TvPlayRecyclerAdapter(TVPlayActivity.this, mTvDatas);
         mRecyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new MoviePlayRecyclerAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new TvPlayRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(MoviePlayActivity.this, MoviePlayActivity.class);
+                mPlayIndex = position;
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+
+    private void loadViewToContainer(final int position) {
+        View itemView = View.inflate(TVPlayActivity.this, R.layout.item_movie_play_view, null);
+        ImageView imageView = (ImageView) itemView.findViewById(R.id.moive_play_img);
+        TextView nameView = (TextView) itemView.findViewById(R.id.movie_play_name);
+        TextView timeView = (TextView) itemView.findViewById(R.id.movie_play_addTime);
+        MoviePlayInfo info = mDatas.get(position);
+        timeView.setText(info.getAddTime());
+        nameView.setText(info.getMovieName());
+        loadImageResource(info.getImgUrl(), imageView);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TVPlayActivity.this, TVPlayActivity.class);
                 intent.putExtra("moviePlayUrl", mDatas.get(position).getNextUrl());
                 intent.putExtra("moviePlayName", mDatas.get(position).getMovieName());
                 startActivity(intent);
             }
         });
+        mMoreContainer.addView(itemView);
+    }
+
+    private void loadImageResource(String url, ImageView imageView) {
+        if (!MainActivity.mIsLoadPhoto) {
+            Glide.with(TVPlayActivity.this).load(url).asBitmap()
+                    .error(R.drawable.photo_loaderror)
+                    .placeholder(R.drawable.main_load_bg)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .dontAnimate()
+                    .into(imageView);
+        } else {
+            if (MainActivity.mIsWIFIState) {
+                Glide.with(TVPlayActivity.this).load(url).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.main_load_bg)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .into(imageView);
+            } else {
+                imageView.setImageResource(R.drawable.main_load_bg);
+            }
+        }
     }
 
     @Override
     protected void onLoadDataError() {
         destroyWebView();
-        Toast.makeText(MoviePlayActivity.this, getString(R.string.not_have_more_data),
+        Toast.makeText(TVPlayActivity.this, getString(R.string.not_have_more_data),
                 Toast.LENGTH_SHORT).show();
         mRefreshLayout.setRefreshing(false);
     }
@@ -189,6 +252,22 @@ public class MoviePlayActivity extends BaseActivity {
         try {
             if (document != null) {
                 Element container = document.getElementsByClass("container").get(3);
+                //parse tv data
+                Element colMd = container.getElementsByClass("container-fluid").get(0)
+                        .getElementsByClass("col-md-12").get(0);
+                Element group = colMd.getElementsByClass("dslist-group").get(0);
+                Elements groupItems = group.getElementsByClass("dslist-group-item");
+                for (Element groupItem : groupItems) {
+                    TvItemInfo tvItemInfo = new TvItemInfo();
+                    Element a = groupItem.getElementsByTag("a").get(0);
+                    String nextUrl = urlUtils.MOVIE_URL + a.attr("href");
+                    Log.i(TAG, "parseVideoData: nexturl==" + nextUrl);
+                    tvItemInfo.setNextUrl(nextUrl);
+                    String name = a.text();
+                    Log.i(TAG, "parseVideoData: name==" + name);
+                    tvItemInfo.setName(name);
+                    mTvDatas.add(tvItemInfo);
+                }
                 //parse more video info
                 Element row = container.getElementsByClass("row").get(0);
                 Elements moreMovies = row.getElementsByClass("movie-item-out");

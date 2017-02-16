@@ -61,6 +61,8 @@
         <activity android:name=".FanjuNewsActivity" />
         <activity android:name=".MoviePlayActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity android:name=".TVPlayActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
             android:name=".FanjuVideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />

@@ -76,10 +76,11 @@
     <string name="related_recommend">相关推荐</string>
     <string name="parse_url_error">解析地址失败, 请重试</string>
     <string name="item_movie_more"><![CDATA[更多>>]]></string>
+    <string name="tv_series">剧集</string>
 
     <string-array name="tab_name">
         <item>新鲜事</item>
-        <item>阅读</item>
+        <item>影视</item>
         <item>音乐期刊</item>
         <item>番剧</item>
     </string-array>

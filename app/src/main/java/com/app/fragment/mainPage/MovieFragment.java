@@ -19,6 +19,7 @@ import com.app.bean.movie.MovieItemInfo;
 import com.app.fragment.BaseFragment;
 import com.app.teacup.MoviePlayActivity;
 import com.app.teacup.R;
+import com.app.teacup.TVPlayActivity;
 import com.app.util.OkHttpUtils;
 import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -200,11 +201,11 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
             mMovieDetailAdapter.setOnItemClickListener(new MovieDetailRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position, int itemPosition) {
-                    MovieItemInfo itemInfo = mDatas.get(position).getMovieInfoList().get(itemPosition);
-                    Intent intent = new Intent(getContext(), MoviePlayActivity.class);
-                    intent.putExtra("moviePlayUrl", itemInfo.getNextUrl());
-                    intent.putExtra("moviePlayName", itemInfo.getMovieName());
-                    startActivity(intent);
+                    if (position < 2) {
+                        enterPlayPage(position, itemPosition, MoviePlayActivity.class);
+                    } else {
+                        enterPlayPage(position, itemPosition, TVPlayActivity.class);
+                    }
                 }
 
                 @Override
@@ -219,6 +220,14 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
             Toast.makeText(getContext(), getString(R.string.screen_shield),
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void enterPlayPage(int position, int itemPosition, Class<?> className) {
+        MovieItemInfo itemInfo = mDatas.get(position).getMovieInfoList().get(itemPosition);
+        Intent intent = new Intent(getContext(), className);
+        intent.putExtra("moviePlayUrl", itemInfo.getNextUrl());
+        intent.putExtra("moviePlayName", itemInfo.getMovieName());
+        startActivity(intent);
     }
 
     @Override
