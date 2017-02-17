@@ -313,4 +313,22 @@
     <dimen name="tv_series_textView_item_textSize">17sp</dimen>
     <dimen name="tv_series_textView_item_width">65dp</dimen>
     <dimen name="tv_series_textView_item_height">45dp</dimen>
+
+    <dimen name="layout_tv_play_player_height">225dp</dimen>
+    <dimen name="layout_tv_play_srl_marginTop">8dp</dimen>
+    <dimen name="layout_tv_play_tv_margin">8dp</dimen>
+    <dimen name="layout_tv_play_tv_textSize">18sp</dimen>
+    <dimen name="layout_tv_play_tv_depend_textSize">18sp</dimen>
+    <dimen name="layout_tv_play_ll_marginLeft">8dp</dimen>
+
+    <dimen name="item_movie_more_rl_marginRight">2dp</dimen>
+    <dimen name="item_movie_more_rl_marginBottom">8dp</dimen>
+    <dimen name="item_movie_more_rl_width">160dp</dimen>
+    <dimen name="item_movie_more_rl_height">205dp</dimen>
+    <dimen name="item_movie_more_iv_height">155dp</dimen>
+    <dimen name="item_movie_more_tv_tip_height">20dp</dimen>
+    <dimen name="item_movie_more_tv_tip_marginTop">135dp</dimen>
+    <dimen name="item_movie_more_tv_tip_textSize">13sp</dimen>
+    <dimen name="item_movie_more_tv_name_margin">4dp</dimen>
+    <dimen name="item_movie_more_tv_name_textSize">14sp</dimen>
 </resources>

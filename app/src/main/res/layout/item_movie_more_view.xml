@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/item_movie_more_rl_width"
+    android:layout_height="@dimen/item_movie_more_rl_height"
+    android:layout_below="@id/movie_detail_top"
+    android:layout_marginRight="@dimen/item_movie_more_rl_marginRight"
+    android:layout_marginBottom="@dimen/item_movie_more_rl_marginBottom"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/movie_more_imageView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_movie_more_iv_height"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/movie_more_tip"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_movie_more_tv_tip_height"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/item_movie_more_tv_tip_marginTop"
+        android:background="@color/movie_tip_color"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/item_movie_more_tv_tip_textSize" />
+
+    <TextView
+        android:id="@+id/movie_more_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/movie_more_imageView"
+        android:layout_margin="@dimen/item_movie_more_tv_name_margin"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/item_movie_more_tv_name_textSize" />
+
+</RelativeLayout>

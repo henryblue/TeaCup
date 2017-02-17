@@ -99,4 +99,10 @@
         <item>姨妈红</item>
         <item>基佬紫</item>
     </string-array>
+    <string-array name="video_style">
+        <item>电影</item>
+        <item>电视剧</item>
+        <item>综艺</item>
+        <item>动漫</item>
+    </string-array>
 </resources>

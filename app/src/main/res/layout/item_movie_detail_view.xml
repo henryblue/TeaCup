@@ -52,12 +52,12 @@
 
         <TextView
             android:id="@+id/movie_detail_tip1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/item_movie_detail_tv_tip_height"
             android:layout_alignParentRight="true"
             android:layout_marginTop="@dimen/item_movie_detail_tv_tip_marginTop"
             android:gravity="center"
-            android:background="@color/yellow"
+            android:background="@color/movie_tip_color"
             android:textColor="@color/white"
             android:textSize="@dimen/item_movie_detail_tv_textSize" />
 
@@ -100,11 +100,11 @@
 
         <TextView
             android:id="@+id/movie_detail_tip2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/item_movie_detail_tv_tip_height"
             android:layout_alignParentRight="true"
             android:layout_marginTop="@dimen/item_movie_detail_tv_tip_marginTop"
-            android:background="@color/yellow"
+            android:background="@color/movie_tip_color"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="@dimen/item_movie_detail_tv_textSize" />
@@ -149,11 +149,11 @@
 
         <TextView
             android:id="@+id/movie_detail_tip3"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/item_movie_detail_tv_tip_height"
             android:layout_alignParentRight="true"
             android:layout_marginTop="@dimen/item_movie_detail_tv_tip_marginTop"
-            android:background="@color/yellow"
+            android:background="@color/movie_tip_color"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="@dimen/item_movie_detail_tv_textSize" />
@@ -197,11 +197,11 @@
 
         <TextView
             android:id="@+id/movie_detail_tip4"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/item_movie_detail_tv_tip_height"
             android:layout_alignParentRight="true"
             android:layout_marginTop="@dimen/item_movie_detail_tv_tip_marginTop"
-            android:background="@color/yellow"
+            android:background="@color/movie_tip_color"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="@dimen/item_movie_detail_tv_textSize" />
@@ -246,11 +246,11 @@
 
         <TextView
             android:id="@+id/movie_detail_tip5"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/item_movie_detail_tv_tip_height"
             android:layout_alignParentRight="true"
             android:layout_marginTop="@dimen/item_movie_detail_tv_tip_marginTop"
-            android:background="@color/yellow"
+            android:background="@color/movie_tip_color"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="@dimen/item_movie_detail_tv_textSize" />
@@ -294,11 +294,11 @@
 
         <TextView
             android:id="@+id/movie_detail_tip6"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/item_movie_detail_tv_tip_height"
             android:layout_alignParentRight="true"
             android:layout_marginTop="@dimen/item_movie_detail_tv_tip_marginTop"
-            android:background="@color/yellow"
+            android:background="@color/movie_tip_color"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="@dimen/item_movie_detail_tv_textSize" />

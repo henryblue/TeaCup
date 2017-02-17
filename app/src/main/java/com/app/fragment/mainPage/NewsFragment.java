@@ -65,9 +65,9 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.news_fragment, container, false);
-        initView(view);
-        setupRefreshLayout();
-        setupRecycleView();
+//        initView(view);
+//        setupRefreshLayout();
+//        setupRecycleView();
         return view;
     }
 

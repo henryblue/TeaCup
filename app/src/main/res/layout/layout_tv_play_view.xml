@@ -16,14 +16,14 @@
     <hb.xvideoplayer.MxVideoPlayerWidget
         android:id="@+id/tv_video_player"
         android:layout_width="match_parent"
-        android:layout_height="225dp" />
+        android:layout_height="@dimen/layout_tv_play_player_height" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/tv_srl_refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_video_player"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="@dimen/layout_tv_play_srl_marginTop">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -38,10 +38,10 @@
                     android:id="@+id/tv_series_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_margin="@dimen/layout_tv_play_tv_margin"
                     android:text="@string/tv_series"
                     android:textColor="@color/deep_gray"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/layout_tv_play_tv_textSize"
                     android:visibility="gone" />
 
                 <android.support.v7.widget.RecyclerView
@@ -53,17 +53,17 @@
                     android:id="@+id/tv_depend_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_margin="@dimen/layout_tv_play_tv_margin"
                     android:text="@string/related_recommend"
                     android:textColor="@color/deep_gray"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/layout_tv_play_tv_depend_textSize"
                     android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/tv_base_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginLeft="@dimen/layout_tv_play_ll_marginLeft"
                     android:orientation="vertical" />
 
             </LinearLayout>

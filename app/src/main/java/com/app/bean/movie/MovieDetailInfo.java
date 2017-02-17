@@ -5,8 +5,17 @@ import java.util.List;
 
 public class MovieDetailInfo {
 
-    String movieBlockName;
-    List<MovieItemInfo> movieInfoList;
+    private String movieBlockName;
+    private String moreUrl;
+    private List<MovieItemInfo> movieInfoList;
+
+    public String getMoreUrl() {
+        return moreUrl;
+    }
+
+    public void setMoreUrl(String moreUrl) {
+        this.moreUrl = moreUrl;
+    }
 
     public String getMovieBlockName() {
         return movieBlockName;

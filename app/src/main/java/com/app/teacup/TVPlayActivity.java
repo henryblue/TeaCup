@@ -149,6 +149,7 @@ public class TVPlayActivity extends BaseActivity {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mPlayIndex = 0;
                 Intent intent = new Intent(TVPlayActivity.this, TVPlayActivity.class);
                 intent.putExtra("moviePlayUrl", mDatas.get(position).getNextUrl());
                 intent.putExtra("moviePlayName", mDatas.get(position).getMovieName());
@@ -261,10 +262,8 @@ public class TVPlayActivity extends BaseActivity {
                     TvItemInfo tvItemInfo = new TvItemInfo();
                     Element a = groupItem.getElementsByTag("a").get(0);
                     String nextUrl = urlUtils.MOVIE_URL + a.attr("href");
-                    Log.i(TAG, "parseVideoData: nexturl==" + nextUrl);
                     tvItemInfo.setNextUrl(nextUrl);
                     String name = a.text();
-                    Log.i(TAG, "parseVideoData: name==" + name);
                     tvItemInfo.setName(name);
                     mTvDatas.add(tvItemInfo);
                 }
@@ -328,7 +327,6 @@ public class TVPlayActivity extends BaseActivity {
                 @Override
                 public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
                         String url = request.getUrl().toString();
                         if (url.startsWith("http") && (url.contains("sid") || url.contains("mp4"))) {
                             mVideoUrl = url;

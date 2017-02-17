@@ -17,6 +17,7 @@ import com.app.adapter.MovieDetailRecyclerAdapter;
 import com.app.bean.movie.MovieDetailInfo;
 import com.app.bean.movie.MovieItemInfo;
 import com.app.fragment.BaseFragment;
+import com.app.teacup.MoreMovieShowActivity;
 import com.app.teacup.MoviePlayActivity;
 import com.app.teacup.R;
 import com.app.teacup.TVPlayActivity;
@@ -144,6 +145,12 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
                     for (Element item : movieItem) {
                         if (j == 0) { // get label name
                             String labelName = item.getElementsByTag("h3").get(0).text();
+                            Elements span = item.getElementsByTag("span");
+                            if (span.size() > 0) {
+                                String moreUrl = urlUtils.MOVIE_URL + span.get(0)
+                                        .getElementsByTag("a").get(0).attr("href");
+                                info.setMoreUrl(moreUrl);
+                            }
                             info.setMovieBlockName(labelName);
                         } else if (j < 7 && j > 0) { // only need 6 item
                             MovieItemInfo itemInfo = parseMovieItemInfo(item);
@@ -211,7 +218,11 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
                 @Override
                 public void onMoreItemClick(View view, int position) {
                     if (position > 0) {
-
+                        String moreUrl = mDatas.get(position).getMoreUrl();
+                        Intent intent = new Intent(getContext(), MoreMovieShowActivity.class);
+                        intent.putExtra("moreMovieUrl", moreUrl);
+                        intent.putExtra("movieStyle", position - 1);
+                        startActivity(intent);
                     }
                 }
 
