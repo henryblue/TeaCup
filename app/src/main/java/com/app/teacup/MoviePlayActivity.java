@@ -90,7 +90,10 @@ public class MoviePlayActivity extends BaseActivity {
 
         if (!TextUtils.isEmpty(mVideoUrl)) {
             String videoName = getIntent().getStringExtra("moviePlayName");
+            mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
+                    View.VISIBLE, View.INVISIBLE, View.INVISIBLE);
             mxVideoPlayerWidget.startPlay(mVideoUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL, videoName);
+            mxVideoPlayerWidget.mStartButton.performClick();
         } else {
             Toast.makeText(MoviePlayActivity.this, getString(R.string.parse_url_error),
                     Toast.LENGTH_SHORT).show();

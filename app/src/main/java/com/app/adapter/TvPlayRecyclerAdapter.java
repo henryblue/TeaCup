@@ -44,7 +44,7 @@ public class TvPlayRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         viewHolder.mTextView.setTextColor(Color.BLACK);
         TvItemInfo info = mDatas.get(position);
         viewHolder.mTextView.setText(info.getName());
-        if (position == TVPlayActivity.mPlayIndex) {
+        if (position == ((TVPlayActivity)mContext).mPlayIndex) {
             viewHolder.mTextView.setTextColor(ContextCompat.getColor(mContext, R.color.deepYellow));
         }
     }
@@ -66,6 +66,8 @@ public class TvPlayRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 .getDimensionPixelOffset(R.dimen.tv_series_textView_item_margin);
         private int width = mContext.getResources()
                 .getDimensionPixelOffset(R.dimen.tv_series_textView_item_width);
+        private int maxWidth = mContext.getResources()
+                .getDimensionPixelOffset(R.dimen.tv_series_textView_item_max_width);
         private int height = mContext.getResources()
                 .getDimensionPixelOffset(R.dimen.tv_series_textView_item_height);
         private int textSize = mContext.getResources().getDimensionPixelSize(R.dimen.tv_series_textView_item_textSize);
@@ -74,8 +76,12 @@ public class TvPlayRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             super(itemView);
             mTextView = (TextView) itemView;
             itemView.setOnClickListener(this);
-            RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(width, height);
+            RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.setMargins(margin, margin, margin, margin);
+            mTextView.setMinHeight(height);
+            mTextView.setMinWidth(width);
+            mTextView.setMaxWidth(maxWidth);
             mTextView.setLayoutParams(params);
             mTextView.setGravity(Gravity.CENTER);
             mTextView.setTextColor(Color.BLACK);

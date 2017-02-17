@@ -59,7 +59,8 @@ public class TVPlayActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
     private LinearLayout mMoreContainer;
     private boolean mIsInitData = false;
-    public static int mPlayIndex = 0;
+    public int mPlayIndex = 0;
+    private boolean mIsChangeVideo = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +104,10 @@ public class TVPlayActivity extends BaseActivity {
 
         if (!TextUtils.isEmpty(mVideoUrl)) {
             String videoName = getIntent().getStringExtra("moviePlayName");
+            mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
+                    View.VISIBLE, View.INVISIBLE, View.INVISIBLE);
             mxVideoPlayerWidget.startPlay(mVideoUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL, videoName);
+            mxVideoPlayerWidget.mStartButton.performClick();
         } else {
             Toast.makeText(TVPlayActivity.this, getString(R.string.parse_url_error),
                     Toast.LENGTH_SHORT).show();
@@ -130,12 +134,19 @@ public class TVPlayActivity extends BaseActivity {
         adapter.setOnItemClickListener(new TvPlayRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                mPlayIndex = position;
-                adapter.notifyDataSetChanged();
+                if (mPlayIndex != position) {
+                    mIsChangeVideo = true;
+                    mPlayIndex = position;
+                    adapter.notifyDataSetChanged();
+                    String nextUrl = mTvDatas.get(position).getNextUrl();
+                    mWebView.loadUrl(nextUrl);
+                    MxVideoPlayer.releaseAllVideos();
+                    mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
+                            View.VISIBLE, View.INVISIBLE, View.INVISIBLE);
+                }
             }
         });
     }
-
 
     private void loadViewToContainer(final int position) {
         View itemView = View.inflate(TVPlayActivity.this, R.layout.item_movie_play_view, null);
@@ -149,7 +160,6 @@ public class TVPlayActivity extends BaseActivity {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPlayIndex = 0;
                 Intent intent = new Intent(TVPlayActivity.this, TVPlayActivity.class);
                 intent.putExtra("moviePlayUrl", mDatas.get(position).getNextUrl());
                 intent.putExtra("moviePlayName", mDatas.get(position).getMovieName());
@@ -183,18 +193,26 @@ public class TVPlayActivity extends BaseActivity {
 
     @Override
     protected void onLoadDataError() {
-        destroyWebView();
+        mWebView.loadUrl("about:blank");
         Toast.makeText(TVPlayActivity.this, getString(R.string.not_have_more_data),
                 Toast.LENGTH_SHORT).show();
         mRefreshLayout.setRefreshing(false);
+        mIsChangeVideo = false;
     }
 
     @Override
     protected void onLoadDataFinish() {
-        destroyWebView();
+        mWebView.loadUrl("about:blank");
         mRefreshLayout.setRefreshing(false);
         initData();
         mIsInitData = true;
+        if (mIsChangeVideo) {
+            String videoName = getIntent().getStringExtra("moviePlayName") +
+                    "-" + mTvDatas.get(mPlayIndex).getName();
+            mxVideoPlayerWidget.startPlay(mVideoUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL, videoName);
+            mxVideoPlayerWidget.mStartButton.performClick();
+            mIsChangeVideo = false;
+        }
     }
 
     @Override
@@ -321,7 +339,9 @@ public class TVPlayActivity extends BaseActivity {
             mWebView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {
-                    sendParseDataMessage(LOAD_DATA_FINISH);
+                    if (!url.contains("about:blank")) {
+                        sendParseDataMessage(LOAD_DATA_FINISH);
+                    }
                 }
 
                 @Override
@@ -365,8 +385,13 @@ public class TVPlayActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        destroyWebView();
         MxVideoPlayer.releaseAllVideos();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        destroyWebView();
     }
 
     @Override
