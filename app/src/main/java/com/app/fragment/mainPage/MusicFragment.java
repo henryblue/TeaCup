@@ -132,8 +132,7 @@ public class MusicFragment extends BaseFragment implements SwipeRefreshLayout.On
         HttpUtils.sendHttpRequest(urlUtils.MUSIC_URL, new HttpUtils.HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
-                parseMusicData(response);
-                sendParseDataMessage(REFRESH_FINISH);
+                parseMusicData(response, 0);
             }
 
             @Override
@@ -155,8 +154,7 @@ public class MusicFragment extends BaseFragment implements SwipeRefreshLayout.On
         HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
-                parseMusicData(response);
-                sendParseDataMessage(LOAD_DATA_FINISH);
+                parseMusicData(response, 1);
             }
 
             @Override
@@ -166,32 +164,41 @@ public class MusicFragment extends BaseFragment implements SwipeRefreshLayout.On
         });
     }
 
-    private void parseMusicData(String response) {
+    private void parseMusicData(String response, int index) {
         Document document = Jsoup.parse(response);
-        Element container = document.getElementsByClass("container").get(0);
-        Element clearfix = container.getElementsByClass("clearfix").get(0);
-        Element article = clearfix.getElementsByClass("article").get(0);
-        Element volList = article.getElementsByClass("vol-list").get(0);
-        Elements items = volList.getElementsByClass("item");
-        for (Element item : items) {
-            MusicInfo info = new MusicInfo();
-            Element element = item.getElementsByClass("cover-wrapper").get(0);
-            String url = element.attr("href");
-            info.setNextUrl(url);
-            Element img = element.getElementsByTag("img").get(0);
-            String src = img.attr("src");
-            String[] split = src.split("\\?");
-            info.setImgUrl(split[0]);
+        try {
+            Element container = document.getElementsByClass("container").get(0);
+            Element clearfix = container.getElementsByClass("clearfix").get(0);
+            Element article = clearfix.getElementsByClass("article").get(0);
+            Element volList = article.getElementsByClass("vol-list").get(0);
+            Elements items = volList.getElementsByClass("item");
+            for (Element item : items) {
+                MusicInfo info = new MusicInfo();
+                Element element = item.getElementsByClass("cover-wrapper").get(0);
+                String url = element.attr("href");
+                info.setNextUrl(url);
+                Element img = element.getElementsByTag("img").get(0);
+                String src = img.attr("src");
+                String[] split = src.split("\\?");
+                info.setImgUrl(split[0]);
 
-            Element meta = item.getElementsByClass("meta").get(0);
-            Element name = meta.getElementsByClass("name").get(0);
-            info.setTitle(name.text());
+                Element meta = item.getElementsByClass("meta").get(0);
+                Element name = meta.getElementsByClass("name").get(0);
+                info.setTitle(name.text());
 
-            String comments = meta.getElementsByClass("comments").get(0).text();
-            String favs = meta.getElementsByClass("favs").get(0).text();
-            info.setHappyNum(favs);
-            info.setInfoNum(comments);
-            mMusicDatas.add(info);
+                String comments = meta.getElementsByClass("comments").get(0).text();
+                String favs = meta.getElementsByClass("favs").get(0).text();
+                info.setHappyNum(favs);
+                info.setInfoNum(comments);
+                mMusicDatas.add(info);
+            }
+            if (index > 0) {
+                sendParseDataMessage(LOAD_DATA_FINISH);
+            } else {
+                sendParseDataMessage(REFRESH_FINISH);
+            }
+        } catch (Exception e) {
+            sendParseDataMessage(LOAD_DATA_ERROR);
         }
     }
 

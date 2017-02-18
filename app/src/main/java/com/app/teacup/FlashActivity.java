@@ -1,17 +1,48 @@
 package com.app.teacup;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.WindowManager;
 
+import com.app.util.HttpUtils;
+import com.app.util.OkHttpUtils;
 import com.app.util.ToolUtils;
+import com.app.util.urlUtils;
+import com.squareup.okhttp.Request;
+
+import java.io.FileOutputStream;
 
 public class FlashActivity extends Activity {
 
-    private static final int LAUNCHER_TIME = 1500;
+    private static final int PRE_LOAD_DATA_FINISH = 0;
+    private static final int PRE_LOAD_DATA_ERROR = 1;
+    private static final String TAG = "FlashActivity";
+
+    @SuppressLint("HandlerLeak")
+    public Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case PRE_LOAD_DATA_FINISH:
+                case PRE_LOAD_DATA_ERROR:
+                    if (msg.arg1 == 1) {
+                        enterMainPage();
+                    } else if (msg.arg1 == 0){
+                        preloadMoviesData();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +56,61 @@ public class FlashActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        preloadNewsData();
+    }
+
+    private void preloadNewsData() {
+        HttpUtils.sendHttpRequest(urlUtils.NEWS_JIANDAN_URL, new HttpUtils.HttpCallBackListener() {
             @Override
-            public void run() {
-                enterMainPage();
+            public void onFinish(String response) {
+                try {
+                    FileOutputStream outputStream = openFileOutput(getString(R.string.news_cache_name),
+                            MODE_PRIVATE);
+                    outputStream.write(response.getBytes());
+                    outputStream.close();
+                } catch (Exception e) {
+                    Log.i(TAG, "preloadNewsData: error==" + e.getMessage());
+                }
+                sendParseDataMessage(PRE_LOAD_DATA_FINISH, 0);
             }
-        }, LAUNCHER_TIME);
+
+            @Override
+            public void onError(Exception e) {
+                sendParseDataMessage(PRE_LOAD_DATA_ERROR, 0);
+            }
+        });
+    }
+
+    private void preloadMoviesData() {
+        OkHttpUtils.getAsyn(urlUtils.MOVIE_URL, new OkHttpUtils.ResultCallback<String>() {
+
+            @Override
+            public void onError(Request request, Exception e) {
+                sendParseDataMessage(PRE_LOAD_DATA_ERROR, 1);
+            }
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    FileOutputStream outputStream = openFileOutput(getString(R.string.movies_cache_name),
+                            MODE_PRIVATE);
+                    outputStream.write(response.getBytes());
+                    outputStream.close();
+                } catch (Exception e) {
+                    Log.i(TAG, "preloadMoviesData: error==" + e.getMessage());
+                }
+                sendParseDataMessage(PRE_LOAD_DATA_FINISH, 1);
+            }
+        });
+    }
+
+    public void sendParseDataMessage(int message, int arg1) {
+        if (mHandler != null) {
+            Message msg = Message.obtain();
+            msg.what = message;
+            msg.arg1 = arg1;
+            mHandler.sendMessage(msg);
+        }
     }
 
     private void enterMainPage() {
@@ -49,4 +128,15 @@ public class FlashActivity extends Activity {
         startActivity(intent);
         finish();
     }
+
+    @Override
+    protected void onDestroy() {
+        if (mHandler != null) {
+            mHandler.removeMessages(PRE_LOAD_DATA_FINISH);
+            mHandler.removeMessages(PRE_LOAD_DATA_ERROR);
+            mHandler = null;
+        }
+        super.onDestroy();
+    }
+
 }

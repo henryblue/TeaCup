@@ -10,7 +10,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlNormal">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
@@ -20,7 +20,7 @@
 
     <style name="greenTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorGreen</item>
-        <item name="colorPrimaryDark">@color/colorGreenDark</item>
+        <item name="colorPrimaryDark">@color/colorGreen</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlNormal">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
@@ -30,7 +30,7 @@
 
     <style name="pinkTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPink</item>
-        <item name="colorPrimaryDark">@color/colorPinkDark</item>
+        <item name="colorPrimaryDark">@color/colorPink</item>
         <item name="colorAccent">@color/pinkAccent</item>
         <item name="colorControlNormal">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
@@ -40,7 +40,7 @@
 
     <style name="grayTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorGray</item>
-        <item name="colorPrimaryDark">@color/colorGrayDark</item>
+        <item name="colorPrimaryDark">@color/colorGray</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlNormal">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
@@ -50,7 +50,7 @@
 
     <style name="tealTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorTeal</item>
-        <item name="colorPrimaryDark">@color/colorTealDark</item>
+        <item name="colorPrimaryDark">@color/colorTeal</item>
         <item name="colorAccent">@color/deepYellow</item>
         <item name="colorControlNormal">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
@@ -60,7 +60,7 @@
 
     <style name="redTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorRed</item>
-        <item name="colorPrimaryDark">@color/colorRedDark</item>
+        <item name="colorPrimaryDark">@color/colorRed</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlNormal">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
@@ -70,7 +70,7 @@
 
     <style name="purpleTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPurple</item>
-        <item name="colorPrimaryDark">@color/colorPurpleDark</item>
+        <item name="colorPrimaryDark">@color/colorPurple</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlNormal">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>

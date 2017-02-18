@@ -38,6 +38,7 @@ import hb.xvideoplayer.MxVideoPlayer;
 
 /**
  * 数据来源于第一弹
+ *
  * @author henry-blue
  */
 public class FanjuFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -169,7 +170,7 @@ public class FanjuFragment extends BaseFragment implements SwipeRefreshLayout.On
 
     private void startLoadData() {
         mPageNum++;
-        if (mPageNum > 15) {
+        if (mPageNum > 18) {
             mRecyclerView.loadMoreComplete();
             Toast.makeText(getContext(), getString(R.string.not_have_more_data),
                     Toast.LENGTH_SHORT).show();
@@ -185,12 +186,8 @@ public class FanjuFragment extends BaseFragment implements SwipeRefreshLayout.On
 
             @Override
             public void onResponse(String response) {
-                boolean isSuccess = parseVideoData(response);
-                if (isSuccess) {
-                    sendParseDataMessage(LOAD_DATA_FINISH);
-                } else {
-                    sendParseDataMessage(LOAD_DATA_NONE);
-                }
+                parseVideoData(response);
+                sendParseDataMessage(LOAD_DATA_FINISH);
             }
         });
     }

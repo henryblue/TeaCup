@@ -39,7 +39,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import hb.xvideoplayer.MxVideoPlayer;
 import hb.xvideoplayer.MxVideoPlayerWidget;
@@ -250,6 +252,7 @@ public class TVPlayActivity extends BaseActivity {
     private void startRefreshData() {
         mDatas.clear();
         String videoUrl = getIntent().getStringExtra("moviePlayUrl");
+        videoUrl = videoUrl.replace(".html", "/1/1.html");
         if (!TextUtils.isEmpty(videoUrl)) {
             OkHttpUtils.getAsyn(videoUrl, new OkHttpUtils.ResultCallback<String>() {
 
@@ -335,6 +338,7 @@ public class TVPlayActivity extends BaseActivity {
             mWebView.getSettings().setJavaScriptEnabled(true);
             mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
             mWebView.getSettings().setLoadWithOverviewMode(true);
+            mWebView.getSettings().setAllowFileAccess(true);
             mWebView.getSettings().setUseWideViewPort(true);
             mWebView.setWebViewClient(new WebViewClient() {
                 @Override

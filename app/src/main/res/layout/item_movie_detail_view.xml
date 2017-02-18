@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    tools:targetApi="lollipop" >
 
     <ImageView
         android:id="@+id/movie_detail_iv_top"
@@ -15,7 +17,8 @@
         android:id="@+id/movie_detail_top"
         android:layout_below="@id/movie_detail_iv_top"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/item_movie_detail_rl_top_height">
+        android:layout_height="@dimen/item_movie_detail_rl_top_height"
+        android:background="?android:attr/selectableItemBackground" >
 
         <TextView
             android:id="@+id/movie_detail_block_tip"
@@ -41,7 +44,7 @@
         android:layout_width="@dimen/item_movie_detail_ll_width"
         android:layout_height="@dimen/item_movie_detail_ll_height"
         android:layout_marginRight="@dimen/item_movie_detail_ll_marginRight"
-        android:background="@color/white"
+        android:background="?android:attr/selectableItemBackground"
         android:layout_below="@id/movie_detail_top" >
 
         <ImageView
@@ -90,7 +93,7 @@
         android:layout_height="@dimen/item_movie_detail_ll_height"
         android:layout_toRightOf="@id/item_movie_detail_container1"
         android:layout_below="@id/movie_detail_top"
-        android:background="@color/white" >
+        android:background="?android:attr/selectableItemBackground" >
 
         <ImageView
             android:id="@+id/movie_detail_imageView2"
@@ -139,7 +142,7 @@
         android:layout_marginRight="@dimen/item_movie_detail_ll_marginRight"
         android:layout_marginTop="@dimen/item_movie_detail_ll_marginTop"
         android:layout_below="@id/item_movie_detail_container1"
-        android:background="@color/white" >
+        android:background="?android:attr/selectableItemBackground" >
 
         <ImageView
             android:id="@+id/movie_detail_imageView3"
@@ -187,7 +190,7 @@
         android:layout_height="@dimen/item_movie_detail_ll_height"
         android:layout_alignTop = "@id/item_movie_detail_container3"
         android:layout_toRightOf="@id/item_movie_detail_container3"
-        android:background="@color/white" >
+        android:background="?android:attr/selectableItemBackground" >
 
         <ImageView
             android:id="@+id/movie_detail_imageView4"
@@ -236,7 +239,7 @@
         android:layout_below="@id/item_movie_detail_container4"
         android:layout_marginTop="@dimen/item_movie_detail_ll_marginTop"
         android:layout_marginRight="@dimen/item_movie_detail_ll_marginRight"
-        android:background="@color/white" >
+        android:background="?android:attr/selectableItemBackground" >
 
         <ImageView
             android:id="@+id/movie_detail_imageView5"
@@ -284,7 +287,7 @@
         android:layout_height="@dimen/item_movie_detail_ll_height"
         android:layout_alignTop="@id/item_movie_detail_container5"
         android:layout_toRightOf="@id/item_movie_detail_container5"
-        android:background="@color/white" >
+        android:background="?android:attr/selectableItemBackground" >
 
         <ImageView
             android:id="@+id/movie_detail_imageView6"

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,17 +22,20 @@ import com.app.teacup.MoreMovieShowActivity;
 import com.app.teacup.MoviePlayActivity;
 import com.app.teacup.R;
 import com.app.teacup.TVPlayActivity;
+import com.app.util.HttpUtils;
 import com.app.util.OkHttpUtils;
 import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.squareup.okhttp.Request;
 
+import org.apache.http.util.EncodingUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +53,7 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
     private XRecyclerView mRecyclerView;
     private List<MovieDetailInfo> mDatas;
     private MovieDetailRecyclerAdapter mMovieDetailAdapter;
+    private boolean mIsFirstEnter = true;
 
     @Override
     public void onAttach(Context context) {
@@ -111,7 +116,35 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
 
     private void startRefreshData() {
         mDatas.clear();
-        OkHttpUtils.getAsyn(MOVIE_URL, new OkHttpUtils.ResultCallback<String>() {
+        if (mIsFirstEnter) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        FileInputStream fin = getContext().openFileInput(getContext()
+                                .getString(R.string.movies_cache_name));
+                        int length = fin.available();
+                        byte[] buffer = new byte[length];
+                        fin.read(buffer);
+                        String result = EncodingUtils.getString(buffer, "UTF-8");
+                        if (!TextUtils.isEmpty(result)) {
+                            parseMovieData(result);
+                        } else {
+                            sendParseDataMessage(LOAD_DATA_NONE);
+                        }
+                    } catch (Exception e) {
+                        sendParseDataMessage(LOAD_DATA_NONE);
+                    }
+                }
+            }).start();
+        } else {
+            loadDataFromNet();
+        }
+        mIsFirstEnter = false;
+    }
+
+    private void loadDataFromNet() {
+        OkHttpUtils.getAsyn(urlUtils.MOVIE_URL, new OkHttpUtils.ResultCallback<String>() {
 
             @Override
             public void onError(Request request, Exception e) {
@@ -166,8 +199,8 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
                     info.setMovieInfoList(movieInfoList);
                     mDatas.add(info);
                 }
-                sendParseDataMessage(REFRESH_FINISH);
             }
+            sendParseDataMessage(REFRESH_FINISH);
         } catch (Exception e) {
             Log.i(TAG, "parseMovieData: ====error===" + e.getMessage());
             sendParseDataMessage(LOAD_DATA_ERROR);
@@ -242,8 +275,16 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
     }
 
     @Override
+    public void onLoadDataNone() {
+        super.onLoadDataNone();
+        loadDataFromNet();
+    }
+
+    @Override
     protected void onLoadDataError() {
         Toast.makeText(getContext(), getString(R.string.load_data_error), Toast.LENGTH_SHORT).show();
+        mRefreshLayout.setRefreshing(false);
+        mRecyclerView.refreshComplete();
     }
 
     @Override
