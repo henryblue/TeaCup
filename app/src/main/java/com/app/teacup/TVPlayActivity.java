@@ -39,9 +39,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import hb.xvideoplayer.MxVideoPlayer;
 import hb.xvideoplayer.MxVideoPlayerWidget;
@@ -209,10 +207,17 @@ public class TVPlayActivity extends BaseActivity {
         initData();
         mIsInitData = true;
         if (mIsChangeVideo) {
-            String videoName = getIntent().getStringExtra("moviePlayName") +
-                    "-" + mTvDatas.get(mPlayIndex).getName();
-            mxVideoPlayerWidget.startPlay(mVideoUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL, videoName);
-            mxVideoPlayerWidget.mStartButton.performClick();
+            if (!TextUtils.isEmpty(mVideoUrl)) {
+                String videoName = getIntent().getStringExtra("moviePlayName") +
+                        "-" + mTvDatas.get(mPlayIndex).getName();
+                mxVideoPlayerWidget.startPlay(mVideoUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL, videoName);
+                mxVideoPlayerWidget.mStartButton.performClick();
+            } else {
+                mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
+                        View.INVISIBLE, View.INVISIBLE, View.INVISIBLE);
+                Toast.makeText(TVPlayActivity.this, getString(R.string.parse_url_error),
+                        Toast.LENGTH_SHORT).show();
+            }
             mIsChangeVideo = false;
         }
     }

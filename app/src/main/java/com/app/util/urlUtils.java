@@ -22,8 +22,8 @@ public class urlUtils {
     public static final String JIANDAN_NEXT_URL = "http://jandan.net/ooxx/page-";
     public static final String JIANDAN_NEXT_ID = "#comments";
 
-    public static final String QIUBAI18_URL = "http://www.qiushibaike18.com/";
-    public static final String QIUBAI18_NEXT_URL = "http://www.qiushibaike18.com/page/";
+    public static final String QIUBAI18_URL = "http://www.qiushibaike18.com/gif/";
+    public static final String QIUBAI18_NEXT_URL = "http://www.qiushibaike18.com/gif/page/";
 
     public static final String MOVIE_URL = "http://www.1zdm.com";
 

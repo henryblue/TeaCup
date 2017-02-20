@@ -60,9 +60,9 @@ public class FanjuFragment extends BaseFragment implements SwipeRefreshLayout.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fanju_fragment, container, false);
-        initView(view);
-        setupRecycleView();
-        setupRefreshLayout();
+//        initView(view);
+//        setupRecycleView();
+//        setupRefreshLayout();
         return view;
     }
 
@@ -258,12 +258,14 @@ public class FanjuFragment extends BaseFragment implements SwipeRefreshLayout.On
         Toast.makeText(getContext(), getString(R.string.refresh_net_error), Toast.LENGTH_SHORT).show();
         mRefreshLayout.setRefreshing(false);
         mRecyclerView.loadMoreComplete();
+        mRecyclerView.refreshComplete();
     }
 
     @Override
     protected void onLoadDataFinish() {
         mRefreshLayout.setRefreshing(false);
         mRecyclerView.loadMoreComplete();
+        mRecyclerView.refreshComplete();
         mFanjuRecyclerAdapter.reSetData(mVideoDatas);
     }
 

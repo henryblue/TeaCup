@@ -22,7 +22,6 @@ import com.app.teacup.MoreMovieShowActivity;
 import com.app.teacup.MoviePlayActivity;
 import com.app.teacup.R;
 import com.app.teacup.TVPlayActivity;
-import com.app.util.HttpUtils;
 import com.app.util.OkHttpUtils;
 import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -38,8 +37,6 @@ import org.jsoup.select.Elements;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.app.util.urlUtils.MOVIE_URL;
 
 /**
  * 数据来源94神马电影网
@@ -65,9 +62,9 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.movie_fragment, container, false);
-        initView(view);
-        setupRefreshLayout();
-        setupRecycleView();
+//        initView(view);
+//        setupRefreshLayout();
+//        setupRecycleView();
         return view;
     }
 

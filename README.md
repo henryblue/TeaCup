@@ -11,15 +11,15 @@ A Material Design app for entertainment
 - view picture
 
 ##ScreenShot
-<p><img src="screenshot/photo1.png" width="32%" />
-<img src="screenshot/photo2.png" width="32%" />
-<img src="screenshot/photo3.png" width="32%" />
-<img src="screenshot/photo4.png" width="32%" />
-<img src="screenshot/photo5.png" width="32%" />
-<img src="screenshot/photo6.png" width="32%" />
-<img src="screenshot/photo7.png" width="32%" />
-<img src="screenshot/photo8.png" width="32%" />
-<img src="screenshot/photo9.png" width="32%" /></p>
+<p><img src="screenshot/photo1.jpg" width="32%" />
+<img src="screenshot/photo2.jpg" width="32%" />
+<img src="screenshot/photo3.jpg" width="32%" />
+<img src="screenshot/photo4.jpg" width="32%" />
+<img src="screenshot/photo5.jpg" width="32%" />
+<img src="screenshot/photo6.jpg" width="32%" />
+<img src="screenshot/photo7.jpg" width="32%" />
+<img src="screenshot/photo8.jpg" width="32%" />
+<img src="screenshot/photo9.jpg" width="32%" /></p>
 
 ## Implementation
 
@@ -36,10 +36,10 @@ Data sources:
 
 - [煎蛋网](http://jandan.net/)
 - [豆瓣读书](https://book.douban.com/)
-- [片刻网](http://www.pianke.me/index/)
+- [神马电影网](http://www.94sm.com/)
 - [落网](http://www.luoo.net/)
 - [糗事百科](http://www.qiushibaike.com/)
-- [悦听有声](http://www.weknow.cn/)
+- [第一弹](http://www.diyidan.com/)
 
 ### UI
 
@@ -67,4 +67,4 @@ Use Baidu maps to locate.
 
 ## Building
 
-You can download the APK file from [releases](/teacup_1.0_1.apk) of this project.
+You can download the APK file from [releases](/teacup-1.2_0.apk) of this project.

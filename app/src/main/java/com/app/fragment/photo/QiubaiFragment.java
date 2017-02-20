@@ -4,7 +4,6 @@ package com.app.fragment.photo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -180,41 +179,22 @@ public class QiubaiFragment extends BaseFragment implements SwipeRefreshLayout.O
 
     private void parsePhotoData(String response) {
         Document document = Jsoup.parse(response);
-        Elements mainWrap = document.getElementsByClass("home_main_wrap");
-        for (Element m : mainWrap) {
-            Elements panelClearfix = m.getElementsByClass("panel");
-            for (Element e : panelClearfix) {
+        if (document != null) {
+            Elements g = document.getElementsByClass("g");
+            Element gif = g.get(1);
+            Element main = gif.getElementById("main");
+            Elements articles = main.getElementsByClass("row")
+                    .get(0).getElementsByTag("article");
+
+            for (Element e : articles) {
                 PhotoInfo info = new PhotoInfo();
-                Elements tops = e.getElementsByClass("top");
-                for (Element top : tops) {
-                    Elements h2 = top.getElementsByTag("h2");
-                    for (Element h : h2) {
-                        Elements title = h.getElementsByTag("a");
-                        info.setTitle(title.text());
-                    }
-                }
-
-                Elements clearfix = e.getElementsByClass("main");
-                for (Element main : clearfix) {
-                    Elements imagebox = main.getElementsByClass("imagebox");
-                    for (Element photo : imagebox) {
-                        Elements a = photo.getElementsByClass("gif");
-                        for (Element gif : a) {
-                            String src = gif.attr("href");
-                            if (src.contains(".gif")) {
-                                info.setImgUrl(src);
-                            }
-                        }
-                        Elements img = photo.getElementsByTag("img");
-                        for (Element pic : img) {
-                            String src = pic.attr("src");
-                            if (src.contains(".jpg")) {
-                                info.setImgUrl(src);
-                            }
-                        }
-                    }
-                }
-
+                Element img = e.getElementsByClass("card-bg").get(0)
+                        .getElementsByClass("thumbnail-container")
+                        .get(0).getElementsByTag("img").get(0);
+                String gifUrl = img.attr("src");
+                String title = img.attr("alt");
+                info.setTitle(title);
+                info.setImgUrl(gifUrl);
                 mImgUrl.add(info);
             }
         }
