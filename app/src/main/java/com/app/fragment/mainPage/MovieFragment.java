@@ -62,9 +62,9 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.movie_fragment, container, false);
-//        initView(view);
-//        setupRefreshLayout();
-//        setupRecycleView();
+        initView(view);
+        setupRefreshLayout();
+        setupRecycleView();
         return view;
     }
 
