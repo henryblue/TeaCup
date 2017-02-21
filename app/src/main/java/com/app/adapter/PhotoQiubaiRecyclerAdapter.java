@@ -43,6 +43,7 @@ public class PhotoQiubaiRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 Glide.with(mContext).load(url)
                         .asGif()
                         .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.loading_photo)
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .into(photoImg);
             } else {
@@ -50,6 +51,7 @@ public class PhotoQiubaiRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                     Glide.with(mContext).load(url)
                             .asGif()
                             .error(R.drawable.photo_loaderror)
+                            .placeholder(R.drawable.loading_photo)
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                             .into(photoImg);
                 } else {

@@ -139,10 +139,10 @@ public class TVPlayActivity extends BaseActivity {
                     mPlayIndex = position;
                     adapter.notifyDataSetChanged();
                     String nextUrl = mTvDatas.get(position).getNextUrl();
-                    mWebView.loadUrl(nextUrl);
                     MxVideoPlayer.releaseAllVideos();
                     mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
                             View.VISIBLE, View.INVISIBLE, View.INVISIBLE);
+                    parseNextPlayUrl(nextUrl);
                 }
             }
         });
@@ -196,6 +196,8 @@ public class TVPlayActivity extends BaseActivity {
         mWebView.loadUrl("about:blank");
         Toast.makeText(TVPlayActivity.this, getString(R.string.not_have_more_data),
                 Toast.LENGTH_SHORT).show();
+        mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
+                View.INVISIBLE, View.INVISIBLE, View.INVISIBLE);
         mRefreshLayout.setRefreshing(false);
         mIsChangeVideo = false;
     }
@@ -220,6 +222,7 @@ public class TVPlayActivity extends BaseActivity {
             }
             mIsChangeVideo = false;
         }
+        mVideoUrl = "";
     }
 
     @Override
@@ -357,6 +360,7 @@ public class TVPlayActivity extends BaseActivity {
                 public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         String url = request.getUrl().toString();
+                        Log.i(TAG, "shouldInterceptRequest: url===" + url);
                         if (url.startsWith("http") && (url.contains("sid") || url.contains("mp4"))) {
                             mVideoUrl = url;
                         }
@@ -377,6 +381,38 @@ public class TVPlayActivity extends BaseActivity {
                 }
             });
             mWebView.loadUrl(htmlUrl);
+        }
+    }
+
+
+    private void parseNextPlayUrl(String nextUrl) {
+        if (!TextUtils.isEmpty(nextUrl)) {
+            OkHttpUtils.getAsyn(nextUrl, new OkHttpUtils.ResultCallback<String>() {
+
+                @Override
+                public void onError(Request request, Exception e) {
+                    sendParseDataMessage(LOAD_DATA_ERROR);
+                }
+
+                @Override
+                public void onResponse(String response) {
+                    parseNextVideoData(response);
+                }
+            });
+        }
+    }
+
+    private void parseNextVideoData(String response) {
+        Document document = Jsoup.parse(response);
+        try {
+            Element container = document.getElementsByClass("container").get(3);
+            Element fluid = container.getElementsByClass("container-fluid").get(0);
+            Element player = fluid.getElementById("player");
+            Element playerSwf = player.getElementById("player_swf");
+            String htmlVideoUrl = playerSwf.attr("src");
+            mWebView.loadUrl(htmlVideoUrl);
+        } catch (Exception e) {
+            sendParseDataMessage(LOAD_DATA_ERROR);
         }
     }
 
