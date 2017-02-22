@@ -10,7 +10,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.WindowManager;
 
-import com.app.util.HttpUtils;
 import com.app.util.OkHttpUtils;
 import com.app.util.ToolUtils;
 import com.app.util.urlUtils;
@@ -60,9 +59,15 @@ public class FlashActivity extends Activity {
     }
 
     private void preloadNewsData() {
-        HttpUtils.sendHttpRequest(urlUtils.NEWS_JIANDAN_URL, new HttpUtils.HttpCallBackListener() {
+        OkHttpUtils.getAsyn(urlUtils.NEWS_JIANDAN_URL, new OkHttpUtils.ResultCallback<String>() {
+
             @Override
-            public void onFinish(String response) {
+            public void onError(Request request, Exception e) {
+                sendParseDataMessage(PRE_LOAD_DATA_ERROR, 0);
+            }
+
+            @Override
+            public void onResponse(String response) {
                 try {
                     FileOutputStream outputStream = openFileOutput(getString(R.string.news_cache_name),
                             MODE_PRIVATE);
@@ -72,11 +77,6 @@ public class FlashActivity extends Activity {
                     Log.i(TAG, "preloadNewsData: error==" + e.getMessage());
                 }
                 sendParseDataMessage(PRE_LOAD_DATA_FINISH, 0);
-            }
-
-            @Override
-            public void onError(Exception e) {
-                sendParseDataMessage(PRE_LOAD_DATA_ERROR, 0);
             }
         });
     }

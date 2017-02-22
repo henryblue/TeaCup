@@ -26,7 +26,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private Context mContext;
     private List<NewsInfo> mDatas;
-    private List<ImageView> mImageViewList;
+    private List<ImageView> mHeaderList;
     private OnItemClickListener mListener;
     private LayoutInflater mLayoutInflater;
     private HeaderViewHolder mHeaderViewHolder;
@@ -35,11 +35,11 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         void onItemClick(View view, int position);
     }
 
-    public NewsRecyclerAdapter(Context context, List<NewsInfo> datas, List<ImageView> imageViews) {
+    public NewsRecyclerAdapter(Context context, List<NewsInfo> datas, List<ImageView> headerData) {
         mContext = context;
         mDatas = datas;
         mLayoutInflater = LayoutInflater.from(context);
-        mImageViewList = imageViews;
+        mHeaderList = headerData;
     }
 
     @Override
@@ -59,11 +59,11 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (holder instanceof NewsViewHolder) {
             onBindSingleItemViewHolder(holder, position);
         } else if (holder instanceof HeaderViewHolder) {
-            onBindHeaderItemViewHolder(holder, position);
+            onBindHeaderItemViewHolder(holder);
         }
     }
 
-    private void onBindHeaderItemViewHolder(RecyclerView.ViewHolder holder, int position) {
+    private void onBindHeaderItemViewHolder(RecyclerView.ViewHolder holder) {
         HeaderViewHolder myHolder = (HeaderViewHolder) holder;
         myHolder.mAdapter.notifyDataSetChanged();
     }
@@ -107,7 +107,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    public int getRealPosition(RecyclerView.ViewHolder holder) {
+     public int getRealPosition(RecyclerView.ViewHolder holder) {
         int position = holder.getLayoutPosition();
         return position - 2;
     }
@@ -115,6 +115,18 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void reSetData(List<NewsInfo> list) {
         mDatas = list;
         notifyDataSetChanged();
+    }
+
+    public void stopHeaderAutoScrolled() {
+        if (mHeaderViewHolder != null) {
+            mHeaderViewHolder.stopAutoScrolled();
+        }
+    }
+
+    public void startHeaderAutoScrolled() {
+        if (mHeaderViewHolder != null) {
+            mHeaderViewHolder.startAutoScrolled();
+        }
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -136,7 +148,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void setHeaderVisible(int visible) {
-        mHeaderViewHolder.setGroupVisible(visible);
+        mHeaderViewHolder.setHeaderVisible(visible);
     }
 
     private class NewsViewHolder extends RecyclerView.ViewHolder {
@@ -146,7 +158,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         private TextView mLabel;
         private View mainView;
 
-        public NewsViewHolder(View itemView) {
+        NewsViewHolder(View itemView) {
             super(itemView);
             mainView = itemView;
             mPhotoImg = (ImageView) itemView.findViewById(R.id.iv_news_img);
@@ -160,18 +172,20 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         private ReactViewPagerAdapter mAdapter;
         private ViewPager mViewPager;
         private LinearLayout mGroup;
+        private View mHeadrView;
         private int mLastPos = 0;
 
-        public HeaderViewHolder(View itemView) {
+        HeaderViewHolder(View itemView) {
             super(itemView);
             mViewPager = (ViewPager) itemView.findViewById(R.id.vp_news);
             mGroup = (LinearLayout) itemView.findViewById(R.id.ll_group);
+            mHeadrView = itemView;
 
-            if (mImageViewList.size() <= 0) {
+            if (mHeaderList.size() <= 0) {
                 return;
             }
 
-            for (int i = 0; i < mImageViewList.size(); i++) {
+            for (int i = 0; i < mHeaderList.size(); i++) {
                 ImageView point = new ImageView(mContext);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams
                         (ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -188,10 +202,10 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 mGroup.addView(point);
             }
 
-            mAdapter = new ReactViewPagerAdapter(mViewPager, mImageViewList);
+            mAdapter = new ReactViewPagerAdapter(mViewPager, mHeaderList);
             mViewPager.setAdapter(mAdapter);
             mViewPager.setCurrentItem(Integer.MAX_VALUE / 2 -
-                    (Integer.MAX_VALUE / 2 % mImageViewList.size()));
+                    (Integer.MAX_VALUE / 2 % mHeaderList.size()));
 
             mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
@@ -200,7 +214,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 @Override
                 public void onPageSelected(int position) {
-                    position = position % mImageViewList.size();
+                    position = position % mHeaderList.size();
                     mGroup.getChildAt(position).setEnabled(true);
                     mGroup.getChildAt(mLastPos).setEnabled(false);
                     mLastPos = position;
@@ -223,19 +237,20 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             });
         }
-        public void startAutoScrolled() {
+        void startAutoScrolled() {
             if (mAdapter != null) {
                 mAdapter.startAutoScrolled();
             }
         }
 
-        public void stopAutoScrolled() {
+        void stopAutoScrolled() {
             if (mAdapter != null) {
                 mAdapter.stopAutoScrolled();
             }
         }
 
-        public void setGroupVisible(int visible) {
+        void setHeaderVisible(int visible) {
+            mHeadrView.setVisibility(visible);
             mGroup.setVisibility(visible);
         }
     }

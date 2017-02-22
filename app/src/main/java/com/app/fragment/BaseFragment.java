@@ -55,6 +55,22 @@ public abstract class BaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (getUserVisibleHint()) {
+            onFragmentVisible();
+        } else {
+            onFragmentInvisible();
+        }
+    }
+
+    protected void onFragmentInvisible() {
+    }
+
+    protected void onFragmentVisible() {
+    }
+
     protected abstract void onLoadDataError();
 
     protected abstract void onLoadDataFinish();

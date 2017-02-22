@@ -20,18 +20,21 @@ import com.app.fragment.BaseFragment;
 import com.app.teacup.MainActivity;
 import com.app.teacup.NewsDetailActivity;
 import com.app.teacup.R;
-import com.app.util.HttpUtils;
+import com.app.util.OkHttpUtils;
 import com.app.util.urlUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.squareup.okhttp.Request;
 
+import org.apache.http.util.EncodingUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +47,7 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     private static final int IMAGE_VIEW_LEN = 4;
     private List<NewsInfo> mNewsDatas;
-    private List<ImageView> mImageViewList;
+    private List<ImageView> mHeaderList;
     private SwipeRefreshLayout mRefreshLayout;
     private XRecyclerView mRecyclerView;
     private NewsRecyclerAdapter mNewsRecyclerAdapter;
@@ -55,11 +58,11 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     public void onAttach(Context context) {
         super.onAttach(context);
         mNewsDatas = new ArrayList<>();
-        mImageViewList = new ArrayList<>();
+        mHeaderList = new ArrayList<>();
         for (int i = 0; i < IMAGE_VIEW_LEN; i++) {
             ImageView view = new ImageView(getContext());
             view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            mImageViewList.add(view);
+            mHeaderList.add(view);
         }
     }
 
@@ -102,7 +105,7 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             }
         });
 
-        mNewsRecyclerAdapter = new NewsRecyclerAdapter(getContext(), mNewsDatas, mImageViewList);
+        mNewsRecyclerAdapter = new NewsRecyclerAdapter(getContext(), mNewsDatas, mHeaderList);
         mRecyclerView.setAdapter(mNewsRecyclerAdapter);
         mNewsRecyclerAdapter.setOnItemClickListener(new NewsRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -115,7 +118,7 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         });
     }
 
-    private void initImageViewList() {
+    private void initHeaderData() {
         if (mNewsDatas.size() <= 0) {
             return;
         }
@@ -129,7 +132,7 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                         .placeholder(R.drawable.main_load_bg)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .dontAnimate()
-                        .into(mImageViewList.get(i));
+                        .into(mHeaderList.get(i));
             } else {
                 if (MainActivity.mIsWIFIState) {
                     Glide.with(getContext()).load(url)
@@ -138,14 +141,14 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                             .placeholder(R.drawable.main_load_bg)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .dontAnimate()
-                            .into(mImageViewList.get(i));
+                            .into(mHeaderList.get(i));
                 } else {
-                    mImageViewList.get(i).setImageResource(R.drawable.main_load_bg);
+                    mHeaderList.get(i).setImageResource(R.drawable.main_load_bg);
                 }
             }
 
             final int pos = i;
-            mImageViewList.get(i).setOnClickListener(new View.OnClickListener() {
+            mHeaderList.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(), NewsDetailActivity.class);
@@ -179,22 +182,46 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private void startRefreshData() {
         mNewsDatas.clear();
         mNewsRecyclerAdapter.setHeaderVisible(View.INVISIBLE);
-        loadDataFromNet();
+        if (mIsFirstEnter) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        FileInputStream fin = getContext().openFileInput(getContext()
+                                .getString(R.string.news_cache_name));
+                        int length = fin.available();
+                        byte[] buffer = new byte[length];
+                        fin.read(buffer);
+                        String result = EncodingUtils.getString(buffer, "UTF-8");
+                        if (!TextUtils.isEmpty(result)) {
+                            parseNewsData(result);
+                        } else {
+                            sendParseDataMessage(LOAD_DATA_NONE);
+                        }
+                    } catch (Exception e) {
+                        sendParseDataMessage(LOAD_DATA_NONE);
+                    }
+                }
+            }, 850);
+        } else {
+            loadDataFromNet();
+        }
+        mIsFirstEnter = false;
     }
 
     private void loadDataFromNet() {
-            HttpUtils.sendHttpRequest(urlUtils.NEWS_JIANDAN_URL, new HttpUtils.HttpCallBackListener() {
-                @Override
-                public void onFinish(String response) {
-                    parseNewsData(response);
-                    sendParseDataMessage(REFRESH_FINISH);
-                }
+        OkHttpUtils.getAsyn(urlUtils.NEWS_JIANDAN_URL, new OkHttpUtils.ResultCallback<String>() {
 
-                @Override
-                public void onError(Exception e) {
-                    sendParseDataMessage(REFRESH_ERROR);
-                }
-            });
+            @Override
+            public void onError(Request request, Exception e) {
+                sendParseDataMessage(REFRESH_ERROR);
+            }
+
+            @Override
+            public void onResponse(String response) {
+                parseNewsData(response);
+            }
+        });
     }
 
     private void startLoadData() {
@@ -205,16 +232,17 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             return;
         }
         String url = urlUtils.NEWS_NEXT_URL + mPageNum;
-        HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallBackListener() {
+        OkHttpUtils.getAsyn(url, new OkHttpUtils.ResultCallback<String>() {
+
             @Override
-            public void onFinish(String response) {
-                parseNextData(response);
-                sendParseDataMessage(LOAD_DATA_FINISH);
+            public void onError(Request request, Exception e) {
+                sendParseDataMessage(LOAD_DATA_ERROR);
             }
 
             @Override
-            public void onError(Exception e) {
-                sendParseDataMessage(LOAD_DATA_ERROR);
+            public void onResponse(String response) {
+                parseNextData(response);
+                sendParseDataMessage(LOAD_DATA_FINISH);
             }
         });
     }
@@ -250,6 +278,7 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                     info.setLabel(tip);
                     mNewsDatas.add(info);
                 }
+                sendParseDataMessage(REFRESH_FINISH);
             }
 
         } catch (Exception e) {
@@ -327,7 +356,7 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             Toast.makeText(getContext(), getString(R.string.screen_shield),
                     Toast.LENGTH_SHORT).show();
         } else {
-            initImageViewList();
+            initHeaderData();
             mNewsRecyclerAdapter.reSetData(mNewsDatas);
         }
         mRecyclerView.refreshComplete();
@@ -354,4 +383,19 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         super.onPause();
     }
 
+    @Override
+    protected void onFragmentInvisible() {
+        super.onFragmentInvisible();
+        if (mNewsRecyclerAdapter != null) {
+            mNewsRecyclerAdapter.stopHeaderAutoScrolled();
+        }
+    }
+
+    @Override
+    protected void onFragmentVisible() {
+        super.onFragmentVisible();
+        if (mNewsRecyclerAdapter != null) {
+            mNewsRecyclerAdapter.startHeaderAutoScrolled();
+        }
+    }
 }
