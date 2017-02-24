@@ -22,6 +22,8 @@
         android:layout_marginTop="@dimen/item_movie_more_tv_tip_marginTop"
         android:background="@color/movie_tip_color"
         android:gravity="center"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/white"
         android:textSize="@dimen/item_movie_more_tv_tip_textSize" />
 

@@ -5,16 +5,18 @@
     tools:ignore="AppCompatResource">
 
     <item
+        android:id="@+id/action_search"
+        android:orderInCategory="80"
+        android:icon="@drawable/search"
+        android:title="@string/settings"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_share"
         android:actionProviderClass="android.widget.ShareActionProvider"
-        android:orderInCategory="80"
+        android:orderInCategory="90"
         android:icon="@drawable/share"
         android:title="@string/share"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="90"
-        android:icon="@drawable/setting"
-        android:title="@string/settings"
-        app:showAsAction="ifRoom" />
+
 </menu>

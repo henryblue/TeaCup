@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">茶杯</string>
     <string name="user_name">gakki</string>
-    <string name="about">关于茶杯</string>
+    <string name="about">关于</string>
     <string name="search">搜索</string>
     <string name="share">分享</string>
     <string name="settings">设置</string>
@@ -67,7 +67,7 @@
     <string name="location_error">定位失败!请打开gps和网络尝试</string>
     <string name="file_save_tip">"文件已经保存到: "</string>
     <string name="file_not_find_tip">文件不存在!</string>
-    <string name="set_theme">切换主题</string>
+    <string name="set_theme">主题</string>
     <string name="desc_shrinkup">收起</string>
     <string name="desc_spread">全文</string>
     <string name="news_delete1">无聊图</string>
@@ -79,6 +79,7 @@
     <string name="tv_series">剧集</string>
     <string name="news_cache_name">newsPreloadFile.html</string>
     <string name="movies_cache_name">moviesPreloadFile.html</string>
+    <string name="nothing_find">什么都没有找到~</string>
 
     <string-array name="tab_name">
         <item>新鲜事</item>

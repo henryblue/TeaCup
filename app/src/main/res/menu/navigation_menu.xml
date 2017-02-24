@@ -31,6 +31,11 @@
             android:id="@+id/navigation_item_about"
             android:icon="@drawable/about"
             android:title="@string/about" />
+
+        <item
+            android:id="@+id/navigation_item_setting"
+            android:icon="@drawable/setting"
+            android:title="@string/settings"/>
     </group>
 
 </menu>

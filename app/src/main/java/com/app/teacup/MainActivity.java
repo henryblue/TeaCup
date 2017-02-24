@@ -158,6 +158,9 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.navigation_item_about:
                                 enterOtherActivity(AboutActivity.class);
                                 break;
+                            case R.id.navigation_item_setting:
+                                enterOtherActivity(SettingActivity.class);
+                                break;
                         }
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
@@ -198,8 +201,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_share:
                 shareApplication();
                 return true;
-            case R.id.action_settings:
-                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+            case R.id.action_search:
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
                 startActivity(intent);
                 return true;
             default:

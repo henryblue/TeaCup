@@ -61,6 +61,7 @@
         <activity android:name=".ThemeChangeActivity" />
         <activity android:name=".FanjuNewsActivity" />
         <activity android:name=".MoreMovieShowActivity" />
+        <activity android:name=".SearchActivity" />
         <activity android:name=".MoviePlayActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity android:name=".TVPlayActivity"
