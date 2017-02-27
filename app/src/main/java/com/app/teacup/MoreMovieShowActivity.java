@@ -41,7 +41,7 @@ public class MoreMovieShowActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_fanju_news_view);
+        setContentView(R.layout.layout_movie_more_view);
         String moreUrl = getIntent().getStringExtra("moreMovieUrl");
         mMoreBaseUrl = moreUrl.replace(".html", "/");
         initView();

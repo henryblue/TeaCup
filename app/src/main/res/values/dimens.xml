@@ -331,4 +331,15 @@
     <dimen name="item_movie_more_tv_tip_textSize">13sp</dimen>
     <dimen name="item_movie_more_tv_name_margin">4dp</dimen>
     <dimen name="item_movie_more_tv_name_textSize">14sp</dimen>
+
+    <dimen name="layout_search_rl_height">46dp</dimen>
+    <dimen name="layout_search_back_img_width">23dp</dimen>
+    <dimen name="layout_search_back_img_height">23dp</dimen>
+    <dimen name="layout_search_back_img_marginLeft">8dp</dimen>
+    <dimen name="layout_search_line_marginBottom">6dp</dimen>
+    <dimen name="layout_search_line_marginRight">8dp</dimen>
+    <dimen name="layout_search_srl_marginLeft">5dp</dimen>
+    <dimen name="layout_search_srl_marginTop">8dp</dimen>
+
+    <dimen name="layout_movie_more_marginTop">7dp</dimen>
 </resources>

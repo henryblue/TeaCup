@@ -9,6 +9,17 @@
 
     <include layout="@layout/navigation_toolbar" />
 
-    <include layout="@layout/common_recycler_view" />
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srl_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/layout_movie_more_marginTop">
+
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/base_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

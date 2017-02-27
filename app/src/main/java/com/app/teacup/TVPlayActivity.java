@@ -360,7 +360,6 @@ public class TVPlayActivity extends BaseActivity {
                 public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         String url = request.getUrl().toString();
-                        Log.i(TAG, "shouldInterceptRequest: url===" + url);
                         if (url.startsWith("http") && (url.contains("sid") || url.contains("mp4"))) {
                             mVideoUrl = url;
                         }
@@ -383,7 +382,6 @@ public class TVPlayActivity extends BaseActivity {
             mWebView.loadUrl(htmlUrl);
         }
     }
-
 
     private void parseNextPlayUrl(String nextUrl) {
         if (!TextUtils.isEmpty(nextUrl)) {

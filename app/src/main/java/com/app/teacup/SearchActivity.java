@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.SearchView;
@@ -33,6 +34,7 @@ import java.util.List;
 
 public class SearchActivity extends BaseActivity {
 
+    private static final String TAG = "SearchActivity";
     private List<MovieItemInfo> mDatas;
     private SwipeRefreshLayout mRefreshLayout;
     private XRecyclerView mRecyclerView;
@@ -52,10 +54,13 @@ public class SearchActivity extends BaseActivity {
 
     private void setupSearchView() {
         mSearchView.onActionViewExpanded();
+        mSearchView.setQueryHint(getString(R.string.search_video_hint));
         // change font color
         SearchView.SearchAutoComplete textView = (SearchView.SearchAutoComplete)
                 mSearchView.findViewById(R.id.search_src_text);
         textView.setTextColor(Color.WHITE);
+        textView.setHintTextColor(ContextCompat.getColor(this, R.color.alpha_white));
+
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
@@ -120,12 +125,14 @@ public class SearchActivity extends BaseActivity {
                 mMoreRecyclerAdapter.setOnItemClickListener(new MoreMovieRecyclerAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        int movieStyle = getIntent().getIntExtra("movieStyle", 0);
-                        if (movieStyle > 0) {
+                        String index = mDatas.get(position).getImageIndex();
+                        boolean isTv = index.contains(getString(R.string.whether_tv_tip));
+                        if (isTv) {
                             enterPlayPage(position, TVPlayActivity.class);
                         } else {
                             enterPlayPage(position, MoviePlayActivity.class);
                         }
+                        finish();
                     }
                 });
             } else {
@@ -213,7 +220,7 @@ public class SearchActivity extends BaseActivity {
                 }
                 sendParseDataMessage(REFRESH_FINISH);
             } catch (Exception e) {
-                Log.i(TAG, "parseMovieData: ====error===" + e.getMessage());
+                Log.i(TAG, "parseData: ====error===" + e.getMessage());
                 sendParseDataMessage(REFRESH_ERROR);
             }
         }
@@ -223,6 +230,11 @@ public class SearchActivity extends BaseActivity {
         if (item != null) {
             MovieItemInfo itemInfo = new MovieItemInfo();
             Element a = item.getElementsByTag("a").get(0);
+            String imgIndex = a.getElementsByTag("button").get(0).text();
+            if (imgIndex.contains("YY")) {
+                return null;
+            }
+            itemInfo.setImageIndex(imgIndex);
             String url = urlUtils.MOVIE_URL + a.attr("href");
             String videoUrl = url.replace("show", "play");
             itemInfo.setNextUrl(videoUrl);
@@ -231,8 +243,6 @@ public class SearchActivity extends BaseActivity {
             String name = img.attr("alt");
             itemInfo.setImageUrl(imgUrl);
             itemInfo.setMovieName(name);
-            String imgIndex = a.getElementsByTag("button").get(0).text();
-            itemInfo.setImageIndex(imgIndex);
             return itemInfo;
         } else {
             return null;
