@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.util.HttpUtils;
+import com.app.util.ToolUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -209,7 +210,7 @@ public class NewsDetailActivity extends BaseActivity {
         mTitle = (TextView) findViewById(R.id.tv_new_detail_title);
         mAuthor = (TextView) findViewById(R.id.tv_news_detail_author);
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.srf_new_layout);
-        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(this));
         mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
         mRefreshLayout.setProgressViewEndTarget(true, 100);
         StartRefreshPage();

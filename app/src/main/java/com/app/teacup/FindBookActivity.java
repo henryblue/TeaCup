@@ -26,6 +26,7 @@ import com.app.bean.book.BookInfo;
 import com.app.bean.book.FindBookInfo;
 import com.app.util.JsonUtils;
 import com.app.util.OkHttpUtils;
+import com.app.util.ToolUtils;
 import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -202,7 +203,7 @@ public class FindBookActivity extends BaseActivity implements SwipeRefreshLayout
     private void setupRefreshLayout() {
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.srl_refresh);
         if (mRefreshLayout != null) {
-            mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+            mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(this));
             mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
             mRefreshLayout.setProgressViewEndTarget(true, 100);
             mRefreshLayout.setOnRefreshListener(this);

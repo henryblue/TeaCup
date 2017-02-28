@@ -8,12 +8,16 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.app.adapter.MoreMovieRecyclerAdapter;
 import com.app.bean.movie.MovieItemInfo;
 import com.app.util.OkHttpUtils;
+import com.app.util.ToolUtils;
 import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -94,7 +98,7 @@ public class MoreMovieShowActivity extends BaseActivity {
     }
 
     private void setupRefreshLayout() {
-        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(this));
         mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
         mRefreshLayout.setProgressViewEndTarget(true, 100);
         StartRefreshPage();
@@ -129,6 +133,25 @@ public class MoreMovieShowActivity extends BaseActivity {
         intent.putExtra("moviePlayUrl", itemInfo.getNextUrl());
         intent.putExtra("moviePlayName", itemInfo.getMovieName());
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                Intent intent = new Intent(MoreMovieShowActivity.this, SearchActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.app.adapter.FanjuNewsRecyclerAdapter;
 import com.app.bean.fanju.FanjuNewInfo;
 import com.app.util.OkHttpUtils;
+import com.app.util.ToolUtils;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.okhttp.Request;
@@ -156,7 +157,7 @@ public class FanjuNewsActivity extends BaseActivity {
     }
 
     private void setupRefreshLayout() {
-        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(this));
         mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
         mRefreshLayout.setProgressViewEndTarget(true, 100);
         StartRefreshPage();

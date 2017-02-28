@@ -28,6 +28,7 @@ import com.app.adapter.TvPlayRecyclerAdapter;
 import com.app.bean.movie.MoviePlayInfo;
 import com.app.bean.movie.TvItemInfo;
 import com.app.util.OkHttpUtils;
+import com.app.util.ToolUtils;
 import com.app.util.urlUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -241,7 +242,7 @@ public class TVPlayActivity extends BaseActivity {
     }
 
     private void setupRefreshLayout() {
-        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(this));
         mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
         mRefreshLayout.setProgressViewEndTarget(true, 100);
         StartRefreshPage();

@@ -1,6 +1,5 @@
 package com.app.teacup;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +23,7 @@ public class ThemeChangeActivity extends AppCompatActivity {
     private List<ThemeItemView> themeItemViews = new ArrayList<>();
 
     private int[] mColors = {R.color.colorPrimary, R.color.colorGreen, R.color.colorPink,
-            R.color.colorGray, R.color.colorTeal, R.color.colorRed, R.color.colorPurple};
+            R.color.colorBlack, R.color.colorGray, R.color.colorTeal, R.color.colorRed, R.color.colorPurple};
 
     private SharedPreferences mSps;
 

@@ -20,6 +20,7 @@ import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
 import com.app.teacup.ShowPhotoListActivity;
 import com.app.util.HttpUtils;
+import com.app.util.ToolUtils;
 import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -59,7 +60,7 @@ public class DoubanMeiziFragment extends BaseFragment implements SwipeRefreshLay
     }
 
     private void setupRefreshLayout() {
-        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(getContext()));
         mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
         mRefreshLayout.setProgressViewEndTarget(true, 100);
         mRefreshLayout.setOnRefreshListener(this);

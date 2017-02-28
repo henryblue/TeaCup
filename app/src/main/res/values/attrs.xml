@@ -3,12 +3,12 @@
     <attr name="title" format="string" />
     <attr name="appBg" format="reference" />
     <declare-styleable name="SettingItemView">
-        <attr name="setting_title" format="reference|string"/>
+        <attr name="setting_title" format="reference|string" />
         <attr name="setting_content" format="reference|string" />
         <attr name="hide_checkbox" format="boolean" />
     </declare-styleable>
     <declare-styleable name="ThemeItemView">
-        <attr name="theme_title" format="reference|string"/>
+        <attr name="theme_title" format="reference|string" />
         <attr name="theme_background" format="reference|color" />
         <attr name="theme_checkbox" format="boolean" />
     </declare-styleable>

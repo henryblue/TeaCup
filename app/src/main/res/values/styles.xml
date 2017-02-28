@@ -38,6 +38,16 @@
         <item name="android:windowAnimationStyle">@style/default_animation</item>
     </style>
 
+    <style name="blackTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorBlack</item>
+        <item name="colorPrimaryDark">@color/colorBlack</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
+        <item name="appBg">@color/colorBlack</item>
+        <item name="android:windowAnimationStyle">@style/default_animation</item>
+    </style>
+
     <style name="grayTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorGray</item>
         <item name="colorPrimaryDark">@color/colorGray</item>

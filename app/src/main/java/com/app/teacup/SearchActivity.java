@@ -14,11 +14,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.adapter.MoreMovieRecyclerAdapter;
 import com.app.bean.movie.MovieItemInfo;
 import com.app.util.OkHttpUtils;
+import com.app.util.ToolUtils;
 import com.app.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.squareup.okhttp.Request;
@@ -28,6 +30,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +63,15 @@ public class SearchActivity extends BaseActivity {
                 mSearchView.findViewById(R.id.search_src_text);
         textView.setTextColor(Color.WHITE);
         textView.setHintTextColor(ContextCompat.getColor(this, R.color.alpha_white));
+
+        //光标颜色
+        try {
+            Field mCursorDrawableRes=TextView.class.getDeclaredField("mCursorDrawableRes");
+            mCursorDrawableRes.setAccessible(true);
+            mCursorDrawableRes.set(textView, R.drawable.cursor_color);
+        } catch (Exception e){
+            Log.i(TAG, "setupSearchView: set color error==" + e.getMessage());
+        }
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -109,7 +121,7 @@ public class SearchActivity extends BaseActivity {
 
 
     private void setupRefreshLayout() {
-        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(this));
         mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
         mRefreshLayout.setProgressViewEndTarget(true, 100);
     }

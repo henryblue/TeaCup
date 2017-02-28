@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.app.bean.fanju.FanjuVideoInfo;
 import com.app.util.OkHttpUtils;
+import com.app.util.ToolUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -93,7 +94,7 @@ public class FanjuVideoActivity extends BaseActivity {
     }
 
     private void setupRefreshLayout() {
-        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(this));
         mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
         mRefreshLayout.setProgressViewEndTarget(true, 100);
         StartRefreshPage();

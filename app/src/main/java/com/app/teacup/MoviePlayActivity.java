@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.app.adapter.MoviePlayRecyclerAdapter;
 import com.app.bean.movie.MoviePlayInfo;
 import com.app.util.OkHttpUtils;
+import com.app.util.ToolUtils;
 import com.squareup.okhttp.Request;
 
 import org.jsoup.Jsoup;
@@ -152,7 +153,7 @@ public class MoviePlayActivity extends BaseActivity {
     }
 
     private void setupRefreshLayout() {
-        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(this));
         mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
         mRefreshLayout.setProgressViewEndTarget(true, 100);
         StartRefreshPage();

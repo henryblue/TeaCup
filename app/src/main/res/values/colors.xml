@@ -27,6 +27,9 @@
     <color name="colorPinkDark">#ff4081</color>
     <color name="pinkAccent">#FF5252</color>
 
+    <color name="colorBlack">#434a54</color>
+    <color name="colorBlackDark">#434a54</color>
+
     <color name="colorGray">#607d8b</color>
     <color name="colorGrayDark">#455a64</color>
 

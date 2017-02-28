@@ -21,6 +21,7 @@ import com.app.teacup.MainActivity;
 import com.app.teacup.NewsDetailActivity;
 import com.app.teacup.R;
 import com.app.util.OkHttpUtils;
+import com.app.util.ToolUtils;
 import com.app.util.urlUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -162,7 +163,7 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     }
 
     private void setupRefreshLayout() {
-        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(getContext()));
         mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
         mRefreshLayout.setProgressViewEndTarget(true, 100);
         mRefreshLayout.setOnRefreshListener(this);

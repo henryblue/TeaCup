@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 
 import com.app.teacup.R;
 
@@ -25,7 +26,7 @@ import static android.app.Activity.RESULT_OK;
 public class ToolUtils {
 
     private static int[] mStyles = {R.style.AppTheme, R.style.greenTheme, R.style.pinkTheme,
-            R.style.grayTheme, R.style.tealTheme, R.style.redTheme, R.style.purpleTheme};
+            R.style.blackTheme, R.style.grayTheme, R.style.tealTheme, R.style.redTheme, R.style.purpleTheme};
 
     public static int getScreenHeight(Context context) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
@@ -189,5 +190,11 @@ public class ToolUtils {
         SharedPreferences pf = context.getSharedPreferences("config", Context.MODE_PRIVATE);
         int pos = pf.getInt("themePos", 0);
         context.setTheme(mStyles[pos]);
+    }
+
+    public static int getThemeColorPrimary(Context context){
+        TypedValue typedValue = new  TypedValue();
+        context.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        return typedValue.data;
     }
 }
