@@ -1,6 +1,6 @@
 package com.app.bean.News;
 
-public class NewsHeadInfo {
+class NewsHeadInfo {
     private String imgUrl;
     private String newsUrl;
     private String newsTitle;

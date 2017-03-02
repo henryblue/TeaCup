@@ -46,8 +46,6 @@ public class FindBookActivity extends BaseActivity implements SwipeRefreshLayout
     private static final String filename = "findBook.json";
 
     private ArrayList<FindBookInfo> mDatas;
-    private LinearLayoutManager mLayoutManager;
-    private FloatingActionButton mAddBtn;
     private SwipeRefreshLayout mRefreshLayout;
     private FindRecycleAdapter mAdapter;
     private XRecyclerView recyclerView;
@@ -196,8 +194,10 @@ public class FindBookActivity extends BaseActivity implements SwipeRefreshLayout
             mToolbar.setTitle(getString(R.string.item_book));
         }
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void setupRefreshLayout() {
@@ -222,7 +222,7 @@ public class FindBookActivity extends BaseActivity implements SwipeRefreshLayout
     }
 
     private void setupFAB() {
-        mAddBtn = (FloatingActionButton) findViewById(R.id.fab_btn_add);
+        FloatingActionButton mAddBtn = (FloatingActionButton) findViewById(R.id.fab_btn_add);
         mAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -236,7 +236,7 @@ public class FindBookActivity extends BaseActivity implements SwipeRefreshLayout
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
         }
-        mLayoutManager = new LinearLayoutManager(FindBookActivity.this);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(FindBookActivity.this);
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -267,10 +267,6 @@ public class FindBookActivity extends BaseActivity implements SwipeRefreshLayout
                                 getString(R.string.transition_book_img));
 
                 ActivityCompat.startActivity(FindBookActivity.this, intent, options.toBundle());
-            }
-
-            @Override
-            public void onItemLongClick(View view, int position) {
             }
         });
 

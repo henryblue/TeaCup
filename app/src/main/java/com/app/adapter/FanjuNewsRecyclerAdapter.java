@@ -26,10 +26,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FanjuNewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context mContext;
-    private List<FanjuNewInfo> mDatas;
+    private final Context mContext;
+    private final List<FanjuNewInfo> mDatas;
     private OnItemClickListener mListener;
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
@@ -131,10 +131,10 @@ public class FanjuNewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private CircleImageView mUserImageView;
-        private TextView mUserName;
-        private TextView mTimeView;
-        private LinearLayout mContainer;
+        private final CircleImageView mUserImageView;
+        private final TextView mUserName;
+        private final TextView mTimeView;
+        private final LinearLayout mContainer;
 
         public NewsViewHolder(View itemView) {
             super(itemView);

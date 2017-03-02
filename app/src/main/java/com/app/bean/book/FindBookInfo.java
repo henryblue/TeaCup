@@ -4,12 +4,12 @@ package com.app.bean.book;
 import java.io.Serializable;
 
 public class FindBookInfo implements Serializable {
-    String mImgUrl;
-    String mBookTitle;
-    String mBookContent;
-    String mSummary;
-    String mAuthor;
-    String mTable;
+    private String mImgUrl;
+    private String mBookTitle;
+    private String mBookContent;
+    private String mSummary;
+    private String mAuthor;
+    private String mTable;
 
     public String getmSummary() {
         return mSummary;

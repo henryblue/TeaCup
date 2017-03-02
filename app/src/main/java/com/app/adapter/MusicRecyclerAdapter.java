@@ -19,10 +19,10 @@ import java.util.List;
 
 public class MusicRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
     private List<MusicInfo> mDatas;
     private OnItemClickListener mListener;
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
@@ -99,10 +99,10 @@ public class MusicRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private class MusicViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView mTitle;
-        private ImageView mPhotoImg;
-        private TextView mHappy;
-        private TextView mInfos;
+        private final TextView mTitle;
+        private final ImageView mPhotoImg;
+        private final TextView mHappy;
+        private final TextView mInfos;
 
         public MusicViewHolder(View itemView) {
             super(itemView);

@@ -29,7 +29,6 @@
                 android:id="@+id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/photo_gaoxiao_tip_title_marginLeft"
                 android:gravity="center_vertical"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/photo_gaoxiao_tip_title_textSize" />

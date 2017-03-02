@@ -18,9 +18,9 @@ import java.lang.reflect.Type;
 
 public class OkHttpUtils {
     private static OkHttpUtils mOkHttpUtils;
-    private OkHttpClient mOkHttpClient;
-    private Handler mDelivery;
-    private Gson mGson;
+    private final OkHttpClient mOkHttpClient;
+    private final Handler mDelivery;
+    private final Gson mGson;
 
     private OkHttpUtils() {
         mOkHttpClient = new OkHttpClient();
@@ -28,7 +28,7 @@ public class OkHttpUtils {
         mGson = new Gson();
     }
 
-    public static OkHttpUtils getInstance()
+    private static OkHttpUtils getInstance()
     {
         if (mOkHttpUtils == null)
         {
@@ -46,7 +46,7 @@ public class OkHttpUtils {
     /**
      * 同步的Get请求
      *
-     * @param url
+     * @param url url
      * @return Response
      */
     private Response _getAsyn(String url) throws IOException
@@ -55,14 +55,13 @@ public class OkHttpUtils {
                 .url(url)
                 .build();
         Call call = mOkHttpClient.newCall(request);
-        Response execute = call.execute();
-        return execute;
+        return call.execute();
     }
 
     /**
      * 同步的Get请求
      *
-     * @param url
+     * @param url url
      * @return 字符串
      */
     private String _getAsString(String url) throws IOException
@@ -75,8 +74,8 @@ public class OkHttpUtils {
     /**
      * 异步的get请求
      *
-     * @param url
-     * @param callback
+     * @param url url
+     * @param callback callback
      */
     private void _getAsyn(String url, final ResultCallback callback)
     {
@@ -166,7 +165,7 @@ public class OkHttpUtils {
 
     public static abstract class ResultCallback<T>
     {
-        Type mType;
+        final Type mType;
 
         public ResultCallback()
         {

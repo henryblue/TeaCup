@@ -19,8 +19,8 @@ import java.util.List;
 
 public class TvPlayRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context mContext;
-    private List<TvItemInfo> mDatas;
+    private final Context mContext;
+    private final List<TvItemInfo> mDatas;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
@@ -61,16 +61,16 @@ public class TvPlayRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private class TvViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView mTextView;
-        private int margin = mContext.getResources()
+        private final TextView mTextView;
+        private final int margin = mContext.getResources()
                 .getDimensionPixelOffset(R.dimen.tv_series_textView_item_margin);
-        private int width = mContext.getResources()
+        private final int width = mContext.getResources()
                 .getDimensionPixelOffset(R.dimen.tv_series_textView_item_width);
-        private int maxWidth = mContext.getResources()
+        private final int maxWidth = mContext.getResources()
                 .getDimensionPixelOffset(R.dimen.tv_series_textView_item_max_width);
-        private int height = mContext.getResources()
+        private final int height = mContext.getResources()
                 .getDimensionPixelOffset(R.dimen.tv_series_textView_item_height);
-        private int textSize = mContext.getResources().getDimensionPixelSize(R.dimen.tv_series_textView_item_textSize);
+        private final int textSize = mContext.getResources().getDimensionPixelSize(R.dimen.tv_series_textView_item_textSize);
 
         public TvViewHolder(View itemView) {
             super(itemView);

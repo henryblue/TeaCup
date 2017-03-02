@@ -161,7 +161,7 @@ public class ShowPhotoActivity extends Activity {
 
     private class SaveImageTask extends AsyncTask<String, Void, File> {
         private final Context context;
-        private int mFlag;
+        private final int mFlag;
 
         public SaveImageTask(Context context, int flag) {
             this.context = context;

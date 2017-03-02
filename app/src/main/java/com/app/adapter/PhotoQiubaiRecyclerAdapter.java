@@ -19,10 +19,10 @@ import java.util.List;
 
 public class PhotoQiubaiRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
     private List<PhotoInfo> mDatas;
     private OnItemClickListener mListener;
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
@@ -142,9 +142,9 @@ public class PhotoQiubaiRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private class PhotoViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView mTitle;
-        private ImageView mPhotoImg;
-        private ImageView mGif;
+        private final TextView mTitle;
+        private final ImageView mPhotoImg;
+        private final ImageView mGif;
 
         public PhotoViewHolder(View itemView) {
             super(itemView);

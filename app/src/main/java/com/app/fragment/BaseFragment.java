@@ -2,22 +2,21 @@ package com.app.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 
 public abstract class BaseFragment extends Fragment {
 
-    public static final int REFRESH_START = 0;
-    public static final int REFRESH_FINISH = 1;
-    public static final int REFRESH_ERROR = 2;
-    public static final int LOAD_DATA_FINISH = 3;
-    public static final int LOAD_DATA_ERROR = 4;
-    public static final int LOAD_DATA_NONE = 5;
+    protected static final int REFRESH_START = 0;
+    protected static final int REFRESH_FINISH = 1;
+    protected static final int REFRESH_ERROR = 2;
+    protected static final int LOAD_DATA_FINISH = 3;
+    protected static final int LOAD_DATA_ERROR = 4;
+    protected static final int LOAD_DATA_NONE = 5;
 
     @SuppressLint("HandlerLeak")
-    public Handler mHandler = new Handler() {
+    protected Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -51,11 +50,6 @@ public abstract class BaseFragment extends Fragment {
     };
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (getUserVisibleHint()) {
@@ -81,10 +75,10 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract void onRefreshStart();
 
-    public void onLoadDataNone() {
+    protected void onLoadDataNone() {
     }
 
-    public void sendParseDataMessage(int message) {
+    protected void sendParseDataMessage(int message) {
         if (mHandler != null) {
             Message msg = Message.obtain();
             msg.what = message;

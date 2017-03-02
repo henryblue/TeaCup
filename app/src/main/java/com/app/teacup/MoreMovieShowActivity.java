@@ -93,8 +93,10 @@ public class MoreMovieShowActivity extends BaseActivity {
             mToolbar.setTitle(arrayStyle[movieStyle]);
         }
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void setupRefreshLayout() {

@@ -18,10 +18,10 @@ import java.util.List;
 
 public class PhotoDoubanRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
     private List<PhotoInfo> mDatas;
     private OnItemClickListener mListener;
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
 
 
     public interface OnItemClickListener {
@@ -98,8 +98,8 @@ public class PhotoDoubanRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private class PhotoViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView mPhotoImg;
-        private TextView mTitle;
+        private final ImageView mPhotoImg;
+        private final TextView mTitle;
 
         public PhotoViewHolder(View itemView) {
             super(itemView);

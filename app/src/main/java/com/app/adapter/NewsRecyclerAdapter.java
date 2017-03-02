@@ -24,11 +24,11 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_NORMAL = 1;
 
-    private Context mContext;
+    private final Context mContext;
     private List<NewsInfo> mDatas;
-    private List<ImageView> mHeaderList;
+    private final List<ImageView> mHeaderList;
     private OnItemClickListener mListener;
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
     private HeaderViewHolder mHeaderViewHolder;
 
     public interface OnItemClickListener {
@@ -107,7 +107,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-     public int getRealPosition(RecyclerView.ViewHolder holder) {
+     private int getRealPosition(RecyclerView.ViewHolder holder) {
         int position = holder.getLayoutPosition();
         return position - 2;
     }
@@ -153,10 +153,10 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private class NewsViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView mTitle;
-        private ImageView mPhotoImg;
-        private TextView mLabel;
-        private View mainView;
+        private final TextView mTitle;
+        private final ImageView mPhotoImg;
+        private final TextView mLabel;
+        private final View mainView;
 
         NewsViewHolder(View itemView) {
             super(itemView);
@@ -170,16 +170,16 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private class HeaderViewHolder extends RecyclerView.ViewHolder {
 
         private ReactViewPagerAdapter mAdapter;
-        private ViewPager mViewPager;
-        private LinearLayout mGroup;
-        private View mHeadrView;
+        private final ViewPager mViewPager;
+        private final LinearLayout mGroup;
+        private final View mHeaderView;
         private int mLastPos = 0;
 
         HeaderViewHolder(View itemView) {
             super(itemView);
             mViewPager = (ViewPager) itemView.findViewById(R.id.vp_news);
             mGroup = (LinearLayout) itemView.findViewById(R.id.ll_group);
-            mHeadrView = itemView;
+            mHeaderView = itemView;
 
             if (mHeaderList.size() <= 0) {
                 return;
@@ -250,7 +250,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         void setHeaderVisible(int visible) {
-            mHeadrView.setVisibility(visible);
+            mHeaderView.setVisibility(visible);
             mGroup.setVisibility(visible);
         }
     }

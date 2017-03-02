@@ -19,14 +19,13 @@ import java.util.List;
 
 public class PhotoGaoxiaoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
     private List<PhotoInfo> mDatas;
     private OnItemClickListener mListener;
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
-        void onItemLongClick(View view, int position);
     }
 
     public PhotoGaoxiaoRecyclerAdapter(Context context, List<PhotoInfo> datas) {
@@ -81,15 +80,6 @@ public class PhotoGaoxiaoRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
                     mListener.onItemClick(myHolder.itemView, pos);
                 }
             });
-
-            myHolder.mPhotoImg.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    int pos = myHolder.getLayoutPosition() - 1;
-                    mListener.onItemLongClick(myHolder.itemView, pos);
-                    return false;
-                }
-            });
         }
     }
 
@@ -110,9 +100,9 @@ public class PhotoGaoxiaoRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private class PhotoViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView mTitle;
-        private MoreTextView mContent;
-        private ImageView mPhotoImg;
+        private final TextView mTitle;
+        private final MoreTextView mContent;
+        private final ImageView mPhotoImg;
 
         public PhotoViewHolder(View itemView) {
             super(itemView);

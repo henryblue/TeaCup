@@ -114,10 +114,6 @@ public class GaoxiaoFragment extends BaseFragment implements SwipeRefreshLayout.
                     startActivity(intent);
                 }
             }
-
-            @Override
-            public void onItemLongClick(View view, int position) {
-            }
         });
     }
 

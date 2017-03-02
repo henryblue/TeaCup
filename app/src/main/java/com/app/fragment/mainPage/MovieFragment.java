@@ -313,15 +313,5 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
         sendParseDataMessage(REFRESH_START);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
 }
 

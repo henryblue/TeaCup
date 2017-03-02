@@ -375,16 +375,6 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
     protected void onFragmentInvisible() {
         super.onFragmentInvisible();
         if (mNewsRecyclerAdapter != null) {

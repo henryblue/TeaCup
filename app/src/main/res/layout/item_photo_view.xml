@@ -19,7 +19,7 @@
         android:layout_gravity="bottom"
         android:layout_height="@dimen/item_photo_view_title_height"
         android:textSize="@dimen/item_photo_view_title_tiexSize"
-        android:singleLine="true"
+        android:maxLines="1"
         android:ellipsize="end"
         android:gravity="bottom"
         android:layout_marginLeft="@dimen/item_photo_view_title_marginLeft"

@@ -19,13 +19,13 @@ public class MoreTextView extends LinearLayout implements View.OnClickListener {
 
     private static final int COLLAPSIBLE_STATE_SHRINKUP = 1;
     private static final int COLLAPSIBLE_STATE_SPREAD = 2;
+    private static final int DEFAULT_TEXT_SIZE = 15;
 
     private TextView mTextContent;
     private TextView mTextDesc;
     private String mShrinkup;
     private String mSpread;
     private int mState;
-    private int mDefaultSize = 15;
     private int mMaxLines;
     private boolean mIsChanged;
 
@@ -63,13 +63,13 @@ public class MoreTextView extends LinearLayout implements View.OnClickListener {
         }
         TypedArray typeArray = context.obtainStyledAttributes(attrs,
                 R.styleable.MoreTextView);
-        final int texSize = typeArray.getDimensionPixelOffset(R.styleable.MoreTextView_textSize, mDefaultSize);
+        final int texSize = typeArray.getDimensionPixelOffset(R.styleable.MoreTextView_textSize, DEFAULT_TEXT_SIZE);
         setTextSize(texSize);
 
         int color = typeArray.getColor(R.styleable.MoreTextView_textColor, Color.BLACK);
         mTextContent.setTextColor(color);
 
-        int size = typeArray.getDimensionPixelOffset(R.styleable.MoreTextView_desc_textSize, mDefaultSize);
+        int size = typeArray.getDimensionPixelOffset(R.styleable.MoreTextView_desc_textSize, DEFAULT_TEXT_SIZE);
         mTextDesc.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
 
         color = typeArray.getColor(R.styleable.MoreTextView_desc_textColor, Color.BLACK);
@@ -114,7 +114,7 @@ public class MoreTextView extends LinearLayout implements View.OnClickListener {
         }
     }
 
-    class InnerRunnable implements Runnable {
+    private class InnerRunnable implements Runnable {
         @Override
         public void run() {
             if (!mIsChanged) {

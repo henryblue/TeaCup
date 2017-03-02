@@ -19,8 +19,8 @@ import java.util.ArrayList;
 
 
 public class FindRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Context mContext;
-    private LayoutInflater mLayoutInflater;
+    private final Context mContext;
+    private final LayoutInflater mLayoutInflater;
     private ArrayList<FindBookInfo> mDatas;
     private OnItemClickListener mListener;
     private boolean animateItems = true;
@@ -29,7 +29,6 @@ public class FindRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public interface OnItemClickListener {
         void onItemClick(View view,int position);
-        void onItemLongClick(View view , int position);
     }
 
     public FindRecycleAdapter(Context context, ArrayList<FindBookInfo> datas) {
@@ -84,15 +83,6 @@ public class FindRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 public void onClick(View v) {
                     int pos = myHolder.getLayoutPosition() - 1;
                     mListener.onItemClick(holder.itemView, pos);
-                }
-            });
-
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    int pos = myHolder.getLayoutPosition() - 1;
-                    mListener.onItemLongClick(holder.itemView, pos);
-                    return false;
                 }
             });
         }
@@ -151,9 +141,9 @@ public class FindRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView mBookImg;
-        private TextView mBookTitle;
-        private TextView mBookContent;
+        private final ImageView mBookImg;
+        private final TextView mBookTitle;
+        private final TextView mBookContent;
 
         public MyViewHolder(View itemView) {
             super(itemView);

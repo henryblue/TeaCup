@@ -7,10 +7,9 @@ import com.google.gson.Gson;
 
 public class JsonUtils {
 
-    public static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     public static Book parseJsonData(String jsonStr) {
-        Book info = gson.fromJson(jsonStr, Book.class);
-        return info;
+        return gson.fromJson(jsonStr, Book.class);
     }
 }

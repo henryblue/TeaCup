@@ -34,7 +34,6 @@ import uk.co.senab.photoview.PhotoView;
 public class ShowPhotoListActivity extends Activity {
 
     private ArrayList<String> mPhotoList;
-    private int mPhotoPos;
     private LinearLayout.LayoutParams mLps;
     private PopupWindow mPopupWindow;
 
@@ -44,7 +43,7 @@ public class ShowPhotoListActivity extends Activity {
         setContentView(R.layout.layout_show_photo_list);
         Intent intent = getIntent();
         mPhotoList = intent.getStringArrayListExtra("photoList");
-        mPhotoPos = intent.getIntExtra("photoPos", 0);
+        int mPhotoPos = intent.getIntExtra("photoPos", 0);
         mLps = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         mLps.gravity = Gravity.CENTER;
@@ -139,7 +138,7 @@ public class ShowPhotoListActivity extends Activity {
     private class SaveImageTask extends AsyncTask<String, Void, File> {
         private final Context context;
         private String mImgUrl;
-        private int mFlag;
+        private final int mFlag;
 
         public SaveImageTask(Context context, int flag) {
             this.context = context;
@@ -223,11 +222,6 @@ public class ShowPhotoListActivity extends Activity {
                 }
             });
             return photoView;
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return super.getItemPosition(object);
         }
     }
 }

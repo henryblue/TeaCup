@@ -43,11 +43,6 @@ public class MusicPlayActivity extends Activity implements View.OnClickListener 
         startPlay(mCurrPlayPos);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
     private void initData() {
         Intent intent = getIntent();
         mCurrPlayPos = intent.getIntExtra("position", -1);

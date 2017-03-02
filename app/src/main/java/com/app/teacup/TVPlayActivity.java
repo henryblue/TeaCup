@@ -415,7 +415,7 @@ public class TVPlayActivity extends BaseActivity {
         }
     }
 
-    public void destroyWebView() {
+    private void destroyWebView() {
         if (mWebView != null) {
             mWebView.clearHistory();
             mWebView.clearFormData();

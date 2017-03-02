@@ -16,10 +16,10 @@ import java.util.List;
 
 public class PhotoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
     private List<String> mDatas;
     private OnItemClickListener mListener;
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
 
 
     public interface OnItemClickListener {
@@ -94,7 +94,7 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private class PhotoViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView mPhotoImg;
+        private final ImageView mPhotoImg;
 
         public PhotoViewHolder(View itemView) {
             super(itemView);

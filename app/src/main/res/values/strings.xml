@@ -2,7 +2,6 @@
     <string name="app_name">茶杯</string>
     <string name="user_name">gakki</string>
     <string name="about">关于</string>
-    <string name="search">搜索</string>
     <string name="share">分享</string>
     <string name="settings">设置</string>
     <string name="drawer_open">打开</string>
@@ -11,7 +10,6 @@
     <string name="item_book">搜书</string>
     <string name="item_package">美图</string>
     <string name="item_news">新鲜事</string>
-    <string name="item_read">阅读</string>
     <string name="item_weather">天气</string>
     <string name="input_hint">请输入需要添加的书名</string>
     <string name="input_http">请输入/粘贴视频地址</string>
@@ -21,20 +19,16 @@
     <string name="cancel">取消</string>
     <string name="transition_book_img">transition_book_img</string>
     <string name="transition_music_img">transition_music_img</string>
-    <string name="transition_ting_img">transition_ting_img</string>
     <string name="book_content_detail">内容简介</string>
     <string name="book_author_detail">作者简介</string>
     <string name="book_table">目录</string>
-    <string name="weather_change">切换</string>
     <string name="music_total_end">首</string>
-    <string name="default_city">上海</string>
     <string name="refresh_net_error">联网失败, 请检查网络</string>
     <string name="not_have_more_data">没有更多的数据了…</string>
     <string name="screen_shield">抱歉, 网站将您ip屏蔽, 请换个网络重试</string>
     <string name="load_data_error">加载数据失败</string>
     <string name="music_play_pre">当前已经是第一首</string>
     <string name="load_music_error">音乐文件加载出错</string>
-    <string name="unknown_name">未名</string>
 
     <string name="about_for_tea">茶,\n一片树叶的故事\n一道茶,就是一种人生\n一道茶,
         总会苦一阵子,\n但不会苦一辈子.\n寻茶、遇茶、品茶,\n就是寻人、遇人、品人的过程,\n
@@ -66,7 +60,6 @@
     <string name="clean_cache_finish">缓存清理完成</string>
     <string name="location_error">定位失败!请打开gps和网络尝试</string>
     <string name="file_save_tip">"文件已经保存到: "</string>
-    <string name="file_not_find_tip">文件不存在!</string>
     <string name="set_theme">主题</string>
     <string name="desc_shrinkup">收起</string>
     <string name="desc_spread">全文</string>
@@ -82,6 +75,8 @@
     <string name="nothing_find">什么都没有找到~</string>
     <string name="whether_tv_tip">集</string>
     <string name="search_video_hint">搜索视频</string>
+    <string name="share_photo">分享图片</string>
+    <string name="save_photo">保存图片</string>
 
     <string-array name="tab_name">
         <item>新鲜事</item>

@@ -1,7 +1,6 @@
 package com.app.teacup;
 
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.app.util.ToolUtils;
+
+import java.lang.ref.WeakReference;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -18,41 +19,52 @@ public abstract class BaseActivity extends AppCompatActivity {
     public static final int LOAD_DATA_FINISH = 3;
     public static final int LOAD_DATA_ERROR = 4;
 
-    @SuppressLint("HandlerLeak")
-    public Handler mHandler = new Handler() {
+    private UpdateHandler mHandler;
+
+    private static class UpdateHandler extends Handler {
+        private WeakReference<BaseActivity> mActivity;
+
+        UpdateHandler(BaseActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (isFinishing()){
+            BaseActivity activity = mActivity.get();
+            if (activity == null) {
+                return;
+            }
+            if (activity.isFinishing()){
                 return;
             }
 
             switch (msg.what) {
                 case REFRESH_START:
-                    onRefreshStart();
+                    activity.onRefreshStart();
                     break;
                 case REFRESH_FINISH:
-                    onRefreshFinish();
+                    activity.onRefreshFinish();
                     break;
                 case REFRESH_ERROR:
-                    onRefreshError();
+                    activity.onRefreshError();
                     break;
                 case LOAD_DATA_FINISH:
-                    onLoadDataFinish();
+                    activity.onLoadDataFinish();
                     break;
                 case LOAD_DATA_ERROR:
-                    onLoadDataError();
+                    activity.onLoadDataError();
                     break;
                 default:
                     break;
             }
         }
-    };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ToolUtils.onActivityCreateSetTheme(this);
+        mHandler = new UpdateHandler(BaseActivity.this);
     }
 
     public void sendParseDataMessage(int message) {

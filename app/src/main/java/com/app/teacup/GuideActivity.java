@@ -25,7 +25,7 @@ public class GuideActivity extends Activity {
     private static final String[] mBgColors = {"#0288d1",
     "#ffccbc", "#88303f9f", "#388e3c"};
 
-    private List<View> mViewList = new ArrayList<>();
+    private final List<View> mViewList = new ArrayList<>();
     private ViewPager mViewPager;
     private LinearLayout mLayoutDot;
     private ImageView mImgView;

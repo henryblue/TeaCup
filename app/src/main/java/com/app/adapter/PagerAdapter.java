@@ -10,8 +10,8 @@ import java.util.List;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
-    private String[] tabTitles;
-    private List<Fragment> mFragmentArrayList;
+    private final String[] tabTitles;
+    private final List<Fragment> mFragmentArrayList;
 
     public PagerAdapter(FragmentManager fm, List<Fragment> lists, String[] titles) {
         super(fm);

@@ -22,10 +22,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FanjuRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
     private List<FanjuInfo> mDatas;
     private OnItemClickListener mListener;
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
@@ -104,13 +104,13 @@ public class FanjuRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private class VideoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private CircleImageView mAuthorImg;
-        private TextView mAuthorName;
-        private TextView mPublishTime;
-        private TextView mVideoName;
-        private TextView mVideoContent;
-        private ImageView mVideoImg;
-        private ImageView mVideoIndex;
+        private final CircleImageView mAuthorImg;
+        private final TextView mAuthorName;
+        private final TextView mPublishTime;
+        private final TextView mVideoName;
+        private final TextView mVideoContent;
+        private final ImageView mVideoImg;
+        private final ImageView mVideoIndex;
 
         public VideoViewHolder(View itemView) {
             super(itemView);

@@ -24,7 +24,7 @@ public class FlashActivity extends Activity {
     private static final String TAG = "FlashActivity";
 
     @SuppressLint("HandlerLeak")
-    public Handler mHandler = new Handler() {
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -104,7 +104,7 @@ public class FlashActivity extends Activity {
         });
     }
 
-    public void sendParseDataMessage(int message, int arg1) {
+    private void sendParseDataMessage(int message, int arg1) {
         if (mHandler != null) {
             Message msg = Message.obtain();
             msg.what = message;

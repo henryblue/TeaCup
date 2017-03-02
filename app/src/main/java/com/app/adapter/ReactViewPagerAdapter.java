@@ -11,14 +11,14 @@ import android.widget.ImageView;
 
 import java.util.List;
 
-public class ReactViewPagerAdapter extends PagerAdapter {
+class ReactViewPagerAdapter extends PagerAdapter {
 
-    private List<ImageView> mImageViewList;
-    private ViewPager mViewPager;
+    private final List<ImageView> mImageViewList;
+    private final ViewPager mViewPager;
     private boolean mIsAutoScroll = false;
 
     @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
+    private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
@@ -59,7 +59,7 @@ public class ReactViewPagerAdapter extends PagerAdapter {
         try {
             container.addView(mImageViewList.get(position % mImageViewList.size()));
         } catch (Exception e) {
-
+            //
         }
         return mImageViewList.get(position % mImageViewList.size());
     }

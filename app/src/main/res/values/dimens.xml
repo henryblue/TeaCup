@@ -56,10 +56,8 @@
 
     <dimen name="muisic_detail_title_margintop">15dp</dimen>
     <dimen name="muisic_detail_title_marginleft">15dp</dimen>
-    <dimen name="muisic_detail_title_marginRight">10dp</dimen>
     <dimen name="muisic_detail_title_textsize">20sp</dimen>
     <dimen name="muisic_detail_type_margintop">10dp</dimen>
-    <dimen name="muisic_detail_type_marginBottom">10dp</dimen>
     <dimen name="muisic_detail_type_marginleft">10dp</dimen>
     <dimen name="muisic_detail_type_textsize">13sp</dimen>
     <dimen name="muisic_detail_content_margin">13dp</dimen>
@@ -67,8 +65,6 @@
     <dimen name="muisic_detail_total_height">40dp</dimen>
     <dimen name="muisic_detail_total_textsize">16sp</dimen>
     <dimen name="muisic_detail_total_margintop">12dp</dimen>
-    <dimen name="muisic_detail_MiniMusicView_marginBottom">10dp</dimen>
-    <dimen name="muisic_detail_MiniMusicView_marginTop">10dp</dimen>
 
     <dimen name="item_muisic_detail_layout_padding">10dp</dimen>
     <dimen name="item_muisic_detail_layout_height">60dp</dimen>
@@ -102,7 +98,6 @@
     <dimen name="photo_gaoxiao_tip_layout_marginLeft">16dp</dimen>
     <dimen name="photo_gaoxiao_tip_img_width">30dp</dimen>
     <dimen name="photo_gaoxiao_tip_img_height">30dp</dimen>
-    <dimen name="photo_gaoxiao_tip_title_marginLeft">8dp</dimen>
     <dimen name="photo_gaoxiao_tip_title_textSize">16sp</dimen>
     <dimen name="photo_gaoxiao_content_marginLeft">16dp</dimen>
     <dimen name="photo_gaoxiao_content_marginTop">5dp</dimen>
@@ -197,31 +192,6 @@
     <dimen name="setting_item_view_marginRight">10dp</dimen>
     <dimen name="setting_item_rl_height">75dp</dimen>
 
-    <dimen name="list_item_read_collection_height">170dp</dimen>
-    <dimen name="list_item_read_collection_marginBottom">10dp</dimen>
-    <dimen name="list_item_read_collection_title_size">18sp</dimen>
-    <dimen name="list_item_read_collection_title_margin">8dp</dimen>
-    <dimen name="list_item_read_collection_ll_marginTop">4dp</dimen>
-    <dimen name="list_item_read_collection_ll_marginRight">8dp</dimen>
-    <dimen name="list_item_read_collection_img_width">75dp</dimen>
-    <dimen name="list_item_read_collection_img_height">85dp</dimen>
-    <dimen name="list_item_read_collection_img_marginLeft">8dp</dimen>
-    <dimen name="list_item_read_collection_content_marginLeft">8dp</dimen>
-    <dimen name="list_item_read_collection_content_size">15sp</dimen>
-    <dimen name="list_item_read_collection_author_marginBottom">8dp</dimen>
-    <dimen name="list_item_read_collection_author_marginLeft">8dp</dimen>
-    <dimen name="list_item_read_collection_author_size">13sp</dimen>
-    <dimen name="list_item_read_collection_detail_marginBottom">8dp</dimen>
-    <dimen name="list_item_read_collection_detail_marginLeft">8dp</dimen>
-    <dimen name="list_item_read_collection_detail_size">13sp</dimen>
-
-    <dimen name="list_item_read_topic_height">225dp</dimen>
-    <dimen name="list_item_read_topic_margin">8dp</dimen>
-    <dimen name="list_item_read_topic_ll_height">60dp</dimen>
-    <dimen name="list_item_read_topic_title_margin">8dp</dimen>
-    <dimen name="list_item_read_topic_title_size">15sp</dimen>
-    <dimen name="list_item_read_topic_detail_size">13sp</dimen>
-
     <dimen name="theme_item_ll_title_textSize">17sp</dimen>
     <dimen name="theme_item_ll_title_marginLeft">10dp</dimen>
     <dimen name="theme_item_ll_img_size">20dp</dimen>
@@ -235,7 +205,6 @@
     <dimen name="item_video_view_elevation">1dp</dimen>
 
     <dimen name="item_fanju_video_cv_margin">8dp</dimen>
-    <dimen name="item_fanju_video_cv_marginBottom">12dp</dimen>
 
     <dimen name="item_fanju_video_paddingBottom">8dp</dimen>
     <dimen name="item_fanju_video_height">90dp</dimen>
@@ -342,4 +311,24 @@
     <dimen name="layout_search_srl_marginTop">8dp</dimen>
 
     <dimen name="layout_movie_more_marginTop">7dp</dimen>
+
+    <dimen name="item_fanju_view_rl_marginLeft">8dp</dimen>
+    <dimen name="item_fanju_view_rl_marginTop">5dp</dimen>
+    <dimen name="item_fanju_view_rl_height">25dp</dimen>
+    <dimen name="item_fanju_view_civ_width">25dp</dimen>
+    <dimen name="item_fanju_view_tv_marginLeft">5dp</dimen>
+    <dimen name="item_fanju_view_tv_textSize">13sp</dimen>
+    <dimen name="item_fanju_view_tv_time_marginRight">10dp</dimen>
+    <dimen name="item_fanju_view_tv_time_textSize">12sp</dimen>
+    <dimen name="item_fanju_view_rl_content_height">93dp</dimen>
+    <dimen name="item_fanju_view_rl_content_marginTop">10dp</dimen>
+    <dimen name="item_fanju_view_videoImg_width">93dp</dimen>
+    <dimen name="item_fanju_view_videoIndex_width">40dp</dimen>
+    <dimen name="item_fanju_view_videoIndex_height">25dp</dimen>
+    <dimen name="item_fanju_view_videoName_marginLeft">10dp</dimen>
+    <dimen name="item_fanju_view_videoName_marginRight">10dp</dimen>
+    <dimen name="item_fanju_view_videoName_textSize">14sp</dimen>
+    <dimen name="item_fanju_view_videoContent_marginRight">10dp</dimen>
+    <dimen name="item_fanju_view_videoContent_marginTop">12dp</dimen>
+    <dimen name="item_fanju_view_videoContent_textSize">13sp</dimen>
 </resources>

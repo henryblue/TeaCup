@@ -19,10 +19,10 @@ import java.util.List;
 
 public class MoviePlayRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context mContext;
-    private List<MoviePlayInfo> mDatas;
+    private final Context mContext;
+    private final List<MoviePlayInfo> mDatas;
     private OnItemClickListener mListener;
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
@@ -82,9 +82,9 @@ public class MoviePlayRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ImageView mImageView;
-        private TextView mNameView;
-        private TextView mTimeView;
+        private final ImageView mImageView;
+        private final TextView mNameView;
+        private final TextView mTimeView;
 
         public MovieViewHolder(View itemView) {
             super(itemView);

@@ -2,12 +2,8 @@ package com.app.teacup;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,17 +30,16 @@ import java.io.IOException;
 
 public class WeatherActivity extends BaseActivity {
 
-    private String mFileName = "WeatherCacheInfo.json";
+    private static final String mFileName = "WeatherCacheInfo.json";
     private ImageView mWeatherIcon;
     private TextView mWeatherLocal;
     private TextView mWeatherTemp;
     private TextView mWeatherWind;
     private TextView mWeatherContent;
     private LinearLayout mLayoutWeatherStatus;
-    private Toolbar mToolbar;
     private String mCurrCity;
     private LocationClient mLocationClient = null;
-    public BDLocationListener myListener = new MyBdlocationListener();
+    private final BDLocationListener myListener = new MyBdlocationListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,11 +196,13 @@ public class WeatherActivity extends BaseActivity {
 
 
     private void initToolBar() {
-        mToolbar = (Toolbar) findViewById(R.id.activity_navigation_toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.activity_navigation_toolbar);
         mToolbar.setTitle(getString(R.string.item_weather));
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override

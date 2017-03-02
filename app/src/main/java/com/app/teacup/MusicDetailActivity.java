@@ -28,6 +28,7 @@ import org.jsoup.select.Elements;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MusicDetailActivity extends BaseActivity {
 
@@ -77,7 +78,9 @@ public class MusicDetailActivity extends BaseActivity {
     private void initToolBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.music_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         if (toolbar != null) {
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
@@ -132,7 +135,8 @@ public class MusicDetailActivity extends BaseActivity {
         mMusicType.setText(mDetailInfo.getType());
         mMusicContent.setContent(mDetailInfo.getContent());
         int total = mDetailInfo.getMusicList().size();
-        String musicTotal = String.format("   %d%s", total, getString(R.string.music_total_end));
+        String musicTotal = String.format(Locale.getDefault(), "   %d%s",
+                total, getString(R.string.music_total_end));
         mMusicTotal.setText(musicTotal);
         initLayout();
     }
@@ -146,7 +150,7 @@ public class MusicDetailActivity extends BaseActivity {
             TextView name = (TextView) view.findViewById(R.id.tv_play_name);
             TextView user = (TextView) view.findViewById(R.id.tv_play_user);
 
-            index.setText(String.format("%02d", i + 1));
+            index.setText(String.format(Locale.getDefault(), "%02d", i + 1));
             if (!MainActivity.mIsLoadPhoto) {
                 Glide.with(this).load(list.get(i).getImgUrl())
                         .error(R.drawable.photo_loaderror)
@@ -229,7 +233,7 @@ public class MusicDetailActivity extends BaseActivity {
 
         String id = mMusicInfo.getTitle().substring(4, 7);
         for (int i = 1; i <= musicList.size(); i++) {
-            String num = String.format("%02d", i);
+            String num = String.format(Locale.getDefault(), "%02d", i);
             String musicUrl = urlUtils.MUSIC_PLAYER_URL + id + "/" + num + ".mp3";
             musicList.get(i - 1).setMusicUrl(musicUrl);
         }

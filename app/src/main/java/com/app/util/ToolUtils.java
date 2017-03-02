@@ -25,7 +25,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class ToolUtils {
 
-    private static int[] mStyles = {R.style.AppTheme, R.style.greenTheme, R.style.pinkTheme,
+    private static final int[] mStyles = {R.style.AppTheme, R.style.greenTheme, R.style.pinkTheme,
             R.style.blackTheme, R.style.grayTheme, R.style.tealTheme, R.style.redTheme, R.style.purpleTheme};
 
     public static int getScreenHeight(Context context) {
@@ -87,7 +87,7 @@ public class ToolUtils {
         return Formatter.formatFileSize(context, cacheSize);
     }
 
-    public static long getFolderSize(File file) throws Exception {
+    private static long getFolderSize(File file) {
         long size = 0;
         try {
             File[] fileList = file.listFiles();
@@ -122,11 +122,7 @@ public class ToolUtils {
                 }
             }
         }
-        if (dir != null) {
-            return dir.delete();
-        } else {
-            return false;
-        }
+        return dir != null && dir.delete();
     }
 
     private static byte [] getHash(String password) {
@@ -136,8 +132,13 @@ public class ToolUtils {
         } catch (NoSuchAlgorithmException e1) {
             e1.printStackTrace();
         }
-        digest.reset();
-        return digest.digest(password.getBytes());
+        if (digest != null) {
+            digest.reset();
+            return digest.digest(password.getBytes());
+        } else {
+            return null;
+        }
+
     }
 
     //SHA-256加密算法

@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/item_muisic_detail_name_marginleft"
             android:textColor="@color/black"
-            android:singleLine="true"
+            android:maxLines="1"
             android:ellipsize="end"
             android:textSize="@dimen/item_muisic_detail_name_textsize"/>
 
@@ -40,7 +40,7 @@
             android:id="@+id/tv_play_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
+            android:maxLines="1"
             android:ellipsize="end"
             android:textSize="@dimen/item_muisic_detail_user_textsize"
             android:textColor="@color/black"

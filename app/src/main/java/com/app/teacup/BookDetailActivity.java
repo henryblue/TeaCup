@@ -24,9 +24,8 @@ import java.util.List;
 
 public class BookDetailActivity extends AppCompatActivity {
 
-    private ViewPager mViewPager;
     private FindBookInfo mBookInfo;
-    TabLayout tabLayout;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +36,12 @@ public class BookDetailActivity extends AppCompatActivity {
         initView();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
     private void initToolBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.book_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         if (toolbar != null) {
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
@@ -82,7 +78,7 @@ public class BookDetailActivity extends AppCompatActivity {
             }
         }
 
-        mViewPager = (ViewPager) findViewById(R.id.book_viewpager);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.book_viewpager);
         setupViewPager(mViewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);

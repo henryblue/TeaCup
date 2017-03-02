@@ -33,7 +33,7 @@ public class SettingItemView extends RelativeLayout {
 	/**
 	 * 初始化布局文件
 	 * 
-	 * @param context
+	 * @param context context
 	 */
 	private void initView(Context context) {
 		View.inflate(context, R.layout.setting_item_view, this);
@@ -74,7 +74,7 @@ public class SettingItemView extends RelativeLayout {
 	/**
 	 * 设置标题
 	 * 
-	 * @param title
+	 * @param title title
 	 */
 	public void setTitle(String title) {
 		mTitle.setText(title);
@@ -82,7 +82,7 @@ public class SettingItemView extends RelativeLayout {
 
 	/**
 	 * 设置说明内容
-	 * @param content
+	 * @param content content
      */
 	public void setContent(String content) {
         mContent.setText(content);

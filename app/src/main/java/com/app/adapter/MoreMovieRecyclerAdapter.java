@@ -20,10 +20,10 @@ import java.util.List;
 public class MoreMovieRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final int mItemWidth;
-    private Context mContext;
+    private final Context mContext;
     private List<MovieItemInfo> mDatas;
     private OnItemClickListener mListener;
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
 
 
     public interface OnItemClickListener {

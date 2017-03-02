@@ -2,6 +2,7 @@ package com.app.teacup;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -20,9 +21,9 @@ public class ThemeChangeActivity extends AppCompatActivity {
     private LinearLayout mLayout;
     private String[] mThemeArray;
     private int oldPos;
-    private List<ThemeItemView> themeItemViews = new ArrayList<>();
+    private final List<ThemeItemView> themeItemViews = new ArrayList<>();
 
-    private int[] mColors = {R.color.colorPrimary, R.color.colorGreen, R.color.colorPink,
+    private final int[] mColors = {R.color.colorPrimary, R.color.colorGreen, R.color.colorPink,
             R.color.colorBlack, R.color.colorGray, R.color.colorTeal, R.color.colorRed, R.color.colorPurple};
 
     private SharedPreferences mSps;
@@ -50,7 +51,7 @@ public class ThemeChangeActivity extends AppCompatActivity {
             final ThemeItemView themeView = new ThemeItemView(this);
             themeView.setLayoutParams(lp);
             themeView.setTitle(mThemeArray[i]);
-            themeView.setTitleColor(getResources().getColor(mColors[i]));
+            themeView.setTitleColor(ContextCompat.getColor(ThemeChangeActivity.this, mColors[i]));
             themeView.setImageBackground(mColors[i]);
             final int finalI = i;
             themeView.setOnClickListener(new View.OnClickListener() {
@@ -82,8 +83,10 @@ public class ThemeChangeActivity extends AppCompatActivity {
             mToolbar.setTitle(getString(R.string.set_theme));
         }
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -95,10 +98,5 @@ public class ThemeChangeActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 }

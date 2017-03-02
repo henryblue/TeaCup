@@ -24,11 +24,11 @@ import static com.app.teacup.R.id.item_movie_detail_container1;
 
 public class MovieDetailRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
     private List<MovieDetailInfo> mDatas;
     private OnItemClickListener mListener;
-    private LayoutInflater mLayoutInflater;
-    private int mItemWidth;
+    private final LayoutInflater mLayoutInflater;
+    private final int mItemWidth;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position, int itemPosition);
@@ -114,13 +114,13 @@ public class MovieDetailRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private class MovieDetailViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private List<ImageView> mImgViewList = new ArrayList<>();
-        private List<TextView> mIndexList = new ArrayList<>();
-        private List<TextView> mNameList = new ArrayList<>();
-        private List<TextView> mTimeList = new ArrayList<>();
-        private TextView mBlockTip;
-        private ImageView mImageViewTop;
-        private TextView mMoreTipView;
+        private final List<ImageView> mImgViewList = new ArrayList<>();
+        private final List<TextView> mIndexList = new ArrayList<>();
+        private final List<TextView> mNameList = new ArrayList<>();
+        private final List<TextView> mTimeList = new ArrayList<>();
+        private final TextView mBlockTip;
+        private final ImageView mImageViewTop;
+        private final TextView mMoreTipView;
 
         public MovieDetailViewHolder(View itemView) {
             super(itemView);
