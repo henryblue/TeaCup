@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import com.app.adapter.TvPlayRecyclerAdapter;
 import com.app.bean.movie.MoviePlayInfo;
 import com.app.bean.movie.TvItemInfo;
+import com.app.util.LogcatUtils;
 import com.app.util.OkHttpUtils;
 import com.app.util.ToolUtils;
 import com.app.util.urlUtils;
@@ -39,6 +41,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -194,6 +197,7 @@ public class TVPlayActivity extends BaseActivity {
 
     @Override
     protected void onLoadDataError() {
+        LogcatUtils.getInstance().stop();
         mWebView.loadUrl("about:blank");
         Toast.makeText(TVPlayActivity.this, getString(R.string.not_have_more_data),
                 Toast.LENGTH_SHORT).show();
@@ -207,6 +211,15 @@ public class TVPlayActivity extends BaseActivity {
     protected void onLoadDataFinish() {
         mWebView.loadUrl("about:blank");
         mRefreshLayout.setRefreshing(false);
+        String result = LogcatUtils.getInstance().getResult();
+        LogcatUtils.getInstance().stop();
+        if (!TextUtils.isEmpty(mVideoUrl) && mVideoUrl.endsWith("&format=mp4")) {
+            if (!TextUtils.isEmpty(result)) {
+                String[] splitInfo = result.split("url:");
+                mVideoUrl = splitInfo[splitInfo.length - 1];
+            }
+        }
+
         initData();
         mIsInitData = true;
         if (mIsChangeVideo) {
@@ -349,37 +362,9 @@ public class TVPlayActivity extends BaseActivity {
             mWebView.getSettings().setLoadWithOverviewMode(true);
             mWebView.getSettings().setAllowFileAccess(true);
             mWebView.getSettings().setUseWideViewPort(true);
-            mWebView.setWebViewClient(new WebViewClient() {
-                @Override
-                public void onPageFinished(WebView view, String url) {
-                    if (!url.contains("about:blank")) {
-                        sendParseDataMessage(LOAD_DATA_FINISH);
-                    }
-                }
-
-                @Override
-                public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        String url = request.getUrl().toString();
-                        if (url.startsWith("http") && (url.contains("sid") || url.contains("mp4"))) {
-                            mVideoUrl = url;
-                        }
-                    } else {
-                        String url = view.getUrl();
-                        if (url.startsWith("http") && url.contains("sid")) {
-                            mVideoUrl = url;
-                        }
-                    }
-                    return super.shouldInterceptRequest(view, request);
-                }
-
-                @Override
-                public void onReceivedError(WebView view, WebResourceRequest request,
-                                            WebResourceError error) {
-                    super.onReceivedError(view, request, error);
-                    sendParseDataMessage(LOAD_DATA_ERROR);
-                }
-            });
+            mWebView.setWebChromeClient(new WebChromeClient());
+            mWebView.setWebViewClient(new MyTvWebViewClient(TVPlayActivity.this));
+            LogcatUtils.getInstance().start();
             mWebView.loadUrl(htmlUrl);
         }
     }
@@ -409,6 +394,7 @@ public class TVPlayActivity extends BaseActivity {
             Element player = fluid.getElementById("player");
             Element playerSwf = player.getElementById("player_swf");
             String htmlVideoUrl = playerSwf.attr("src");
+            LogcatUtils.getInstance().start();
             mWebView.loadUrl(htmlVideoUrl);
         } catch (Exception e) {
             sendParseDataMessage(LOAD_DATA_ERROR);
@@ -436,6 +422,7 @@ public class TVPlayActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         destroyWebView();
+        LogcatUtils.getInstance().stop();
     }
 
     @Override
@@ -444,5 +431,54 @@ public class TVPlayActivity extends BaseActivity {
             return;
         }
         super.onBackPressed();
+    }
+
+    private static class MyTvWebViewClient extends WebViewClient {
+        private WeakReference<TVPlayActivity> mTvPlayActivity;
+
+        MyTvWebViewClient(TVPlayActivity activity) {
+            mTvPlayActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            if (!url.contains("about:blank")) {
+                if (mTvPlayActivity.get() != null) {
+                    mTvPlayActivity.get().sendParseDataMessageDelayed(LOAD_DATA_FINISH, 1200);
+                }
+            }
+        }
+
+        @Override
+        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                String url = request.getUrl().toString();
+                if (url.startsWith("http") && (url.contains("sid") || url.contains("mp4"))) {
+                    if (mTvPlayActivity.get() != null) {
+                        mTvPlayActivity.get().mVideoUrl = url;
+                    }
+                }
+            }
+            return super.shouldInterceptRequest(view, request);
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            if (url.startsWith("http") && (url.contains("sid") || url.contains("mp4"))) {
+                if (mTvPlayActivity.get() != null) {
+                    mTvPlayActivity.get().mVideoUrl = url;
+                }
+            }
+            return super.shouldOverrideUrlLoading(view, url);
+        }
+
+        @Override
+        public void onReceivedError(WebView view, WebResourceRequest request,
+                                    WebResourceError error) {
+            super.onReceivedError(view, request, error);
+            if (mTvPlayActivity.get() != null) {
+                mTvPlayActivity.get().sendParseDataMessage(LOAD_DATA_ERROR);
+            }
+        }
     }
 }

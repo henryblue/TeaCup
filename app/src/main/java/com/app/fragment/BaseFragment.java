@@ -14,6 +14,7 @@ public abstract class BaseFragment extends Fragment {
     protected static final int LOAD_DATA_FINISH = 3;
     protected static final int LOAD_DATA_ERROR = 4;
     protected static final int LOAD_DATA_NONE = 5;
+    protected boolean mIsInitData = false;
 
     @SuppressLint("HandlerLeak")
     protected Handler mHandler = new Handler() {
@@ -48,6 +49,7 @@ public abstract class BaseFragment extends Fragment {
             }
         }
     };
+
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {

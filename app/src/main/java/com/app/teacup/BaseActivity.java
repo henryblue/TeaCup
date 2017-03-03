@@ -75,6 +75,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void sendParseDataMessageDelayed(int message, long delay) {
+        if (mHandler != null) {
+            Message msg = Message.obtain();
+            msg.what = message;
+            mHandler.sendMessageDelayed(msg, delay);
+        }
+    }
+
     protected abstract void onLoadDataError();
 
     protected abstract void onLoadDataFinish();

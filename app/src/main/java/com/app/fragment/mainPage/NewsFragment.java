@@ -203,7 +203,7 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                         sendParseDataMessage(LOAD_DATA_NONE);
                     }
                 }
-            }, 850);
+            }, 1000);
         } else {
             loadDataFromNet();
         }

@@ -50,4 +50,6 @@ dependencies {
     compile files('libs/gson-2.3.1.jar')
     compile files('libs/jsoup-1.9.2.jar')
     compile files('libs/BaiduLBS_Android.jar')
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3'
 }

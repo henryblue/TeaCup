@@ -56,9 +56,18 @@ public class MusicFragment extends BaseFragment implements SwipeRefreshLayout.On
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.music_fragment, container, false);
         initView(view);
-        setupRecycleView();
-        setupRefreshLayout();
+        mIsInitData = true;
         return view;
+    }
+
+    @Override
+    protected void onFragmentVisible() {
+        super.onFragmentVisible();
+        if (mIsInitData) {
+            mIsInitData = false;
+            setupRecycleView();
+            setupRefreshLayout();
+        }
     }
 
     private void initView(View view) {

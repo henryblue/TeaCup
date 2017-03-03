@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.app.adapter.MoviePlayRecyclerAdapter;
 import com.app.bean.movie.MoviePlayInfo;
+import com.app.util.LogcatUtils;
 import com.app.util.OkHttpUtils;
 import com.app.util.ToolUtils;
 import com.squareup.okhttp.Request;
@@ -33,6 +34,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,6 +125,7 @@ public class MoviePlayActivity extends BaseActivity {
 
     @Override
     protected void onLoadDataError() {
+        LogcatUtils.getInstance().stop();
         destroyWebView();
         Toast.makeText(MoviePlayActivity.this, getString(R.string.not_have_more_data),
                 Toast.LENGTH_SHORT).show();
@@ -131,8 +134,16 @@ public class MoviePlayActivity extends BaseActivity {
 
     @Override
     protected void onLoadDataFinish() {
+        String result = LogcatUtils.getInstance().getResult();
+        LogcatUtils.getInstance().stop();
         destroyWebView();
         mRefreshLayout.setRefreshing(false);
+        if (!TextUtils.isEmpty(mVideoUrl) && mVideoUrl.endsWith("&format=mp4")) {
+            if (!TextUtils.isEmpty(result)) {
+                String[] splitInfo = result.split("url:");
+                mVideoUrl = splitInfo[splitInfo.length - 1];
+            }
+        }
         initData();
         mIsInitData = true;
     }
@@ -244,37 +255,9 @@ public class MoviePlayActivity extends BaseActivity {
             mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
             mWebView.getSettings().setLoadWithOverviewMode(true);
             mWebView.getSettings().setUseWideViewPort(true);
-            mWebView.setWebViewClient(new WebViewClient() {
-                @Override
-                public void onPageFinished(WebView view, String url) {
-                    sendParseDataMessage(LOAD_DATA_FINISH);
-                }
-
-                @Override
-                public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-                        String url = request.getUrl().toString();
-                        if (url.startsWith("http") && (url.contains("sid") || url.contains("mp4"))) {
-                            mVideoUrl = url;
-                        }
-                    } else {
-                        String url = view.getUrl();
-                        if (url.startsWith("http") && url.contains("sid")) {
-                            mVideoUrl = url;
-                        }
-                    }
-                    return super.shouldInterceptRequest(view, request);
-                }
-
-                @Override
-                public void onReceivedError(WebView view, WebResourceRequest request,
-                                            WebResourceError error) {
-                    super.onReceivedError(view, request, error);
-                    sendParseDataMessage(LOAD_DATA_ERROR);
-                }
-            });
+            mWebView.setWebViewClient(new MyWebViewClient(MoviePlayActivity.this));
             mWebView.loadUrl(htmlUrl);
+            LogcatUtils.getInstance().start();
         }
     }
 
@@ -294,6 +277,7 @@ public class MoviePlayActivity extends BaseActivity {
         super.onPause();
         destroyWebView();
         MxVideoPlayer.releaseAllVideos();
+        LogcatUtils.getInstance().stop();
     }
 
     @Override
@@ -303,4 +287,53 @@ public class MoviePlayActivity extends BaseActivity {
         }
         super.onBackPressed();
     }
+
+    private static class MyWebViewClient extends WebViewClient {
+        private WeakReference<MoviePlayActivity> mActivity;
+
+        MyWebViewClient(MoviePlayActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            if (mActivity.get() != null) {
+                mActivity.get().sendParseDataMessage(LOAD_DATA_FINISH);
+            }
+        }
+
+        @Override
+        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                String url = request.getUrl().toString();
+                if (url.startsWith("http") && (url.contains("sid") || url.contains("mp4"))) {
+                    if (mActivity.get() != null) {
+                        mActivity.get().mVideoUrl = url;
+                    }
+                }
+            }
+            return super.shouldInterceptRequest(view, request);
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            if (url.startsWith("http") && (url.contains("sid") || url.contains("mp4"))) {
+                if (mActivity.get() != null) {
+                    mActivity.get().mVideoUrl = url;
+                }
+            }
+            return super.shouldOverrideUrlLoading(view, url);
+        }
+
+        @Override
+        public void onReceivedError(WebView view, WebResourceRequest request,
+                                    WebResourceError error) {
+            super.onReceivedError(view, request, error);
+            if (mActivity.get() != null) {
+                mActivity.get().sendParseDataMessage(LOAD_DATA_ERROR);
+            }
+        }
+    }
+
 }
