@@ -263,18 +263,17 @@
     <dimen name="item_movie_play_tv_time_textSize">15sp</dimen>
 
     <dimen name="item_movie_detail_ll_height">190dp</dimen>
-    <dimen name="item_movie_detail_ll_marginRight">13dp</dimen>
-    <dimen name="item_movie_detail_ll_marginTop">13dp</dimen>
-    <dimen name="item_movie_detail_ll_width">160dp</dimen>
-    <dimen name="item_movie_detail_iv_height">145dp</dimen>
+    <dimen name="item_movie_detail_ll_marginRight">6dp</dimen>
+    <dimen name="item_movie_detail_ll_marginTop">4dp</dimen>
+    <dimen name="item_movie_detail_ll_width">120dp</dimen>
+    <dimen name="item_movie_detail_iv_height">150dp</dimen>
     <dimen name="item_movie_detail_tv_tip_height">20dp</dimen>
-    <dimen name="item_movie_detail_tv_tip_marginTop">125dp</dimen>
+    <dimen name="item_movie_detail_tv_tip_marginTop">130dp</dimen>
     <dimen name="item_movie_detail_tv_textSize">14sp</dimen>
-    <dimen name="item_movie_detail_tv_time_textSize">13sp</dimen>
-    <dimen name="item_movie_detail_rl_top_height">45dp</dimen>
+    <dimen name="item_movie_detail_rl_top_height">41dp</dimen>
     <dimen name="item_movie_detail_tv_margin">4dp</dimen>
-    <dimen name="item_movie_more_textSize">14sp</dimen>
-    <dimen name="movie_detail_block_tip_textSize">16sp</dimen>
+    <dimen name="item_movie_more_textSize">16sp</dimen>
+    <dimen name="movie_detail_block_tip_textSize">17sp</dimen>
     <dimen name="movie_detail_iv_top_height">150dp</dimen>
 
     <dimen name="tv_series_textView_item_margin">8dp</dimen>
@@ -331,4 +330,5 @@
     <dimen name="item_fanju_view_videoContent_marginRight">10dp</dimen>
     <dimen name="item_fanju_view_videoContent_marginTop">12dp</dimen>
     <dimen name="item_fanju_view_videoContent_textSize">13sp</dimen>
+
 </resources>

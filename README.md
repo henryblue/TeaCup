@@ -36,7 +36,7 @@ Data sources:
 
 - [煎蛋网](http://jandan.net/)
 - [豆瓣读书](https://book.douban.com/)
-- [神马电影网](http://www.94sm.com/)
+- [神马电影网](http://www.82ke.com/)
 - [落网](http://www.luoo.net/)
 - [糗事百科](http://www.qiushibaike.com/)
 - [第一弹](http://www.diyidan.com/)
@@ -67,7 +67,7 @@ Use Baidu maps to locate.
 
 ## Building
 
-You can download the APK file from [releases](/teacup-1.2_1.apk) of this project.
+You can download the APK file from [releases](/teacup-1.2_3.apk) of this project.
 
 
 ##License

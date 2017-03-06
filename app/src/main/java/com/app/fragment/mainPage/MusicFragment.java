@@ -3,15 +3,9 @@ package com.app.fragment.mainPage;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.app.adapter.MusicRecyclerAdapter;
@@ -20,10 +14,7 @@ import com.app.fragment.BaseFragment;
 import com.app.teacup.MusicDetailActivity;
 import com.app.teacup.R;
 import com.app.util.HttpUtils;
-import com.app.util.ToolUtils;
 import com.app.util.urlUtils;
-import com.jcodecraeer.xrecyclerview.ProgressStyle;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -37,13 +28,10 @@ import java.util.List;
  * 数据来源于落网音乐
  * @author henry-blue
  */
-public class MusicFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class MusicFragment extends BaseFragment {
 
     private List<MusicInfo> mMusicDatas;
-    private SwipeRefreshLayout mRefreshLayout;
-    private XRecyclerView mRecyclerView;
     private MusicRecyclerAdapter mMusicRecyclerAdapter;
-    private int mPageNum = 1;
 
     @Override
     public void onAttach(Context context) {
@@ -52,55 +40,32 @@ public class MusicFragment extends BaseFragment implements SwipeRefreshLayout.On
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.music_fragment, container, false);
-        initView(view);
-        mIsInitData = true;
-        return view;
+    protected void startRefreshData() {
+        mMusicDatas.clear();
+        HttpUtils.sendHttpRequest(urlUtils.MUSIC_URL, new HttpUtils.HttpCallBackListener() {
+            @Override
+            public void onFinish(String response) {
+                parseMusicData(response, 0);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                sendParseDataMessage(REFRESH_ERROR);
+            }
+        });
     }
 
     @Override
-    protected void onFragmentVisible() {
-        super.onFragmentVisible();
-        if (mIsInitData) {
-            mIsInitData = false;
-            setupRecycleView();
-            setupRefreshLayout();
+    protected void onResponseLoadMore() {
+        if (mMusicDatas.size() <= 0) {
+            mRecyclerView.loadMoreComplete();
+        } else {
+            startLoadData();
         }
     }
 
-    private void initView(View view) {
-        mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
-        mRecyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
-
-    }
-
-    private void setupRecycleView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-
-        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-            @Override
-            public void onRefresh() {
-                mPageNum = 1;
-                startRefreshData();
-            }
-
-            @Override
-            public void onLoadMore() {
-                if (mMusicDatas.size() <= 0) {
-                    mRecyclerView.loadMoreComplete();
-                } else {
-                    startLoadData();
-                }
-            }
-        });
-
+    @Override
+    protected void setupRecycleViewAndAdapter() {
         mMusicRecyclerAdapter = new MusicRecyclerAdapter(getContext(), mMusicDatas);
         mRecyclerView.setAdapter(mMusicRecyclerAdapter);
         mMusicRecyclerAdapter.setOnItemClickListener(new MusicRecyclerAdapter.OnItemClickListener() {
@@ -115,39 +80,6 @@ public class MusicFragment extends BaseFragment implements SwipeRefreshLayout.On
                                 getString(R.string.transition_music_img));
 
                 ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
-            }
-        });
-    }
-
-    private void setupRefreshLayout() {
-        mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(getContext()));
-        mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-        mRefreshLayout.setProgressViewEndTarget(true, 100);
-        mRefreshLayout.setOnRefreshListener(this);
-        StartRefreshPage();
-    }
-
-    private void StartRefreshPage() {
-        mRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(true);
-                startRefreshData();
-            }
-        });
-    }
-
-    private void startRefreshData() {
-        mMusicDatas.clear();
-        HttpUtils.sendHttpRequest(urlUtils.MUSIC_URL, new HttpUtils.HttpCallBackListener() {
-            @Override
-            public void onFinish(String response) {
-                parseMusicData(response, 0);
-            }
-
-            @Override
-            public void onError(Exception e) {
-                sendParseDataMessage(REFRESH_ERROR);
             }
         });
     }
@@ -237,15 +169,4 @@ public class MusicFragment extends BaseFragment implements SwipeRefreshLayout.On
         mRefreshLayout.setRefreshing(false);
         mMusicRecyclerAdapter.reSetData(mMusicDatas);
     }
-
-    @Override
-    protected void onRefreshStart() {
-        startRefreshData();
-    }
-
-    @Override
-    public void onRefresh() {
-        sendParseDataMessage(REFRESH_START);
-    }
-
 }

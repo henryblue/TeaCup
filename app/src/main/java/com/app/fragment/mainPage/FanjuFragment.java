@@ -3,15 +3,9 @@ package com.app.fragment.mainPage;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.app.adapter.FanjuRecyclerAdapter;
@@ -21,10 +15,7 @@ import com.app.teacup.FanjuNewsActivity;
 import com.app.teacup.FanjuVideoActivity;
 import com.app.teacup.R;
 import com.app.util.OkHttpUtils;
-import com.app.util.ToolUtils;
 import com.app.util.urlUtils;
-import com.jcodecraeer.xrecyclerview.ProgressStyle;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.squareup.okhttp.Request;
 
 import org.jsoup.Jsoup;
@@ -42,12 +33,10 @@ import hb.xvideoplayer.MxVideoPlayer;
  *
  * @author henry-blue
  */
-public class FanjuFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class FanjuFragment extends BaseFragment {
 
     private static final String TAG = "FanjuFragment";
     private List<FanjuInfo> mVideoDatas;
-    private SwipeRefreshLayout mRefreshLayout;
-    private XRecyclerView mRecyclerView;
     private FanjuRecyclerAdapter mFanjuRecyclerAdapter;
     private int mPageNum = 1;
 
@@ -58,54 +47,44 @@ public class FanjuFragment extends BaseFragment implements SwipeRefreshLayout.On
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fanju_fragment, container, false);
-        initView(view);
-        mIsInitData = true;
-        return view;
+    public void onPause() {
+        super.onPause();
+        MxVideoPlayer.releaseAllVideos();
     }
 
     @Override
-    protected void onFragmentVisible() {
-        super.onFragmentVisible();
-        if (mIsInitData) {
-            mIsInitData = false;
-            setupRecycleView();
-            setupRefreshLayout();
-        }
-    }
+    protected void startRefreshData() {
+        mVideoDatas.clear();
+        OkHttpUtils.getAsyn(urlUtils.VIDEO_DIYIDAN_URL, new OkHttpUtils.ResultCallback<String>() {
 
-    private void initView(View view) {
-        mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
-        mRecyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
-    }
-
-    private void setupRecycleView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-
-        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
-            public void onRefresh() {
-                mPageNum = 1;
-                startRefreshData();
+            public void onError(Request request, Exception e) {
+                sendParseDataMessage(REFRESH_ERROR);
             }
 
             @Override
-            public void onLoadMore() {
-                if (mVideoDatas.size() <= 0) {
-                    mRecyclerView.loadMoreComplete();
+            public void onResponse(String response) {
+                boolean isSuccess = parseVideoData(response);
+                if (isSuccess) {
+                    sendParseDataMessage(REFRESH_FINISH);
                 } else {
                     startLoadData();
                 }
             }
         });
+    }
 
+    @Override
+    protected void onResponseLoadMore() {
+        if (mVideoDatas.size() <= 0) {
+            mRecyclerView.loadMoreComplete();
+        } else {
+            startLoadData();
+        }
+    }
+
+    @Override
+    protected void setupRecycleViewAndAdapter() {
         mFanjuRecyclerAdapter = new FanjuRecyclerAdapter(getContext(), mVideoDatas);
         mRecyclerView.setAdapter(mFanjuRecyclerAdapter);
         mFanjuRecyclerAdapter.setOnItemClickListener(new FanjuRecyclerAdapter.OnItemClickListener() {
@@ -128,51 +107,6 @@ public class FanjuFragment extends BaseFragment implements SwipeRefreshLayout.On
                     intent.putExtra("fanjuVideoName", fanjuInfo.getVideoName());
                     intent.putExtra("fanjuVideoImgUrl", fanjuInfo.getVideoImgUrl());
                     startActivity(intent);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        MxVideoPlayer.releaseAllVideos();
-    }
-
-    private void setupRefreshLayout() {
-        mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(getContext()));
-        mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-        mRefreshLayout.setProgressViewEndTarget(true, 100);
-        mRefreshLayout.setOnRefreshListener(this);
-        StartRefreshPage();
-    }
-
-    private void StartRefreshPage() {
-        mRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(true);
-                startRefreshData();
-            }
-        });
-    }
-
-    private void startRefreshData() {
-        mVideoDatas.clear();
-        OkHttpUtils.getAsyn(urlUtils.VIDEO_DIYIDAN_URL, new OkHttpUtils.ResultCallback<String>() {
-
-            @Override
-            public void onError(Request request, Exception e) {
-                sendParseDataMessage(REFRESH_ERROR);
-            }
-
-            @Override
-            public void onResponse(String response) {
-                boolean isSuccess = parseVideoData(response);
-                if (isSuccess) {
-                    sendParseDataMessage(REFRESH_FINISH);
-                } else {
-                    startLoadData();
                 }
             }
         });
@@ -292,15 +226,4 @@ public class FanjuFragment extends BaseFragment implements SwipeRefreshLayout.On
         mRefreshLayout.setRefreshing(false);
         mFanjuRecyclerAdapter.reSetData(mVideoDatas);
     }
-
-    @Override
-    protected void onRefreshStart() {
-        startRefreshData();
-    }
-
-    @Override
-    public void onRefresh() {
-        sendParseDataMessage(REFRESH_START);
-    }
-
 }

@@ -3,15 +3,9 @@ package com.app.fragment.photo;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Message;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.app.adapter.PhotoRecyclerAdapter;
@@ -19,10 +13,7 @@ import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
 import com.app.teacup.ShowPhotoListActivity;
 import com.app.util.HttpUtils;
-import com.app.util.ToolUtils;
 import com.app.util.urlUtils;
-import com.jcodecraeer.xrecyclerview.ProgressStyle;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -31,13 +22,12 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 
-public class JiandanMeiziFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class JiandanMeiziFragment extends BaseFragment {
 
     private ArrayList<String> mImgUrl;
-    private SwipeRefreshLayout mRefreshLayout;
-    private XRecyclerView mRecyclerView;
     private int mainPageId = -1;
     private PhotoRecyclerAdapter mPhotoRecyclerAdapter;
+    private boolean mIsFirstEnter = true;
 
     @Override
     public void onAttach(Context context) {
@@ -46,56 +36,33 @@ public class JiandanMeiziFragment extends BaseFragment implements SwipeRefreshLa
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.photo_fragment, container, false);
-        initView(view);
-        setupRecycleView();
-        setupRefreshLayout();
-        return view;
+    public void onResume() {
+        super.onResume();
+        if (mIsFirstEnter) {
+            mIsInitData = true;
+            super.onFragmentVisible();
+        }
+        mIsFirstEnter = false;
     }
 
-    private void setupRefreshLayout() {
-        mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(getContext()));
-        mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-        mRefreshLayout.setProgressViewEndTarget(true, 100);
-        mRefreshLayout.setOnRefreshListener(this);
-        StartRefreshPage();
+    @Override
+    protected void onResponseRefresh() {
+        mainPageId = -1;
+        super.onResponseRefresh();
     }
 
-    private void StartRefreshPage() {
-        mRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(true);
-                startRefreshData();
-            }
-        });
+    @Override
+    protected void onResponseLoadMore() {
+        if (mImgUrl.size() <= 0) {
+            mRecyclerView.loadMoreComplete();
+        } else {
+            startLoadData();
+        }
     }
 
-    private void setupRecycleView() {
+    @Override
+    protected void setupRecycleViewAndAdapter() {
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-            @Override
-            public void onRefresh() {
-                mainPageId = -1;
-                startRefreshData();
-            }
-
-            @Override
-            public void onLoadMore() {
-                if (mImgUrl.size() <= 0) {
-                 mRecyclerView.loadMoreComplete();
-                } else {
-                    startLoadData();
-                }
-            }
-        });
-        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-
         mPhotoRecyclerAdapter = new PhotoRecyclerAdapter(getContext(),
                 mImgUrl);
         mRecyclerView.setAdapter(mPhotoRecyclerAdapter);
@@ -114,12 +81,8 @@ public class JiandanMeiziFragment extends BaseFragment implements SwipeRefreshLa
         });
     }
 
-    private void initView(View view) {
-        mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
-        mRecyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
-    }
-
-    private void startRefreshData() {
+    @Override
+    protected void startRefreshData() {
         mImgUrl.clear();
         HttpUtils.sendHttpRequest(urlUtils.JIANDAN_URL, new HttpUtils.HttpCallBackListener() {
             @Override
@@ -184,13 +147,6 @@ public class JiandanMeiziFragment extends BaseFragment implements SwipeRefreshLa
     }
 
     @Override
-    public void onRefresh() {
-        Message msg = Message.obtain();
-        msg.what = REFRESH_START;
-        mHandler.sendMessage(msg);
-    }
-
-    @Override
     protected void onLoadDataError() {
         Toast.makeText(getContext(), getString(R.string.refresh_net_error),
                 Toast.LENGTH_SHORT).show();
@@ -221,10 +177,5 @@ public class JiandanMeiziFragment extends BaseFragment implements SwipeRefreshLa
         } else {
             mPhotoRecyclerAdapter.reSetData(mImgUrl);
         }
-    }
-
-    @Override
-    protected void onRefreshStart() {
-        startRefreshData();
     }
 }

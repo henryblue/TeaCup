@@ -3,14 +3,8 @@ package com.app.fragment.mainPage;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -21,12 +15,9 @@ import com.app.teacup.MainActivity;
 import com.app.teacup.NewsDetailActivity;
 import com.app.teacup.R;
 import com.app.util.OkHttpUtils;
-import com.app.util.ToolUtils;
 import com.app.util.urlUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.jcodecraeer.xrecyclerview.ProgressStyle;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.squareup.okhttp.Request;
 
 import org.apache.http.util.EncodingUtils;
@@ -44,15 +35,12 @@ import java.util.List;
  *
  * @author henry-blue
  */
-public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class NewsFragment extends BaseFragment {
 
     private static final int IMAGE_VIEW_LEN = 4;
     private List<NewsInfo> mNewsDatas;
     private List<ImageView> mHeaderList;
-    private SwipeRefreshLayout mRefreshLayout;
-    private XRecyclerView mRecyclerView;
     private NewsRecyclerAdapter mNewsRecyclerAdapter;
-    private int mPageNum = 1;
     private boolean mIsFirstEnter = true;
 
     @Override
@@ -65,58 +53,6 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             view.setScaleType(ImageView.ScaleType.CENTER_CROP);
             mHeaderList.add(view);
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.news_fragment, container, false);
-        initView(view);
-        setupRefreshLayout();
-        setupRecycleView();
-        return view;
-    }
-
-    private void initView(View view) {
-        mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
-        mRecyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
-    }
-
-    private void setupRecycleView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-
-        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-            @Override
-            public void onRefresh() {
-                startRefreshData();
-            }
-
-            @Override
-            public void onLoadMore() {
-                if (mNewsDatas.size() <= 0) {
-                    mRecyclerView.loadMoreComplete();
-                } else {
-                    startLoadData();
-                }
-            }
-        });
-
-        mNewsRecyclerAdapter = new NewsRecyclerAdapter(getContext(), mNewsDatas, mHeaderList);
-        mRecyclerView.setAdapter(mNewsRecyclerAdapter);
-        mNewsRecyclerAdapter.setOnItemClickListener(new NewsRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = new Intent(getContext(), NewsDetailActivity.class);
-                intent.putExtra("newsDetailUrl", mNewsDatas.get(position).getNextUrl());
-                intent.putExtra("newsTitle", mNewsDatas.get(position).getTitle());
-                startActivity(intent);
-            }
-        });
     }
 
     private void initHeaderData() {
@@ -162,25 +98,8 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         mNewsRecyclerAdapter.setHeaderVisible(View.VISIBLE);
     }
 
-    private void setupRefreshLayout() {
-        mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(getContext()));
-        mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-        mRefreshLayout.setProgressViewEndTarget(true, 100);
-        mRefreshLayout.setOnRefreshListener(this);
-        StartRefreshPage();
-    }
-
-    private void StartRefreshPage() {
-        mRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(true);
-                startRefreshData();
-            }
-        });
-    }
-
-    private void startRefreshData() {
+    @Override
+    protected void startRefreshData() {
         mNewsDatas.clear();
         mNewsRecyclerAdapter.setHeaderVisible(View.INVISIBLE);
         if (mIsFirstEnter) {
@@ -208,6 +127,30 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             loadDataFromNet();
         }
         mIsFirstEnter = false;
+    }
+
+    @Override
+    protected void onResponseLoadMore() {
+        if (mNewsDatas.size() <= 0) {
+            mRecyclerView.loadMoreComplete();
+        } else {
+            startLoadData();
+        }
+    }
+
+    @Override
+    protected void setupRecycleViewAndAdapter() {
+        mNewsRecyclerAdapter = new NewsRecyclerAdapter(getContext(), mNewsDatas, mHeaderList);
+        mRecyclerView.setAdapter(mNewsRecyclerAdapter);
+        mNewsRecyclerAdapter.setOnItemClickListener(new NewsRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(getContext(), NewsDetailActivity.class);
+                intent.putExtra("newsDetailUrl", mNewsDatas.get(position).getNextUrl());
+                intent.putExtra("newsTitle", mNewsDatas.get(position).getTitle());
+                startActivity(intent);
+            }
+        });
     }
 
     private void loadDataFromNet() {
@@ -365,20 +308,19 @@ public class NewsFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    protected void onRefreshStart() {
-        startRefreshData();
-    }
-
-    @Override
-    public void onRefresh() {
-        sendParseDataMessage(REFRESH_START);
-    }
-
-    @Override
     protected void onFragmentInvisible() {
         super.onFragmentInvisible();
         if (mNewsRecyclerAdapter != null) {
             mNewsRecyclerAdapter.stopHeaderAutoScrolled();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mIsFirstEnter) {
+            mIsInitData = true;
+            super.onFragmentVisible();
         }
     }
 

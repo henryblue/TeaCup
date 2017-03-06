@@ -6,15 +6,6 @@ public class MovieItemInfo {
     private String imageIndex;
     private String nextUrl;
     private String movieName;
-    private String addTime;
-
-    public String getAddTime() {
-        return addTime;
-    }
-
-    public void setAddTime(String addTime) {
-        this.addTime = addTime;
-    }
 
     public String getImageIndex() {
         return imageIndex;

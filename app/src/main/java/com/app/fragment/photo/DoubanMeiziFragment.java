@@ -3,15 +3,10 @@ package com.app.fragment.photo;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.app.adapter.PhotoDoubanRecyclerAdapter;
@@ -20,10 +15,7 @@ import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
 import com.app.teacup.ShowPhotoListActivity;
 import com.app.util.HttpUtils;
-import com.app.util.ToolUtils;
 import com.app.util.urlUtils;
-import com.jcodecraeer.xrecyclerview.ProgressStyle;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -33,13 +25,10 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DoubanMeiziFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class DoubanMeiziFragment extends BaseFragment {
 
-    private int mPageNum = 1;
     private List<PhotoInfo> mImgUrl;
     private ArrayList<String> mImageUrls;
-    private SwipeRefreshLayout mRefreshLayout;
-    private XRecyclerView mRecyclerView;
     private PhotoDoubanRecyclerAdapter mPhotoRecyclerAdapter;
 
     @Override
@@ -50,59 +39,20 @@ public class DoubanMeiziFragment extends BaseFragment implements SwipeRefreshLay
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.photo_fragment, container, false);
-        initView(view);
-        setupRecycleView();
-        setupRefreshLayout();
-        return view;
+    protected void onResponseLoadMore() {
+        if (mImgUrl.size() <= 0) {
+            mRecyclerView.loadMoreComplete();
+        } else {
+            startLoadData();
+        }
     }
 
-    private void setupRefreshLayout() {
-        mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(getContext()));
-        mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-        mRefreshLayout.setProgressViewEndTarget(true, 100);
-        mRefreshLayout.setOnRefreshListener(this);
-        StartRefreshPage();
-    }
-
-    private void StartRefreshPage() {
-        mRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(true);
-                startRefreshData();
-            }
-        });
-    }
-
-    private void setupRecycleView() {
+    @Override
+    protected void setupRecycleViewAndAdapter() {
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
         mPhotoRecyclerAdapter = new PhotoDoubanRecyclerAdapter(getContext(),
                 mImgUrl);
         mRecyclerView.setAdapter(mPhotoRecyclerAdapter);
-        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-            @Override
-            public void onRefresh() {
-                mPageNum = 1;
-                startRefreshData();
-            }
-
-            @Override
-            public void onLoadMore() {
-                if (mImgUrl.size() <= 0) {
-                 mRecyclerView.loadMoreComplete();
-                } else {
-                    startLoadData();
-                }
-            }
-        });
-        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-
         mPhotoRecyclerAdapter.setOnItemClickListener(new PhotoDoubanRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -117,12 +67,8 @@ public class DoubanMeiziFragment extends BaseFragment implements SwipeRefreshLay
         });
     }
 
-    private void initView(View view) {
-        mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
-        mRecyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
-    }
-
-    private void startRefreshData() {
+    @Override
+    protected void startRefreshData() {
         mImgUrl.clear();
         mImageUrls.clear();
         HttpUtils.sendHttpRequest(urlUtils.DOUBAN_MEINV_URL, new HttpUtils.HttpCallBackListener() {
@@ -213,10 +159,5 @@ public class DoubanMeiziFragment extends BaseFragment implements SwipeRefreshLay
         mRefreshLayout.setRefreshing(false);
         mRecyclerView.refreshComplete();
         mPhotoRecyclerAdapter.reSetData(mImgUrl);
-    }
-
-    @Override
-    protected void onRefreshStart() {
-        startRefreshData();
     }
 }

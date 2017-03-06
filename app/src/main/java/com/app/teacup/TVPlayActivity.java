@@ -311,7 +311,7 @@ public class TVPlayActivity extends BaseActivity {
                     mTvDatas.add(tvItemInfo);
                 }
                 //parse more video info
-                Element row = container.getElementsByClass("row").get(0);
+                Element row = container.getElementsByClass("row").get(1);
                 Elements moreMovies = row.getElementsByClass("movie-item-out");
                 for (Element movie : moreMovies) {
                     Elements movieItem = movie.getElementsByClass("movie-item");
@@ -323,7 +323,7 @@ public class TVPlayActivity extends BaseActivity {
                     Element a = e.getElementsByTag("a").get(0);
                     String url = a.attr("href");
                     String replace = url.replace("show", "play");
-                    String nextUrl = "http://www.1zdm.com" + replace;
+                    String nextUrl = urlUtils.MOVIE_URL + replace;
                     String currentLoadUrl = getIntent().getStringExtra("moviePlayUrl");
                     if (currentLoadUrl.equals(nextUrl)) {
                         continue;

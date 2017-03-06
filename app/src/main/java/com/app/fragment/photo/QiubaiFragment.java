@@ -3,14 +3,8 @@ package com.app.fragment.photo;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.app.adapter.PhotoQiubaiRecyclerAdapter;
@@ -19,10 +13,7 @@ import com.app.fragment.BaseFragment;
 import com.app.teacup.R;
 import com.app.teacup.ShowPhotoActivity;
 import com.app.util.HttpUtils;
-import com.app.util.ToolUtils;
 import com.app.util.urlUtils;
-import com.jcodecraeer.xrecyclerview.ProgressStyle;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -32,13 +23,10 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QiubaiFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class QiubaiFragment extends BaseFragment {
 
     private List<PhotoInfo> mImgUrl;
-    private SwipeRefreshLayout mRefreshLayout;
-    private XRecyclerView mRecyclerView;
     private PhotoQiubaiRecyclerAdapter mPhotoRecyclerAdapter;
-    private int mPageNum = 1;
 
     @Override
     public void onAttach(Context context) {
@@ -47,58 +35,16 @@ public class QiubaiFragment extends BaseFragment implements SwipeRefreshLayout.O
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.photo_fragment, container, false);
-        initView(view);
-        setupRecycleView();
-        setupRefreshLayout();
-        return view;
+    protected void onResponseLoadMore() {
+        if (mImgUrl.size() <= 0) {
+            mRecyclerView.loadMoreComplete();
+        } else {
+            startLoadData();
+        }
     }
 
-    private void setupRefreshLayout() {
-        mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(getContext()));
-        mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-        mRefreshLayout.setProgressViewEndTarget(true, 100);
-        mRefreshLayout.setOnRefreshListener(this);
-        StartRefreshPage();
-    }
-
-    private void StartRefreshPage() {
-        mRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(true);
-                startRefreshData();
-            }
-        });
-    }
-
-    private void setupRecycleView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-            @Override
-            public void onRefresh() {
-                mPageNum = 1;
-                startRefreshData();
-            }
-
-            @Override
-            public void onLoadMore() {
-                if (mImgUrl.size() <= 0) {
-                    mRecyclerView.loadMoreComplete();
-                } else {
-                    startLoadData();
-                }
-            }
-        });
-
-        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-
+    @Override
+    protected void setupRecycleViewAndAdapter() {
         mPhotoRecyclerAdapter = new PhotoQiubaiRecyclerAdapter(getContext(),
                 mImgUrl);
         mRecyclerView.setAdapter(mPhotoRecyclerAdapter);
@@ -128,15 +74,8 @@ public class QiubaiFragment extends BaseFragment implements SwipeRefreshLayout.O
         });
     }
 
-    private void initView(View view) {
-        mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
-        mRecyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
-    }
-
-    /**
-     * 上拉刷新数据
-     */
-    private void startRefreshData() {
+    @Override
+    protected void startRefreshData() {
         mImgUrl.clear();
         HttpUtils.sendHttpRequest(urlUtils.QIUBAI18_URL, new HttpUtils.HttpCallBackListener() {
             @Override
@@ -152,9 +91,6 @@ public class QiubaiFragment extends BaseFragment implements SwipeRefreshLayout.O
         });
     }
 
-    /**
-     * 下拉加载数据
-     */
     private void startLoadData() {
         mPageNum++;
         if (mPageNum > 50) {
@@ -202,11 +138,6 @@ public class QiubaiFragment extends BaseFragment implements SwipeRefreshLayout.O
     }
 
     @Override
-    public void onRefresh() {
-        sendParseDataMessage(REFRESH_START);
-    }
-
-    @Override
     protected void onLoadDataError() {
         Toast.makeText(getContext(), getString(R.string.refresh_net_error),
                 Toast.LENGTH_SHORT).show();
@@ -232,10 +163,5 @@ public class QiubaiFragment extends BaseFragment implements SwipeRefreshLayout.O
         mRecyclerView.refreshComplete();
         mRefreshLayout.setRefreshing(false);
         mPhotoRecyclerAdapter.reSetData(mImgUrl);
-    }
-
-    @Override
-    protected void onRefreshStart() {
-        startRefreshData();
     }
 }

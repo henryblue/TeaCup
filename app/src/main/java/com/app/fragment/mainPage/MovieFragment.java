@@ -3,15 +3,9 @@ package com.app.fragment.mainPage;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.app.adapter.MovieDetailRecyclerAdapter;
@@ -23,10 +17,7 @@ import com.app.teacup.MoviePlayActivity;
 import com.app.teacup.R;
 import com.app.teacup.TVPlayActivity;
 import com.app.util.OkHttpUtils;
-import com.app.util.ToolUtils;
 import com.app.util.urlUtils;
-import com.jcodecraeer.xrecyclerview.ProgressStyle;
-import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.squareup.okhttp.Request;
 
 import org.apache.http.util.EncodingUtils;
@@ -40,15 +31,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 数据来源94神马电影网
+ * 数据来源15影城
  *
  * @author henry-blue
  */
-public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class MovieFragment extends BaseFragment {
 
     private static final String TAG = "MovieFragment";
-    private SwipeRefreshLayout mRefreshLayout;
-    private XRecyclerView mRecyclerView;
     private List<MovieDetailInfo> mDatas;
     private MovieDetailRecyclerAdapter mMovieDetailAdapter;
     private boolean mIsFirstEnter = true;
@@ -60,70 +49,7 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.movie_fragment, container, false);
-        initView(view);
-        mIsInitData = true;
-        return view;
-    }
-
-    @Override
-    protected void onFragmentVisible() {
-        super.onFragmentVisible();
-        if (mIsInitData) {
-            mIsInitData = false;
-            setupRefreshLayout();
-            setupRecycleView();
-        }
-    }
-
-
-
-    private void initView(View view) {
-        mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.srl_refresh);
-        mRecyclerView = (XRecyclerView) view.findViewById(R.id.base_recycler_view);
-    }
-
-    private void setupRefreshLayout() {
-        mRefreshLayout.setColorSchemeColors(ToolUtils.getThemeColorPrimary(getContext()));
-        mRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-        mRefreshLayout.setProgressViewEndTarget(true, 100);
-        mRefreshLayout.setOnRefreshListener(this);
-        StartRefreshPage();
-    }
-
-    private void setupRecycleView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setLoadingMoreEnabled(false);
-        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-
-        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-            @Override
-            public void onRefresh() {
-                startRefreshData();
-            }
-
-            @Override
-            public void onLoadMore() {
-            }
-        });
-    }
-
-    private void StartRefreshPage() {
-        mRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(true);
-                startRefreshData();
-            }
-        });
-    }
-
-    private void startRefreshData() {
+    protected void startRefreshData() {
         mDatas.clear();
         if (mIsFirstEnter) {
             new Thread(new Runnable() {
@@ -152,6 +78,39 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
         mIsFirstEnter = false;
     }
 
+    @Override
+    protected void onResponseLoadMore() {
+
+    }
+
+    @Override
+    protected void setupRecycleViewAndAdapter() {
+        mRecyclerView.setLoadingMoreEnabled(false);
+        mMovieDetailAdapter = new MovieDetailRecyclerAdapter(getContext(), mDatas);
+        mRecyclerView.setAdapter(mMovieDetailAdapter);
+
+        mMovieDetailAdapter.setOnItemClickListener(new MovieDetailRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position, int itemPosition) {
+                if (position == 0 || position == 4) {
+                    enterPlayPage(position, itemPosition, MoviePlayActivity.class);
+                } else {
+                    enterPlayPage(position, itemPosition, TVPlayActivity.class);
+                }
+            }
+
+            @Override
+            public void onMoreItemClick(View view, int position) {
+                String moreUrl = mDatas.get(position).getMoreUrl();
+                Intent intent = new Intent(getContext(), MoreMovieShowActivity.class);
+                intent.putExtra("moreMovieUrl", moreUrl);
+                intent.putExtra("movieStyle", position);
+                startActivity(intent);
+            }
+
+        });
+    }
+
     private void loadDataFromNet() {
         OkHttpUtils.getAsyn(urlUtils.MOVIE_URL, new OkHttpUtils.ResultCallback<String>() {
 
@@ -176,7 +135,7 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
                 int i = 0;
                 int j = 0;
                 for (Element row : rows) {
-                    if (i == 3) { // remove dislike label
+                    if (i == 4 || i == 3) { // remove dislike label
                         i++;
                         continue;
                     }
@@ -223,6 +182,7 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
             String url = urlUtils.MOVIE_URL + a.attr("href");
             String videoUrl = url.replace("show", "play");
             itemInfo.setNextUrl(videoUrl);
+
             Element img = a.getElementsByTag("img").get(0);
             String imgUrl = img.attr("src");
             String name = img.attr("alt");
@@ -230,9 +190,6 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
             itemInfo.setMovieName(name);
             String imgIndex = a.getElementsByTag("button").get(0).text();
             itemInfo.setImageIndex(imgIndex);
-            String addTime = item.getElementsByClass("meta").
-                    get(0).getElementsByTag("em").get(0).text();
-            itemInfo.setAddTime(addTime);
             return itemInfo;
         } else {
             return null;
@@ -241,34 +198,7 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
 
     private void loadData() {
         if (!mDatas.isEmpty()) {
-            if (mMovieDetailAdapter == null) {
-                mMovieDetailAdapter = new MovieDetailRecyclerAdapter(getContext(), mDatas);
-                mRecyclerView.setAdapter(mMovieDetailAdapter);
-            } else {
-                mMovieDetailAdapter.resetData(mDatas);
-            }
-            mMovieDetailAdapter.setOnItemClickListener(new MovieDetailRecyclerAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position, int itemPosition) {
-                    if (position < 2) {
-                        enterPlayPage(position, itemPosition, MoviePlayActivity.class);
-                    } else {
-                        enterPlayPage(position, itemPosition, TVPlayActivity.class);
-                    }
-                }
-
-                @Override
-                public void onMoreItemClick(View view, int position) {
-                    if (position > 0) {
-                        String moreUrl = mDatas.get(position).getMoreUrl();
-                        Intent intent = new Intent(getContext(), MoreMovieShowActivity.class);
-                        intent.putExtra("moreMovieUrl", moreUrl);
-                        intent.putExtra("movieStyle", position - 1);
-                        startActivity(intent);
-                    }
-                }
-
-            });
+            mMovieDetailAdapter.resetData(mDatas);
         } else {
             Toast.makeText(getContext(), getString(R.string.screen_shield),
                     Toast.LENGTH_SHORT).show();
@@ -313,16 +243,5 @@ public class MovieFragment extends BaseFragment implements SwipeRefreshLayout.On
         mRecyclerView.refreshComplete();
         mRefreshLayout.setRefreshing(false);
     }
-
-    @Override
-    protected void onRefreshStart() {
-        startRefreshData();
-    }
-
-    @Override
-    public void onRefresh() {
-        sendParseDataMessage(REFRESH_START);
-    }
-
 }
 

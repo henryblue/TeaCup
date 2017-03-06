@@ -27,6 +27,7 @@ import com.app.bean.movie.MoviePlayInfo;
 import com.app.util.LogcatUtils;
 import com.app.util.OkHttpUtils;
 import com.app.util.ToolUtils;
+import com.app.util.urlUtils;
 import com.squareup.okhttp.Request;
 
 import org.jsoup.Jsoup;
@@ -205,7 +206,7 @@ public class MoviePlayActivity extends BaseActivity {
             if (document != null) {
                 Element container = document.getElementsByClass("container").get(3);
                 //parse more video info
-                Element row = container.getElementsByClass("row").get(0);
+                Element row = container.getElementsByClass("row").get(1);
                 Elements moreMovies = row.getElementsByClass("movie-item-out");
                 for (Element movie : moreMovies) {
                     Elements movieItem = movie.getElementsByClass("movie-item");
@@ -217,7 +218,7 @@ public class MoviePlayActivity extends BaseActivity {
                     Element a = e.getElementsByTag("a").get(0);
                     String url = a.attr("href");
                     String replace = url.replace("show", "play");
-                    String nextUrl = "http://www.1zdm.com" + replace;
+                    String nextUrl = urlUtils.MOVIE_URL + replace;
                     String currentLoadUrl = getIntent().getStringExtra("moviePlayUrl");
                     if (currentLoadUrl.equals(nextUrl)) {
                         continue;
