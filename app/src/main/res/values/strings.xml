@@ -70,6 +70,7 @@
     <string name="parse_url_error">解析地址失败, 请重试</string>
     <string name="item_movie_more"><![CDATA[更多>>]]></string>
     <string name="tv_series">剧集</string>
+    <string name="video_from">数据源</string>
     <string name="news_cache_name">newsPreloadFile.html</string>
     <string name="movies_cache_name">moviesPreloadFile.html</string>
     <string name="nothing_find">什么都没有找到~</string>

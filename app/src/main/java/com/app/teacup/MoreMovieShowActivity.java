@@ -41,6 +41,7 @@ public class MoreMovieShowActivity extends BaseActivity {
     private MoreMovieRecyclerAdapter mMoreRecyclerAdapter;
     private String mMoreBaseUrl;
     private int mLoadIndex = 1;
+    private int movieStyle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class MoreMovieShowActivity extends BaseActivity {
         setContentView(R.layout.layout_movie_more_view);
         String moreUrl = getIntent().getStringExtra("moreMovieUrl");
         mMoreBaseUrl = moreUrl.replace(".html", "/");
+        movieStyle = getIntent().getIntExtra("moreMovieStyle", -1);
         initView();
         setupRecyclerView();
         initToolBar();
@@ -117,12 +119,7 @@ public class MoreMovieShowActivity extends BaseActivity {
                 mMoreRecyclerAdapter.setOnItemClickListener(new MoreMovieRecyclerAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        int movieStyle = getIntent().getIntExtra("movieStyle", 0);
-                        if (movieStyle > 0) {
-                            enterPlayPage(position, TVPlayActivity.class);
-                        } else {
-                            enterPlayPage(position, MoviePlayActivity.class);
-                        }
+                        enterPlayPage(position, MoviePlayActivity.class);
                     }
                 });
             }
@@ -134,6 +131,11 @@ public class MoreMovieShowActivity extends BaseActivity {
         Intent intent = new Intent(MoreMovieShowActivity.this, className);
         intent.putExtra("moviePlayUrl", itemInfo.getNextUrl());
         intent.putExtra("moviePlayName", itemInfo.getMovieName());
+        String style = getString(R.string.tv_series);
+        if (movieStyle != -1 && (movieStyle == 0 || movieStyle == 4)) {
+            style = getString(R.string.video_from);
+        }
+        intent.putExtra("movieStyle", style);
         startActivity(intent);
     }
 

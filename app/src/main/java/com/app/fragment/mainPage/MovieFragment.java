@@ -15,7 +15,6 @@ import com.app.fragment.BaseFragment;
 import com.app.teacup.MoreMovieShowActivity;
 import com.app.teacup.MoviePlayActivity;
 import com.app.teacup.R;
-import com.app.teacup.TVPlayActivity;
 import com.app.util.OkHttpUtils;
 import com.app.util.urlUtils;
 import com.squareup.okhttp.Request;
@@ -92,11 +91,7 @@ public class MovieFragment extends BaseFragment {
         mMovieDetailAdapter.setOnItemClickListener(new MovieDetailRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, int itemPosition) {
-                if (position == 0 || position == 4) {
                     enterPlayPage(position, itemPosition, MoviePlayActivity.class);
-                } else {
-                    enterPlayPage(position, itemPosition, TVPlayActivity.class);
-                }
             }
 
             @Override
@@ -104,7 +99,7 @@ public class MovieFragment extends BaseFragment {
                 String moreUrl = mDatas.get(position).getMoreUrl();
                 Intent intent = new Intent(getContext(), MoreMovieShowActivity.class);
                 intent.putExtra("moreMovieUrl", moreUrl);
-                intent.putExtra("movieStyle", position);
+                intent.putExtra("moreMovieStyle", position);
                 startActivity(intent);
             }
 
@@ -210,6 +205,11 @@ public class MovieFragment extends BaseFragment {
         Intent intent = new Intent(getContext(), className);
         intent.putExtra("moviePlayUrl", itemInfo.getNextUrl());
         intent.putExtra("moviePlayName", itemInfo.getMovieName());
+        String style = getContext().getString(R.string.tv_series);
+        if (position == 0 || position == 4) {
+            style = getContext().getString(R.string.video_from);
+        }
+        intent.putExtra("movieStyle", style);
         startActivity(intent);
     }
 

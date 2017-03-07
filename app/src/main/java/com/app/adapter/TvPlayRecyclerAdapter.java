@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.app.bean.movie.TvItemInfo;
+import com.app.teacup.MoviePlayActivity;
 import com.app.teacup.R;
-import com.app.teacup.TVPlayActivity;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class TvPlayRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         viewHolder.mTextView.setTextColor(Color.BLACK);
         TvItemInfo info = mDatas.get(position);
         viewHolder.mTextView.setText(info.getName());
-        if (position == ((TVPlayActivity)mContext).mPlayIndex) {
+        if (position == ((MoviePlayActivity)mContext).mPlayIndex) {
             viewHolder.mTextView.setTextColor(ContextCompat.getColor(mContext, R.color.deepYellow));
         }
     }

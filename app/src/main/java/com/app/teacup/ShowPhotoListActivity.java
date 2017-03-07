@@ -91,8 +91,7 @@ public class ShowPhotoListActivity extends Activity {
         String imageName = ToolUtils.SHA256Encrypt(imgUrl);
         String newPath = Environment.getExternalStorageDirectory() + "/tea_img/" + imageName + ".jpg";
         File file = new File(newPath);
-        if (file.exists()) {
-        } else {
+        if (!file.exists()) {
             File tmpFile = new File(Environment.getExternalStorageDirectory(), "tea_img");
             if (!tmpFile.exists()) {
                 tmpFile.mkdir();

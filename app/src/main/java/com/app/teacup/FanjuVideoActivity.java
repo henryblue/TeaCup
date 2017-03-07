@@ -174,11 +174,11 @@ public class FanjuVideoActivity extends BaseActivity {
             mRefreshLayout.setEnabled(false);
         }
         if (!TextUtils.isEmpty(mVideoPlayUrl)) {
+            mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.VISIBLE,
+                    View.INVISIBLE, View.VISIBLE, View.INVISIBLE);
             mxVideoPlayerWidget.startPlay(mVideoPlayUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL,
                     getIntent().getStringExtra("fanjuVideoName"));
             mxVideoPlayerWidget.mStartButton.performClick();
-            mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.VISIBLE,
-                    View.INVISIBLE, View.VISIBLE, View.INVISIBLE);
         }
 
         if (!TextUtils.isEmpty(mVideoContent)) {

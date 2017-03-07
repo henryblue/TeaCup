@@ -140,7 +140,7 @@ public class SearchActivity extends BaseActivity {
                         String index = mDatas.get(position).getImageIndex();
                         boolean isTv = index.contains(getString(R.string.whether_tv_tip));
                         if (isTv) {
-                            enterPlayPage(position, TVPlayActivity.class);
+                            enterPlayPage(position, MoviePlayActivity.class);
                         } else {
                             enterPlayPage(position, MoviePlayActivity.class);
                         }
