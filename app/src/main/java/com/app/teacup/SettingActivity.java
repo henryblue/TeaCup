@@ -8,8 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.app.ui.SettingItemView;
-import com.app.util.ToolUtils;
+import com.app.teacup.ui.SettingItemView;
+import com.app.teacup.util.ToolUtils;
 
 
 public class SettingActivity extends AppCompatActivity {

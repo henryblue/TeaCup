@@ -9,8 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.app.ui.ThemeItemView;
-import com.app.util.ToolUtils;
+import com.app.teacup.ui.ThemeItemView;
+import com.app.teacup.util.ToolUtils;
 
 import java.util.ArrayList;
 import java.util.List;

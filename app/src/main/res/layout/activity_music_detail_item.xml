@@ -23,7 +23,7 @@
         android:textSize="@dimen/muisic_detail_type_textsize"
         android:textColor="@color/gray"/>
 
-    <com.app.ui.MoreTextView
+    <com.app.teacup.ui.MoreTextView
         android:id="@+id/tv_music_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -13,9 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.app.bean.book.FindBookInfo;
-import com.app.fragment.DetailFragment;
-import com.app.util.ToolUtils;
+import com.app.teacup.bean.book.FindBookInfo;
+import com.app.teacup.fragment.DetailFragment;
+import com.app.teacup.util.ToolUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 

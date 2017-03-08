@@ -7,26 +7,26 @@
 
     <include layout="@layout/navigation_toolbar" />
 
-    <com.app.ui.SettingItemView
+    <com.app.teacup.ui.SettingItemView
         android:id="@+id/siv_save_data_stream"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:setting_title="@string/save_mobile_data"
         app:setting_content="@string/tip_save_data"/>
 
-    <com.app.ui.SettingItemView
+    <com.app.teacup.ui.SettingItemView
         android:id="@+id/siv_warm_data_stream"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:setting_title="@string/tip_not_wifi" />
 
-    <com.app.ui.SettingItemView
+    <com.app.teacup.ui.SettingItemView
         android:id="@+id/siv_play_music"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:setting_title="@string/play_play_not_wifi" />
 
-    <com.app.ui.SettingItemView
+    <com.app.teacup.ui.SettingItemView
         android:id="@+id/siv_clean_cache"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

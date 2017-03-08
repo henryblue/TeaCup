@@ -34,7 +34,7 @@
                 android:textSize="@dimen/photo_gaoxiao_tip_title_textSize" />
         </LinearLayout>
 
-        <com.app.ui.MoreTextView
+        <com.app.teacup.ui.MoreTextView
             android:id="@+id/tv_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

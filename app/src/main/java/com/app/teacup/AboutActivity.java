@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.app.util.ToolUtils;
+import com.app.teacup.util.ToolUtils;
 
 
 public class AboutActivity extends AppCompatActivity {

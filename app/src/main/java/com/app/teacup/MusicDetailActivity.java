@@ -11,12 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.bean.Music.MusicDetail;
-import com.app.bean.Music.MusicDetailInfo;
-import com.app.bean.Music.MusicInfo;
-import com.app.ui.MoreTextView;
-import com.app.util.HttpUtils;
-import com.app.util.urlUtils;
+import com.app.teacup.bean.Music.MusicDetail;
+import com.app.teacup.bean.Music.MusicDetailInfo;
+import com.app.teacup.bean.Music.MusicInfo;
+import com.app.teacup.ui.MoreTextView;
+import com.app.teacup.util.HttpUtils;
+import com.app.teacup.util.urlUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 

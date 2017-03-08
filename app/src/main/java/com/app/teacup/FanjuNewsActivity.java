@@ -14,10 +14,10 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
-import com.app.adapter.FanjuNewsRecyclerAdapter;
-import com.app.bean.fanju.FanjuNewInfo;
-import com.app.util.OkHttpUtils;
-import com.app.util.ToolUtils;
+import com.app.teacup.adapter.FanjuNewsRecyclerAdapter;
+import com.app.teacup.bean.fanju.FanjuNewInfo;
+import com.app.teacup.util.OkHttpUtils;
+import com.app.teacup.util.ToolUtils;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.okhttp.Request;
@@ -33,7 +33,6 @@ import java.util.List;
 
 public class FanjuNewsActivity extends BaseActivity {
 
-    private static final String TAG = "FanjuNewsActivity";
     private List<FanjuNewInfo> mDatas;
     private SwipeRefreshLayout mRefreshLayout;
     private XRecyclerView mRecyclerView;

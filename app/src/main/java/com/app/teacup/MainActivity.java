@@ -19,14 +19,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.app.fragment.mainPage.FanjuFragment;
-import com.app.receiver.ConnectionChangeReceiver;
-import com.app.adapter.PagerAdapter;
-import com.app.fragment.mainPage.MusicFragment;
-import com.app.fragment.mainPage.NewsFragment;
-import com.app.fragment.mainPage.MovieFragment;
-import com.app.util.HttpUtils;
-import com.app.util.ToolUtils;
+import com.app.teacup.fragment.mainPage.FanjuFragment;
+import com.app.teacup.receiver.ConnectionChangeReceiver;
+import com.app.teacup.adapter.PagerAdapter;
+import com.app.teacup.fragment.mainPage.MusicFragment;
+import com.app.teacup.fragment.mainPage.NewsFragment;
+import com.app.teacup.fragment.mainPage.MovieFragment;
+import com.app.teacup.util.HttpUtils;
+import com.app.teacup.util.ToolUtils;
 
 import java.util.ArrayList;
 

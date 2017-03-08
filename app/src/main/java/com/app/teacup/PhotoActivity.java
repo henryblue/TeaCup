@@ -8,12 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.app.adapter.PagerAdapter;
-import com.app.fragment.photo.DoubanMeiziFragment;
-import com.app.fragment.photo.GaoxiaoFragment;
-import com.app.fragment.photo.JiandanMeiziFragment;
-import com.app.fragment.photo.QiubaiFragment;
-import com.app.util.ToolUtils;
+import com.app.teacup.adapter.PagerAdapter;
+import com.app.teacup.fragment.photo.DoubanMeiziFragment;
+import com.app.teacup.fragment.photo.GaoxiaoFragment;
+import com.app.teacup.fragment.photo.JiandanMeiziFragment;
+import com.app.teacup.fragment.photo.QiubaiFragment;
+import com.app.teacup.util.ToolUtils;
 
 import java.util.ArrayList;
 import java.util.List;

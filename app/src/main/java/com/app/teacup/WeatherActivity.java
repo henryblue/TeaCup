@@ -10,10 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.bean.WeatherInfo;
-import com.app.util.OkHttpUtils;
-import com.app.util.ToolUtils;
-import com.app.util.urlUtils;
+import com.app.teacup.bean.WeatherInfo;
+import com.app.teacup.util.OkHttpUtils;
+import com.app.teacup.util.ToolUtils;
+import com.app.teacup.util.urlUtils;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;

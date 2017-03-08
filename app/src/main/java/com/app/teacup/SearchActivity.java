@@ -17,11 +17,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.adapter.MoreMovieRecyclerAdapter;
-import com.app.bean.movie.MovieItemInfo;
-import com.app.util.OkHttpUtils;
-import com.app.util.ToolUtils;
-import com.app.util.urlUtils;
+import com.app.teacup.adapter.MoreMovieRecyclerAdapter;
+import com.app.teacup.bean.movie.MovieItemInfo;
+import com.app.teacup.util.OkHttpUtils;
+import com.app.teacup.util.ToolUtils;
+import com.app.teacup.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.squareup.okhttp.Request;
 
