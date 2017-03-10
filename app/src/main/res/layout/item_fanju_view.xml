@@ -11,88 +11,83 @@
     tools:targetApi="lollipop">
 
     <RelativeLayout
+        android:id="@+id/top_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/item_fanju_view_rl_height"
         android:layout_marginLeft="@dimen/item_fanju_view_rl_marginLeft"
         android:layout_marginTop="@dimen/item_fanju_view_rl_marginTop">
 
-        <RelativeLayout
-            android:id="@+id/top_container"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/video_author_img"
+            android:layout_width="@dimen/item_fanju_view_civ_width"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/video_author_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/item_fanju_view_tv_marginLeft"
+            android:layout_toRightOf="@id/video_author_img"
+            android:ellipsize="end"
+            android:textColor="@color/deep_gray"
+            android:textSize="@dimen/item_fanju_view_tv_textSize" />
+
+        <TextView
+            android:id="@+id/video_publish_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/item_fanju_view_tv_time_marginRight"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/item_fanju_view_tv_time_textSize" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_fanju_view_rl_content_height"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/item_fanju_view_rl_content_marginBottom"
+        android:layout_marginLeft="@dimen/item_fanju_view_rl_marginLeft">
+
+        <ImageView
+            android:id="@+id/video_img"
+            android:layout_width="@dimen/item_fanju_view_videoImg_width"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/video_index"
+            android:layout_width="@dimen/item_fanju_view_videoIndex_width"
+            android:layout_height="@dimen/item_fanju_view_videoIndex_height"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/video_name"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/item_fanju_view_rl_height">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/item_fanju_view_videoName_marginLeft"
+            android:layout_marginRight="@dimen/item_fanju_view_videoName_marginRight"
+            android:layout_toRightOf="@id/video_img"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/deep_gray"
+            android:textSize="@dimen/item_fanju_view_videoName_textSize" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/video_author_img"
-                android:layout_width="@dimen/item_fanju_view_civ_width"
-                android:layout_height="match_parent" />
-
-            <TextView
-                android:id="@+id/video_author_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/item_fanju_view_tv_marginLeft"
-                android:layout_toRightOf="@id/video_author_img"
-                android:textColor="@color/deep_gray"
-                android:ellipsize="end"
-                android:textSize="@dimen/item_fanju_view_tv_textSize" />
-
-            <TextView
-                android:id="@+id/video_publish_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/item_fanju_view_tv_time_marginRight"
-                android:textColor="@color/gray"
-                android:textSize="@dimen/item_fanju_view_tv_time_textSize" />
-        </RelativeLayout>
-
-
-        <RelativeLayout
+        <TextView
+            android:id="@+id/video_content"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/item_fanju_view_rl_content_height"
-            android:layout_below="@id/top_container"
-            android:layout_marginTop="@dimen/item_fanju_view_rl_content_marginTop">
-
-            <ImageView
-                android:id="@+id/video_img"
-                android:layout_width="@dimen/item_fanju_view_videoImg_width"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
-
-            <ImageView
-                android:id="@+id/video_index"
-                android:layout_width="@dimen/item_fanju_view_videoIndex_width"
-                android:layout_height="@dimen/item_fanju_view_videoIndex_height"
-                android:scaleType="centerCrop"
-                android:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/video_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/item_fanju_view_videoName_marginLeft"
-                android:layout_marginRight="@dimen/item_fanju_view_videoName_marginRight"
-                android:layout_toRightOf="@id/video_img"
-                android:maxLines="1"
-                android:textColor="@color/deep_gray"
-                android:ellipsize="end"
-                android:textSize="@dimen/item_fanju_view_videoName_textSize" />
-
-            <TextView
-                android:id="@+id/video_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/video_name"
-                android:layout_below="@id/video_name"
-                android:layout_marginRight="@dimen/item_fanju_view_videoContent_marginRight"
-                android:layout_marginTop="@dimen/item_fanju_view_videoContent_marginTop"
-                android:maxLines="4"
-                android:textColor="@color/deep_gray"
-                android:textSize="@dimen/item_fanju_view_videoContent_textSize" />
-        </RelativeLayout>
-
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/video_name"
+            android:layout_below="@id/video_name"
+            android:layout_marginRight="@dimen/item_fanju_view_videoContent_marginRight"
+            android:layout_marginTop="@dimen/item_fanju_view_videoContent_marginTop"
+            android:maxLines="4"
+            android:textColor="@color/deep_gray"
+            android:textSize="@dimen/item_fanju_view_videoContent_textSize" />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

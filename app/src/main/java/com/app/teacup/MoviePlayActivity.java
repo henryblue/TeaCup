@@ -283,7 +283,7 @@ public class MoviePlayActivity extends BaseActivity {
             return;
         }
         String videoUrl = getIntent().getStringExtra("moviePlayUrl");
-        videoUrl = videoUrl.replace(".html", "/1/1.html");
+        //videoUrl = videoUrl.replace(".html", "/1/1.html");
         if (!TextUtils.isEmpty(videoUrl)) {
             OkHttpUtils.getAsyn(videoUrl, new OkHttpUtils.ResultCallback<String>() {
 

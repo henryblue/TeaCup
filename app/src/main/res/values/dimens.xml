@@ -314,7 +314,7 @@
     <dimen name="item_fanju_view_tv_time_marginRight">10dp</dimen>
     <dimen name="item_fanju_view_tv_time_textSize">12sp</dimen>
     <dimen name="item_fanju_view_rl_content_height">93dp</dimen>
-    <dimen name="item_fanju_view_rl_content_marginTop">10dp</dimen>
+    <dimen name="item_fanju_view_rl_content_marginBottom">15dp</dimen>
     <dimen name="item_fanju_view_videoImg_width">93dp</dimen>
     <dimen name="item_fanju_view_videoIndex_width">40dp</dimen>
     <dimen name="item_fanju_view_videoIndex_height">25dp</dimen>
