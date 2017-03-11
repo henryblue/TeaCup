@@ -90,7 +90,7 @@ public class MoreMovieShowActivity extends BaseActivity {
     private void initToolBar() {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.activity_navigation_toolbar);
         if (mToolbar != null) {
-            int movieStyle = getIntent().getIntExtra("movieStyle", 0);
+            int movieStyle = getIntent().getIntExtra("moreMovieStyle", 0);
             String[] arrayStyle = getResources().getStringArray(R.array.video_style);
             mToolbar.setTitle(arrayStyle[movieStyle]);
         }
