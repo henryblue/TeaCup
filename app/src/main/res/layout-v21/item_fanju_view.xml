@@ -5,6 +5,7 @@
     android:layout_height="@dimen/item_video_view_height"
     android:layout_marginBottom="@dimen/item_video_view_marginBottom"
     android:layout_marginTop="@dimen/item_video_view_marginTop"
+    android:foreground="?android:attr/selectableItemBackgroundBorderless"
     app:cardElevation="@dimen/item_video_view_elevation">
 
     <RelativeLayout

@@ -372,6 +372,7 @@ public class MoviePlayActivity extends BaseActivity {
             mWebView.getSettings().setAllowFileAccess(true);
             mWebView.getSettings().setUseWideViewPort(true);
             mWebView.setWebChromeClient(new WebChromeClient());
+            mWebView.getSettings().setDomStorageEnabled(true);
             mWebView.setWebViewClient(new MyTvWebViewClient(MoviePlayActivity.this));
             LogcatUtils.getInstance().start();
             mWebView.loadUrl(htmlUrl);
@@ -462,6 +463,7 @@ public class MoviePlayActivity extends BaseActivity {
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 String url = request.getUrl().toString();
+                Log.i(TAG, "LOLLIPOPLOLLIPOPshouldInterceptRequest: ==url==" + url);
                 if (url.startsWith("http") && (url.contains("sid") || url.contains("mp4"))) {
                     if (mTvPlayActivity.get() != null) {
                         mTvPlayActivity.get().mVideoUrl = url;
@@ -472,13 +474,14 @@ public class MoviePlayActivity extends BaseActivity {
         }
 
         @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+            Log.i(TAG, "shouldInterceptRequest: ==url=" + url);
             if (url.startsWith("http") && (url.contains("sid") || url.contains("mp4"))) {
                 if (mTvPlayActivity.get() != null) {
                     mTvPlayActivity.get().mVideoUrl = url;
                 }
             }
-            return super.shouldOverrideUrlLoading(view, url);
+            return super.shouldInterceptRequest(view, url);
         }
 
         @Override

@@ -64,7 +64,8 @@
         <activity android:name=".MoreMovieShowActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".MoviePlayActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:hardwareAccelerated="true"/>
         <activity
             android:name=".FanjuVideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />

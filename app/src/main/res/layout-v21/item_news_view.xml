@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_news_view_cardView_height"
     android:layout_margin="@dimen/item_news_view_cardView_margin"
+    android:foreground="?android:attr/selectableItemBackgroundBorderless"
     app:cardElevation="@dimen/item_news_view_elevation" >
 
     <RelativeLayout

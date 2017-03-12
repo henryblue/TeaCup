@@ -8,6 +8,7 @@
     android:layout_marginLeft="@dimen/item_music_view_marginleft"
     android:layout_marginRight="@dimen/item_music_view_marginright"
     android:layout_marginTop="@dimen/item_music_view_marginTop"
+    android:foreground="?android:attr/selectableItemBackgroundBorderless"
     app:cardElevation="@dimen/item_music_view_elevation" >
 
     <RelativeLayout
