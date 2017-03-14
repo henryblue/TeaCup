@@ -178,7 +178,7 @@ public class FanjuVideoActivity extends BaseActivity {
                     View.INVISIBLE, View.VISIBLE, View.INVISIBLE);
             mxVideoPlayerWidget.startPlay(mVideoPlayUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL,
                     getIntent().getStringExtra("fanjuVideoName"));
-            mxVideoPlayerWidget.mStartButton.performClick();
+            mxVideoPlayerWidget.mPlayControllerButton.performClick();
         }
 
         if (!TextUtils.isEmpty(mVideoContent)) {

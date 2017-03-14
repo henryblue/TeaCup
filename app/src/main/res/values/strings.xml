@@ -78,6 +78,7 @@
     <string name="search_video_hint">搜索视频</string>
     <string name="share_photo">分享图片</string>
     <string name="save_photo">保存图片</string>
+    <string name="video_dir_name">concat.ffconcat</string>
 
     <string-array name="tab_name">
         <item>新鲜事</item>

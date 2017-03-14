@@ -137,13 +137,7 @@ public class SearchActivity extends BaseActivity {
                 mMoreRecyclerAdapter.setOnItemClickListener(new MoreMovieRecyclerAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        String index = mDatas.get(position).getImageIndex();
-                        boolean isTv = index.contains(getString(R.string.whether_tv_tip));
-                        if (isTv) {
-                            enterPlayPage(position, MoviePlayActivity.class);
-                        } else {
-                            enterPlayPage(position, MoviePlayActivity.class);
-                        }
+                        enterPlayPage(position, MovieTestPlayActivity.class);
                         finish();
                     }
                 });

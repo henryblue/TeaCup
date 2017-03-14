@@ -1,6 +1,7 @@
 package com.app.teacup;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -13,10 +14,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -40,23 +41,31 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import hb.xvideoplayer.MxVideoPlayer;
 import hb.xvideoplayer.MxVideoPlayerWidget;
 
 
-public class MoviePlayActivity extends BaseActivity {
+public class MovieTestPlayActivity extends BaseActivity {
 
-    private static final String TAG = "MoviePlayActivity";
-    private List<MoviePlayInfo> mDatas;
-    private List<TvItemInfo> mTvDatas;
+    private static final String TAG = "MovieTestPlayActivity";
+    private List<MoviePlayInfo> mMoreDatas;
+    private List<TvItemInfo> mTvListDatas;
+    private List<String> mVideoUrlList;
     private SwipeRefreshLayout mRefreshLayout;
     private WebView mWebView;
-    private String mVideoUrl;
     private MxVideoPlayerWidget mxVideoPlayerWidget;
     private TextView mDependText;
     private TextView mTvText;
@@ -64,7 +73,9 @@ public class MoviePlayActivity extends BaseActivity {
     private LinearLayout mMoreContainer;
     private boolean mIsInitData = false;
     public int mPlayIndex = 0;
+    public boolean mIsParseVideoXml = false;
     private boolean mIsChangeVideo = false;
+    private String mVideoUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,13 +87,15 @@ public class MoviePlayActivity extends BaseActivity {
             window.setStatusBarColor(Color.BLACK);
             window.setNavigationBarColor(Color.TRANSPARENT);
         }
+        mVideoUrl = "concat:" + getFilesDir() + "/" + getString(R.string.video_dir_name);
         initView();
         setupRefreshLayout();
     }
 
     private void initView() {
-        mDatas = new ArrayList<>();
-        mTvDatas = new ArrayList<>();
+        mMoreDatas = new ArrayList<>();
+        mTvListDatas = new ArrayList<>();
+        mVideoUrlList = new ArrayList<>();
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.tv_srl_refresh);
         mWebView = (WebView) findViewById(R.id.tv_base_webView);
         mxVideoPlayerWidget = (MxVideoPlayerWidget) findViewById(R.id.tv_video_player);
@@ -105,31 +118,32 @@ public class MoviePlayActivity extends BaseActivity {
         if (mIsInitData) {
             return;
         }
-        if (mDatas.isEmpty() && TextUtils.isEmpty(mVideoUrl)) {
-            Toast.makeText(MoviePlayActivity.this, getString(R.string.refresh_net_error),
+        if (mMoreDatas.isEmpty() && mVideoUrlList.isEmpty()) {
+            Toast.makeText(MovieTestPlayActivity.this, getString(R.string.refresh_net_error),
                     Toast.LENGTH_SHORT).show();
         } else {
             mRefreshLayout.setEnabled(false);
         }
 
-        if (!TextUtils.isEmpty(mVideoUrl)) {
+        if (!mVideoUrlList.isEmpty()) {
             String videoName = getIntent().getStringExtra("moviePlayName");
             mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
                     View.VISIBLE, View.INVISIBLE, View.INVISIBLE);
+
             mxVideoPlayerWidget.startPlay(mVideoUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL, videoName);
             mxVideoPlayerWidget.mPlayControllerButton.performClick();
         } else {
-            Toast.makeText(MoviePlayActivity.this, getString(R.string.parse_url_error),
+            Toast.makeText(MovieTestPlayActivity.this, getString(R.string.parse_url_error),
                     Toast.LENGTH_SHORT).show();
         }
 
-        if (!mTvDatas.isEmpty()) {
+        if (!mTvListDatas.isEmpty()) {
             mTvText.setVisibility(View.VISIBLE);
             setupRecyclerView();
         }
-        if (!mDatas.isEmpty()) {
+        if (!mMoreDatas.isEmpty()) {
             mDependText.setVisibility(View.VISIBLE);
-            for (int i = 0; i < mDatas.size(); i++) {
+            for (int i = 0; i < mMoreDatas.size(); i++) {
                 loadViewToContainer(i);
             }
         }
@@ -139,7 +153,7 @@ public class MoviePlayActivity extends BaseActivity {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(manager);
-        final TvPlayRecyclerAdapter adapter = new TvPlayRecyclerAdapter(MoviePlayActivity.this, mTvDatas);
+        final TvPlayRecyclerAdapter adapter = new TvPlayRecyclerAdapter(MovieTestPlayActivity.this, mTvListDatas);
         mRecyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new TvPlayRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -148,7 +162,7 @@ public class MoviePlayActivity extends BaseActivity {
                     mIsChangeVideo = true;
                     mPlayIndex = position;
                     adapter.notifyDataSetChanged();
-                    String nextUrl = mTvDatas.get(position).getNextUrl();
+                    String nextUrl = mTvListDatas.get(position).getNextUrl();
                     MxVideoPlayer.releaseAllVideos();
                     mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
                             View.VISIBLE, View.INVISIBLE, View.INVISIBLE);
@@ -159,20 +173,20 @@ public class MoviePlayActivity extends BaseActivity {
     }
 
     private void loadViewToContainer(final int position) {
-        View itemView = View.inflate(MoviePlayActivity.this, R.layout.item_movie_play_view, null);
+        View itemView = View.inflate(MovieTestPlayActivity.this, R.layout.item_movie_play_view, null);
         ImageView imageView = (ImageView) itemView.findViewById(R.id.moive_play_img);
         TextView nameView = (TextView) itemView.findViewById(R.id.movie_play_name);
         TextView timeView = (TextView) itemView.findViewById(R.id.movie_play_addTime);
-        MoviePlayInfo info = mDatas.get(position);
+        MoviePlayInfo info = mMoreDatas.get(position);
         timeView.setText(info.getAddTime());
         nameView.setText(info.getMovieName());
         loadImageResource(info.getImgUrl(), imageView);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MoviePlayActivity.this, MoviePlayActivity.class);
-                intent.putExtra("moviePlayUrl", mDatas.get(position).getNextUrl());
-                intent.putExtra("moviePlayName", mDatas.get(position).getMovieName());
+                Intent intent = new Intent(MovieTestPlayActivity.this, MovieTestPlayActivity.class);
+                intent.putExtra("moviePlayUrl", mMoreDatas.get(position).getNextUrl());
+                intent.putExtra("moviePlayName", mMoreDatas.get(position).getMovieName());
                 startActivity(intent);
             }
         });
@@ -181,7 +195,7 @@ public class MoviePlayActivity extends BaseActivity {
 
     private void loadImageResource(String url, ImageView imageView) {
         if (!MainActivity.mIsLoadPhoto) {
-            Glide.with(MoviePlayActivity.this).load(url).asBitmap()
+            Glide.with(MovieTestPlayActivity.this).load(url).asBitmap()
                     .error(R.drawable.photo_loaderror)
                     .placeholder(R.drawable.main_load_bg)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -189,7 +203,7 @@ public class MoviePlayActivity extends BaseActivity {
                     .into(imageView);
         } else {
             if (MainActivity.mIsWIFIState) {
-                Glide.with(MoviePlayActivity.this).load(url).asBitmap()
+                Glide.with(MovieTestPlayActivity.this).load(url).asBitmap()
                         .error(R.drawable.photo_loaderror)
                         .placeholder(R.drawable.main_load_bg)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -203,9 +217,8 @@ public class MoviePlayActivity extends BaseActivity {
 
     @Override
     protected void onLoadDataError() {
-        LogcatUtils.getInstance().stop();
         mWebView.loadUrl("about:blank");
-        Toast.makeText(MoviePlayActivity.this, getString(R.string.not_have_more_data),
+        Toast.makeText(MovieTestPlayActivity.this, getString(R.string.not_have_more_data),
                 Toast.LENGTH_SHORT).show();
         mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
                 View.INVISIBLE, View.INVISIBLE, View.INVISIBLE);
@@ -217,37 +230,26 @@ public class MoviePlayActivity extends BaseActivity {
     protected void onLoadDataFinish() {
         mWebView.loadUrl("about:blank");
         mRefreshLayout.setRefreshing(false);
-        String result = LogcatUtils.getInstance().getResult();
-        LogcatUtils.getInstance().stop();
-        if (!TextUtils.isEmpty(mVideoUrl) && mVideoUrl.endsWith("&format=mp4")) {
-            if (!TextUtils.isEmpty(result)) {
-                String[] splitInfo = result.split("url:");
-                mVideoUrl = splitInfo[splitInfo.length - 1];
-            }
-        }
-
         initData();
         mIsInitData = true;
         if (mIsChangeVideo) {
-            if (!TextUtils.isEmpty(mVideoUrl)) {
+            if (!mVideoUrlList.isEmpty()) {
                 String videoName = getIntent().getStringExtra("moviePlayName") +
-                        "-" + mTvDatas.get(mPlayIndex).getName();
+                        "-" + mTvListDatas.get(mPlayIndex).getName();
                 mxVideoPlayerWidget.startPlay(mVideoUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL, videoName);
                 mxVideoPlayerWidget.mPlayControllerButton.performClick();
             } else {
                 mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
                         View.INVISIBLE, View.INVISIBLE, View.INVISIBLE);
-                Toast.makeText(MoviePlayActivity.this, getString(R.string.parse_url_error),
+                Toast.makeText(MovieTestPlayActivity.this, getString(R.string.parse_url_error),
                         Toast.LENGTH_SHORT).show();
             }
             mIsChangeVideo = false;
         }
-        mVideoUrl = "";
     }
 
     @Override
     protected void onRefreshError() {
-
     }
 
     @Override
@@ -278,12 +280,11 @@ public class MoviePlayActivity extends BaseActivity {
     }
 
     private void startRefreshData() {
-        mDatas.clear();
+        mMoreDatas.clear();
         if (getIntent() == null) {
             return;
         }
         String videoUrl = getIntent().getStringExtra("moviePlayUrl");
-        //videoUrl = videoUrl.replace(".html", "/1/1.html");
         if (!TextUtils.isEmpty(videoUrl)) {
             OkHttpUtils.getAsyn(videoUrl, new OkHttpUtils.ResultCallback<String>() {
 
@@ -317,7 +318,7 @@ public class MoviePlayActivity extends BaseActivity {
                     tvItemInfo.setNextUrl(nextUrl);
                     String name = a.text();
                     tvItemInfo.setName(name);
-                    mTvDatas.add(tvItemInfo);
+                    mTvListDatas.add(tvItemInfo);
                 }
                 //parse more video info
                 Element row = container.getElementsByClass("row").get(1);
@@ -347,7 +348,7 @@ public class MoviePlayActivity extends BaseActivity {
                     String addTime = e.getElementsByClass("meta").get(0)
                             .getElementsByTag("em").get(0).text();
                     info.setAddTime(addTime);
-                    mDatas.add(info);
+                    mMoreDatas.add(info);
                 }
 
                 // parse video url
@@ -363,18 +364,19 @@ public class MoviePlayActivity extends BaseActivity {
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     private void parseVideoPlayUrl(String htmlUrl) {
         if (!TextUtils.isEmpty(htmlUrl) && mWebView != null) {
             mWebView.getSettings().setJavaScriptEnabled(true);
+            mWebView.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
             mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
             mWebView.getSettings().setLoadWithOverviewMode(true);
             mWebView.getSettings().setAllowFileAccess(true);
             mWebView.getSettings().setUseWideViewPort(true);
             mWebView.setWebChromeClient(new WebChromeClient());
             mWebView.getSettings().setDomStorageEnabled(true);
-            mWebView.setWebViewClient(new MyTvWebViewClient(MoviePlayActivity.this));
-            LogcatUtils.getInstance().start();
+            mWebView.setWebViewClient(new MyTvWebViewClient(MovieTestPlayActivity.this));
+            mIsParseVideoXml = false;
             mWebView.loadUrl(htmlUrl);
         }
     }
@@ -403,8 +405,8 @@ public class MoviePlayActivity extends BaseActivity {
             Element fluid = container.getElementsByClass("container-fluid").get(0);
             Element player = fluid.getElementById("player");
             Element playerSwf = player.getElementById("player_swf");
-            String htmlVideoUrl = playerSwf.attr("src");
-            LogcatUtils.getInstance().start();
+            final String htmlVideoUrl = playerSwf.attr("src");
+            mIsParseVideoXml = false;
             mWebView.loadUrl(htmlVideoUrl);
         } catch (Exception e) {
             sendParseDataMessage(LOAD_DATA_ERROR);
@@ -443,43 +445,104 @@ public class MoviePlayActivity extends BaseActivity {
         super.onBackPressed();
     }
 
-    private static class MyTvWebViewClient extends WebViewClient {
-        private WeakReference<MoviePlayActivity> mTvPlayActivity;
+    private void concatVideoUrl() throws Exception {
+        FileOutputStream fos = openFileOutput(getString(R.string.video_dir_name), Context.MODE_PRIVATE);
+        OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+        osw.write("ffconcat version 1.0" + "\n");
+        for (int i = 0; i < mVideoUrlList.size(); ++i) {
+            osw.write("file '" + mVideoUrlList.get(i) + "'" + "\n");
+            osw.write("duration " + mVideoUrlList.get(++i) + "\n");
+        }
+        osw.flush();
+        fos.flush();
+        fos.close();
+        osw.close();
+    }
 
-        MyTvWebViewClient(MoviePlayActivity activity) {
+    private void parseVideoXmlUrl(String htmlData) {
+        String regEx = "\\b(xml|core)\\b[\\w.?=/&]*guhuo[\\w.?=/&]*";
+        Pattern pat = Pattern.compile(regEx);
+        Matcher mat = pat.matcher(htmlData);
+        boolean rs = mat.find();
+        if (rs) {
+            final String nextUrl = "https://vs.6no.cc/" + mat.group(0);
+            mIsParseVideoXml = true;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mWebView.loadUrl(nextUrl);
+                }
+            });
+        } else {
+            sendParseDataMessage(LOAD_DATA_ERROR);
+        }
+    }
+
+    private void parseVideoUrlList(String xmlData) throws Exception {
+        mVideoUrlList.clear();
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        XmlPullParser parser = factory.newPullParser();
+        InputStream is = new ByteArrayInputStream(xmlData.getBytes());
+        parser.setInput(is, "utf-8");
+        int eventType = parser.getEventType();
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            String nodeName = parser.getName();
+            switch (eventType) {
+                case XmlPullParser.START_TAG: {
+                    if ("file".equals(nodeName)) {
+                        String url = parser.nextText();
+                        mVideoUrlList.add(url);
+                    } else if ("seconds".equals(nodeName)) {
+                        String time = parser.nextText();
+                        mVideoUrlList.add(time);
+                    }
+                    break;
+                }
+                case XmlPullParser.END_TAG: {
+                    if ("video".equals(nodeName)) {
+                        return;
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            eventType = parser.next();
+        }
+    }
+
+    class MyJavaScriptInterface {
+        @JavascriptInterface
+        @SuppressWarnings("unused")
+        public void processHTML(String html) {
+            if (!mIsParseVideoXml) {
+                parseVideoXmlUrl(html);
+            } else {
+                try {
+                    mIsParseVideoXml = false;
+                    parseVideoUrlList(html);
+                    concatVideoUrl();
+                    sendParseDataMessage(LOAD_DATA_FINISH);
+                } catch (Exception e) {
+                    sendParseDataMessage(LOAD_DATA_ERROR);
+                }
+            }
+        }
+    }
+
+    private static class MyTvWebViewClient extends WebViewClient {
+        private WeakReference<MovieTestPlayActivity> mTvPlayActivity;
+
+        MyTvWebViewClient(MovieTestPlayActivity activity) {
             mTvPlayActivity = new WeakReference<>(activity);
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             if (!url.contains("about:blank")) {
-                if (mTvPlayActivity.get() != null) {
-                    mTvPlayActivity.get().sendParseDataMessageDelayed(LOAD_DATA_FINISH, 1200);
-                }
+                view.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'" +
+                        "+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
             }
-        }
-
-        @Override
-        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                String url = request.getUrl().toString();
-                if (url.startsWith("http") && (url.contains("sid") || url.contains("mp4"))) {
-                    if (mTvPlayActivity.get() != null) {
-                        mTvPlayActivity.get().mVideoUrl = url;
-                    }
-                }
-            }
-            return super.shouldInterceptRequest(view, request);
-        }
-
-        @Override
-        public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-            if (url.startsWith("http") && (url.contains("sid") || url.contains("mp4"))) {
-                if (mTvPlayActivity.get() != null) {
-                    mTvPlayActivity.get().mVideoUrl = url;
-                }
-            }
-            return super.shouldInterceptRequest(view, url);
         }
 
         @Override

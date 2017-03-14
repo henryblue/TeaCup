@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.app.teacup.MoreMovieShowActivity;
-import com.app.teacup.MoviePlayActivity;
+import com.app.teacup.MovieTestPlayActivity;
 import com.app.teacup.R;
 import com.app.teacup.adapter.MovieDetailRecyclerAdapter;
 import com.app.teacup.bean.movie.MovieDetailInfo;
@@ -89,7 +89,7 @@ public class MovieFragment extends BaseFragment {
         mMovieDetailAdapter.setOnItemClickListener(new MovieDetailRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, int itemPosition) {
-                    enterPlayPage(position, itemPosition, MoviePlayActivity.class);
+                    enterPlayPage(position, itemPosition, MovieTestPlayActivity.class);
             }
 
             @Override
