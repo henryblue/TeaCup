@@ -7,13 +7,12 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import java.util.List;
 
-class ReactViewPagerAdapter extends PagerAdapter {
+public class ReactViewPagerAdapter extends PagerAdapter {
 
-    private final List<ImageView> mImageViewList;
+    private final List<View> mViewList;
     private final ViewPager mViewPager;
     private boolean mIsAutoScroll = false;
 
@@ -29,9 +28,9 @@ class ReactViewPagerAdapter extends PagerAdapter {
         }
     };
 
-    public ReactViewPagerAdapter(ViewPager viewPager, List<ImageView> imageViews) {
+    public ReactViewPagerAdapter(ViewPager viewPager, List<View> imageViews) {
         mViewPager = viewPager;
-        mImageViewList = imageViews;
+        mViewList = imageViews;
     }
 
     @Override
@@ -52,16 +51,16 @@ class ReactViewPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        if (mImageViewList.get(position % mImageViewList.size()).getParent() != null) {
-            ((ViewPager)mImageViewList.get(position % mImageViewList.size()).getParent()).
-                    removeView(mImageViewList.get(position % mImageViewList.size()));
+        if (mViewList.get(position % mViewList.size()).getParent() != null) {
+            ((ViewPager)mViewList.get(position % mViewList.size()).getParent()).
+                    removeView(mViewList.get(position % mViewList.size()));
         }
         try {
-            container.addView(mImageViewList.get(position % mImageViewList.size()));
+            container.addView(mViewList.get(position % mViewList.size()));
         } catch (Exception e) {
             //
         }
-        return mImageViewList.get(position % mImageViewList.size());
+        return mViewList.get(position % mViewList.size());
     }
 
 

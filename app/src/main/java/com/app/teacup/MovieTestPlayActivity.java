@@ -1,7 +1,6 @@
 package com.app.teacup;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -41,18 +40,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import hb.xvideoplayer.MxVideoPlayer;
 import hb.xvideoplayer.MxVideoPlayerWidget;
@@ -63,7 +54,6 @@ public class MovieTestPlayActivity extends BaseActivity {
     private static final String TAG = "MovieTestPlayActivity";
     private List<MoviePlayInfo> mMoreDatas;
     private List<TvItemInfo> mTvListDatas;
-    private List<String> mVideoUrlList;
     private SwipeRefreshLayout mRefreshLayout;
     private WebView mWebView;
     private MxVideoPlayerWidget mxVideoPlayerWidget;
@@ -73,7 +63,6 @@ public class MovieTestPlayActivity extends BaseActivity {
     private LinearLayout mMoreContainer;
     private boolean mIsInitData = false;
     public int mPlayIndex = 0;
-    public boolean mIsParseVideoXml = false;
     private boolean mIsChangeVideo = false;
     private String mVideoUrl;
 
@@ -87,7 +76,6 @@ public class MovieTestPlayActivity extends BaseActivity {
             window.setStatusBarColor(Color.BLACK);
             window.setNavigationBarColor(Color.TRANSPARENT);
         }
-        mVideoUrl = "concat:" + getFilesDir() + "/" + getString(R.string.video_dir_name);
         initView();
         setupRefreshLayout();
     }
@@ -95,7 +83,6 @@ public class MovieTestPlayActivity extends BaseActivity {
     private void initView() {
         mMoreDatas = new ArrayList<>();
         mTvListDatas = new ArrayList<>();
-        mVideoUrlList = new ArrayList<>();
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.tv_srl_refresh);
         mWebView = (WebView) findViewById(R.id.tv_base_webView);
         mxVideoPlayerWidget = (MxVideoPlayerWidget) findViewById(R.id.tv_video_player);
@@ -115,17 +102,17 @@ public class MovieTestPlayActivity extends BaseActivity {
     }
 
     private void initData() {
-        if (mIsInitData) {
+        if (mIsInitData) { //WebView onPageFinished maybe call two
             return;
         }
-        if (mMoreDatas.isEmpty() && mVideoUrlList.isEmpty()) {
+        if (mMoreDatas.isEmpty() && TextUtils.isEmpty(mVideoUrl)) {
             Toast.makeText(MovieTestPlayActivity.this, getString(R.string.refresh_net_error),
                     Toast.LENGTH_SHORT).show();
         } else {
             mRefreshLayout.setEnabled(false);
         }
 
-        if (!mVideoUrlList.isEmpty()) {
+        if (!TextUtils.isEmpty(mVideoUrl)) {
             String videoName = getIntent().getStringExtra("moviePlayName");
             mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
                     View.VISIBLE, View.INVISIBLE, View.INVISIBLE);
@@ -137,10 +124,12 @@ public class MovieTestPlayActivity extends BaseActivity {
                     Toast.LENGTH_SHORT).show();
         }
 
+        // show video's source or episode
         if (!mTvListDatas.isEmpty()) {
             mTvText.setVisibility(View.VISIBLE);
             setupRecyclerView();
         }
+        // load more videos
         if (!mMoreDatas.isEmpty()) {
             mDependText.setVisibility(View.VISIBLE);
             for (int i = 0; i < mMoreDatas.size(); i++) {
@@ -218,6 +207,7 @@ public class MovieTestPlayActivity extends BaseActivity {
     @Override
     protected void onLoadDataError() {
         mWebView.loadUrl("about:blank");
+        LogcatUtils.getInstance().stop();
         Toast.makeText(MovieTestPlayActivity.this, getString(R.string.not_have_more_data),
                 Toast.LENGTH_SHORT).show();
         mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
@@ -229,11 +219,12 @@ public class MovieTestPlayActivity extends BaseActivity {
     @Override
     protected void onLoadDataFinish() {
         mWebView.loadUrl("about:blank");
+        LogcatUtils.getInstance().stop();
         mRefreshLayout.setRefreshing(false);
         initData();
         mIsInitData = true;
         if (mIsChangeVideo) {
-            if (!mVideoUrlList.isEmpty()) {
+            if (!TextUtils.isEmpty(mVideoUrl)) {
                 String videoName = getIntent().getStringExtra("moviePlayName") +
                         "-" + mTvListDatas.get(mPlayIndex).getName();
                 mxVideoPlayerWidget.startPlay(mVideoUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL, videoName);
@@ -246,6 +237,7 @@ public class MovieTestPlayActivity extends BaseActivity {
             }
             mIsChangeVideo = false;
         }
+        mVideoUrl = "";
     }
 
     @Override
@@ -254,12 +246,10 @@ public class MovieTestPlayActivity extends BaseActivity {
 
     @Override
     protected void onRefreshFinish() {
-
     }
 
     @Override
     protected void onRefreshStart() {
-
     }
 
     private void setupRefreshLayout() {
@@ -295,13 +285,13 @@ public class MovieTestPlayActivity extends BaseActivity {
 
                 @Override
                 public void onResponse(String response) {
-                    parseVideoData(response);
+                    parseMoreVideoData(response);
                 }
             });
         }
     }
 
-    private void parseVideoData(String response) {
+    private void parseMoreVideoData(String response) {
         Document document = Jsoup.parse(response);
         try {
             if (document != null) {
@@ -350,23 +340,47 @@ public class MovieTestPlayActivity extends BaseActivity {
                     info.setAddTime(addTime);
                     mMoreDatas.add(info);
                 }
-
-                // parse video url
-                Element fluid = container.getElementsByClass("container-fluid").get(0);
-                Element player = fluid.getElementById("player");
-                Element playerSwf = player.getElementById("player_swf");
-                String htmlVideoUrl = playerSwf.attr("src");
-                parseVideoPlayUrl(htmlVideoUrl);
             }
+            requestParseVideoUrl();
         } catch (Exception e) {
             Log.i(TAG, "parseBaseData: ====error===" + e.getMessage());
             sendParseDataMessage(LOAD_DATA_ERROR);
         }
     }
 
+    private void requestParseVideoUrl() {
+        String videoUrl = getIntent().getStringExtra("moviePlayUrl");
+        if (!TextUtils.isEmpty(videoUrl)) {
+            OkHttpUtils.getAsynWithHeader(MovieTestPlayActivity.this, videoUrl,
+                    new OkHttpUtils.ResultCallback<String>() {
+
+                        @Override
+                        public void onError(Request request, Exception e) {
+                            sendParseDataMessage(LOAD_DATA_FINISH);
+                        }
+
+                        @Override
+                        public void onResponse(String response) {
+                            parseVideoUrl(response);
+                        }
+                    });
+        }
+    }
+
+    private void parseVideoUrl(String response) {
+        Document document = Jsoup.parse(response);
+        try {
+            Element video = document.getElementsByTag("iframe").first();
+            String videoUrl = video.attr("src");
+            parseVideoPlayUrl(videoUrl);
+        } catch (Exception e) {
+            sendParseDataMessage(LOAD_DATA_FINISH);
+        }
+    }
+
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
-    private void parseVideoPlayUrl(String htmlUrl) {
-        if (!TextUtils.isEmpty(htmlUrl) && mWebView != null) {
+    private void parseVideoPlayUrl(String videoUrl) {
+        if (!mIsInitData && !TextUtils.isEmpty(videoUrl) && mWebView != null) {
             mWebView.getSettings().setJavaScriptEnabled(true);
             mWebView.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
             mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
@@ -376,40 +390,31 @@ public class MovieTestPlayActivity extends BaseActivity {
             mWebView.setWebChromeClient(new WebChromeClient());
             mWebView.getSettings().setDomStorageEnabled(true);
             mWebView.setWebViewClient(new MyTvWebViewClient(MovieTestPlayActivity.this));
-            mIsParseVideoXml = false;
-            mWebView.loadUrl(htmlUrl);
+            LogcatUtils.getInstance().start();
+            mWebView.loadUrl(videoUrl);
+        } else if (!TextUtils.isEmpty(videoUrl)) {
+            LogcatUtils.getInstance().start();
+            mWebView.loadUrl(videoUrl);
+        } else {
+            sendParseDataMessage(LOAD_DATA_FINISH);
         }
     }
 
     private void parseNextPlayUrl(String nextUrl) {
         if (!TextUtils.isEmpty(nextUrl)) {
-            OkHttpUtils.getAsyn(nextUrl, new OkHttpUtils.ResultCallback<String>() {
+            OkHttpUtils.getAsynWithHeader(MovieTestPlayActivity.this, nextUrl,
+                    new OkHttpUtils.ResultCallback<String>() {
 
-                @Override
-                public void onError(Request request, Exception e) {
-                    sendParseDataMessage(LOAD_DATA_ERROR);
-                }
+                        @Override
+                        public void onError(Request request, Exception e) {
+                            sendParseDataMessage(LOAD_DATA_FINISH);
+                        }
 
-                @Override
-                public void onResponse(String response) {
-                    parseNextVideoData(response);
-                }
-            });
-        }
-    }
-
-    private void parseNextVideoData(String response) {
-        Document document = Jsoup.parse(response);
-        try {
-            Element container = document.getElementsByClass("container").get(3);
-            Element fluid = container.getElementsByClass("container-fluid").get(0);
-            Element player = fluid.getElementById("player");
-            Element playerSwf = player.getElementById("player_swf");
-            final String htmlVideoUrl = playerSwf.attr("src");
-            mIsParseVideoXml = false;
-            mWebView.loadUrl(htmlVideoUrl);
-        } catch (Exception e) {
-            sendParseDataMessage(LOAD_DATA_ERROR);
+                        @Override
+                        public void onResponse(String response) {
+                            parseVideoUrl(response);
+                        }
+                    });
         }
     }
 
@@ -445,69 +450,23 @@ public class MovieTestPlayActivity extends BaseActivity {
         super.onBackPressed();
     }
 
-    private void concatVideoUrl() throws Exception {
-        FileOutputStream fos = openFileOutput(getString(R.string.video_dir_name), Context.MODE_PRIVATE);
-        OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
-        osw.write("ffconcat version 1.0" + "\n");
-        for (int i = 0; i < mVideoUrlList.size(); ++i) {
-            osw.write("file '" + mVideoUrlList.get(i) + "'" + "\n");
-            osw.write("duration " + mVideoUrlList.get(++i) + "\n");
-        }
-        osw.flush();
-        fos.flush();
-        fos.close();
-        osw.close();
-    }
-
-    private void parseVideoXmlUrl(String htmlData) {
-        String regEx = "\\b(xml|core)\\b[\\w.?=/&]*guhuo[\\w.?=/&]*";
-        Pattern pat = Pattern.compile(regEx);
-        Matcher mat = pat.matcher(htmlData);
-        boolean rs = mat.find();
-        if (rs) {
-            final String nextUrl = "https://vs.6no.cc/" + mat.group(0);
-            mIsParseVideoXml = true;
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mWebView.loadUrl(nextUrl);
-                }
-            });
-        } else {
-            sendParseDataMessage(LOAD_DATA_ERROR);
-        }
-    }
-
-    private void parseVideoUrlList(String xmlData) throws Exception {
-        mVideoUrlList.clear();
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        XmlPullParser parser = factory.newPullParser();
-        InputStream is = new ByteArrayInputStream(xmlData.getBytes());
-        parser.setInput(is, "utf-8");
-        int eventType = parser.getEventType();
-        while (eventType != XmlPullParser.END_DOCUMENT) {
-            String nodeName = parser.getName();
-            switch (eventType) {
-                case XmlPullParser.START_TAG: {
-                    if ("file".equals(nodeName)) {
-                        String url = parser.nextText();
-                        mVideoUrlList.add(url);
-                    } else if ("seconds".equals(nodeName)) {
-                        String time = parser.nextText();
-                        mVideoUrlList.add(time);
+    private void parseVideoUrlFinish(String htmlData) {
+        Document document = Jsoup.parse(htmlData);
+        if (document != null) {
+            Elements videos = document.getElementsByTag("video");
+            String result = LogcatUtils.getInstance().getResult();
+            LogcatUtils.getInstance().stop();
+            if (videos != null) {
+                String tmpUrl = videos.first().attr("src");
+                if (tmpUrl.endsWith("format=mp4")) {
+                    if (!TextUtils.isEmpty(result)) {
+                        String[] splitInfo = result.split("url:");
+                        mVideoUrl = splitInfo[splitInfo.length - 1];
                     }
-                    break;
+                } else {
+                    mVideoUrl = tmpUrl;
                 }
-                case XmlPullParser.END_TAG: {
-                    if ("video".equals(nodeName)) {
-                        return;
-                    }
-                    break;
-                }
-                default:
-                    break;
             }
-            eventType = parser.next();
         }
     }
 
@@ -515,18 +474,8 @@ public class MovieTestPlayActivity extends BaseActivity {
         @JavascriptInterface
         @SuppressWarnings("unused")
         public void processHTML(String html) {
-            if (!mIsParseVideoXml) {
-                parseVideoXmlUrl(html);
-            } else {
-                try {
-                    mIsParseVideoXml = false;
-                    parseVideoUrlList(html);
-                    concatVideoUrl();
-                    sendParseDataMessage(LOAD_DATA_FINISH);
-                } catch (Exception e) {
-                    sendParseDataMessage(LOAD_DATA_ERROR);
-                }
-            }
+            parseVideoUrlFinish(html);
+            sendParseDataMessage(LOAD_DATA_FINISH);
         }
     }
 

@@ -82,7 +82,7 @@ public class FlashActivity extends Activity {
     }
 
     private void preloadMoviesData() {
-        OkHttpUtils.getAsyn(urlUtils.MOVIE_URL, new OkHttpUtils.ResultCallback<String>() {
+        OkHttpUtils.getAsynWithHeader(this, urlUtils.MOVIE_URL, new OkHttpUtils.ResultCallback<String>() {
 
             @Override
             public void onError(Request request, Exception e) {

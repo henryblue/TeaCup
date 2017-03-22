@@ -268,7 +268,6 @@
     <dimen name="item_movie_detail_tv_margin">4dp</dimen>
     <dimen name="item_movie_more_textSize">16sp</dimen>
     <dimen name="movie_detail_block_tip_textSize">17sp</dimen>
-    <dimen name="movie_detail_iv_top_height">150dp</dimen>
 
     <dimen name="tv_series_textView_item_margin">8dp</dimen>
     <dimen name="tv_series_textView_item_textSize">16sp</dimen>
@@ -324,5 +323,6 @@
     <dimen name="item_fanju_view_videoContent_marginRight">10dp</dimen>
     <dimen name="item_fanju_view_videoContent_marginTop">12dp</dimen>
     <dimen name="item_fanju_view_videoContent_textSize">13sp</dimen>
+    <dimen name="item_movie_header_text_height">30dp</dimen>
 
 </resources>

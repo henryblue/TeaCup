@@ -3,20 +3,29 @@ package com.app.teacup.fragment.mainPage;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.teacup.MainActivity;
 import com.app.teacup.MoreMovieShowActivity;
 import com.app.teacup.MovieTestPlayActivity;
 import com.app.teacup.R;
 import com.app.teacup.adapter.MovieDetailRecyclerAdapter;
+import com.app.teacup.adapter.ReactViewPagerAdapter;
 import com.app.teacup.bean.movie.MovieDetailInfo;
 import com.app.teacup.bean.movie.MovieItemInfo;
 import com.app.teacup.fragment.BaseFragment;
+import com.app.teacup.util.OkHttpUtils;
 import com.app.teacup.util.ThreadPoolUtils;
 import com.app.teacup.util.urlUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.squareup.okhttp.Request;
 
 import org.apache.http.util.EncodingUtils;
 import org.jsoup.Jsoup;
@@ -28,26 +37,36 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.app.teacup.util.urlUtils.MOVIE_URL;
+
 /**
  * 数据来源15影城
  * @author henryblue
  */
 public class MovieFragment extends BaseFragment {
 
+    private static final int HEADER_LOAD_NUM = 5;
+
     private List<MovieDetailInfo> mDatas;
+    private List<MovieItemInfo> mHeadersData;
     private MovieDetailRecyclerAdapter mMovieDetailAdapter;
     private boolean mIsFirstEnter = true;
+    private List<View> mHeaderList;
+    private ReactViewPagerAdapter mHeaderAdapter;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mDatas = new ArrayList<>();
-        mRequestUrl = urlUtils.MOVIE_URL;
+        mHeadersData = new ArrayList<>();
+//        mRequestUrl = urlUtils.MOVIE_URL;
     }
 
     @Override
     protected void startRefreshData() {
         mDatas.clear();
+        mHeadersData.clear();
+        mMovieDetailAdapter.getHeaderView().setVisibility(View.INVISIBLE);
         if (mIsFirstEnter) {
             ThreadPoolUtils.getInstance().execute(new Runnable() {
                 @Override
@@ -71,9 +90,25 @@ public class MovieFragment extends BaseFragment {
                 }
             });
         } else {
-            super.startRefreshData();
+            startRefreshDataWithHeader();
         }
         mIsFirstEnter = false;
+    }
+
+    private void startRefreshDataWithHeader() {
+        OkHttpUtils.getAsynWithHeader(getContext(), MOVIE_URL, new OkHttpUtils.ResultCallback<String>() {
+
+            @Override
+            public void onError(Request request, Exception e) {
+                sendParseDataMessage(REFRESH_ERROR);
+            }
+
+            @Override
+            public void onResponse(String response) {
+                parseData(response);
+                sendParseDataMessage(REFRESH_FINISH);
+            }
+        });
     }
 
     @Override
@@ -84,6 +119,7 @@ public class MovieFragment extends BaseFragment {
     protected void setupRecycleViewAndAdapter() {
         mRecyclerView.setLoadingMoreEnabled(false);
         mMovieDetailAdapter = new MovieDetailRecyclerAdapter(getContext(), mDatas);
+        mMovieDetailAdapter.setHeaderView(setupRecycleViewHeader());
         mRecyclerView.setAdapter(mMovieDetailAdapter);
 
         mMovieDetailAdapter.setOnItemClickListener(new MovieDetailRecyclerAdapter.OnItemClickListener() {
@@ -104,6 +140,31 @@ public class MovieFragment extends BaseFragment {
         });
     }
 
+    private View setupRecycleViewHeader() {
+        View headView = View.inflate(getContext(), R.layout.item_movie_header, null);
+        headView.setVisibility(View.VISIBLE);
+        ViewPager viewPager = (ViewPager) headView.findViewById(R.id.vp_movie);
+        mHeaderList = new ArrayList<>();
+        for (int i = 0; i < HEADER_LOAD_NUM; i++) {
+            View itemView = View.inflate(getContext(), R.layout.item_movie_header_view, null);
+            mHeaderList.add(itemView);
+        }
+        mHeaderAdapter = new ReactViewPagerAdapter(viewPager, mHeaderList);
+        viewPager.setAdapter(mHeaderAdapter);
+        headView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                mHeaderAdapter.startAutoScrolled();
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                mHeaderAdapter.stopAutoScrolled();
+            }
+        });
+        return headView;
+    }
+
     private void enterPlayPage(int position, int itemPosition, Class<?> className) {
         MovieItemInfo itemInfo = mDatas.get(position).getMovieInfoList().get(itemPosition);
         Intent intent = new Intent(getContext(), className);
@@ -122,40 +183,56 @@ public class MovieFragment extends BaseFragment {
         Document document = Jsoup.parse(response);
         try {
             if (document != null) {
-                Element container = document.getElementsByClass("container").get(3);
-                Elements rows = container.getElementsByClass("row");
-                int i = 0;
-                int j = 0;
-                for (Element row : rows) {
-                    if (i == 4 || i == 3) { // remove dislike label
-                        i++;
+                // parse header content
+                Element focusBanner = document.getElementsByClass("focusBanner").first();
+                Element focusList = focusBanner.getElementsByClass("focusList").first();
+                Elements headers = focusList.getElementsByTag("li");
+                int i = -1;
+                for (Element header : headers) {
+                    i++;
+                    if (i >= HEADER_LOAD_NUM) {
+                        break;
+                    }
+                    MovieItemInfo itemInfo = new MovieItemInfo();
+                    Element a = header.getElementsByTag("a").first();
+                    Element img = a.getElementsByTag("img").first();
+                    itemInfo.setMovieName(img.attr("alt"));
+                    String imgUrl = img.attr("data-src");
+                    itemInfo.setImageUrl(imgUrl);
+                    String href = a.attr("href");
+                    String tmpUrl = urlUtils.MOVIE_URL + href;
+                    String nextUrl = tmpUrl.replace("show", "play");
+                    itemInfo.setNextUrl(nextUrl);
+                    mHeadersData.add(itemInfo);
+                }
+
+                // parse video content
+                Elements videos = document.getElementsByClass("main").first()
+                        .getElementsByClass("clearfix");
+                i = -1;
+                for (Element index : videos) {
+                    i++;
+                    if (i == 3 || i == 5 || i == 6) {
                         continue;
                     }
-                    i++;
                     MovieDetailInfo info = new MovieDetailInfo();
+                    Element section = index.getElementsByTag("section").first();
+                    String videoMark = section.getElementsByClass("sMark").first().text();
+                    String subMark = videoMark.substring(0, 4);
+                    info.setMovieBlockName(subMark);
+                    String moreUrl = urlUtils.MOVIE_URL +
+                            section.getElementsByClass("aMore").first().attr("href");
+                    info.setMoreUrl(moreUrl);
+
+                    //parse all movie info
                     List<MovieItemInfo> movieInfoList = new ArrayList<>();
-                    Elements movieItem = row.getElementsByClass("movie-item-out");
-                    for (Element item : movieItem) {
-                        if (j == 0) { // get label name
-                            String labelName = item.getElementsByTag("h3").get(0).text();
-                            Elements span = item.getElementsByTag("span");
-                            if (span.size() > 0) {
-                                String moreUrl = urlUtils.MOVIE_URL + span.get(0)
-                                        .getElementsByTag("a").get(0).attr("href");
-                                info.setMoreUrl(moreUrl);
-                            }
-                            info.setMovieBlockName(labelName);
-                        } else if (j < 7 && j > 0) { // only need 6 item
-                            MovieItemInfo itemInfo = parseMovieItemInfo(item);
-                            if (itemInfo != null) {
-                                movieInfoList.add(itemInfo);
-                            }
-                        } else {
-                            break;
+                    Elements lis = index.getElementsByTag("li");
+                    for (Element li : lis) {
+                        MovieItemInfo itemInfo = parseMovieItemInfo(li);
+                        if (itemInfo != null) {
+                            movieInfoList.add(itemInfo);
                         }
-                        j++;
                     }
-                    j = 0;
                     info.setMovieInfoList(movieInfoList);
                     mDatas.add(info);
                 }
@@ -168,17 +245,17 @@ public class MovieFragment extends BaseFragment {
     private MovieItemInfo parseMovieItemInfo(Element item) {
         if (item != null) {
             MovieItemInfo itemInfo = new MovieItemInfo();
-            Element a = item.getElementsByTag("a").get(0);
-            String url = urlUtils.MOVIE_URL + a.attr("href");
+            Element a = item.getElementsByTag("a").first();
+            String url = MOVIE_URL + a.attr("href");
             String videoUrl = url.replace("show", "play");
             itemInfo.setNextUrl(videoUrl);
 
-            Element img = a.getElementsByTag("img").get(0);
+            Element img = a.getElementsByTag("img").first();
             String imgUrl = img.attr("src");
             String name = img.attr("alt");
             itemInfo.setImageUrl(imgUrl);
             itemInfo.setMovieName(name);
-            String imgIndex = a.getElementsByTag("button").get(0).text();
+            String imgIndex = a.getElementsByClass("other").first().text();
             itemInfo.setImageIndex(imgIndex);
             return itemInfo;
         } else {
@@ -192,18 +269,83 @@ public class MovieFragment extends BaseFragment {
         } else {
             Toast.makeText(getContext(), getString(R.string.screen_shield),
                     Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!mHeadersData.isEmpty()) {
+            initHeaderData();
+        }
+    }
+
+    private void initHeaderData() {
+        mMovieDetailAdapter.getHeaderView().setVisibility(View.VISIBLE);
+        for (int i = 0; i < HEADER_LOAD_NUM; i++) {
+            View view = mHeaderList.get(i);
+            final MovieItemInfo itemInfo = mHeadersData.get(i);
+            ImageView imgView = (ImageView) view.findViewById(R.id.movie_header_img);
+            loadImageResource(itemInfo.getImageUrl(), imgView);
+            TextView textView = (TextView) view.findViewById(R.id.movie_header_text);
+            textView.setText(itemInfo.getMovieName());
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), MovieTestPlayActivity.class);
+                    intent.putExtra("moviePlayUrl", itemInfo.getNextUrl());
+                    intent.putExtra("moviePlayName", itemInfo.getMovieName());
+                    intent.putExtra("movieStyle", getString(R.string.video_from));
+                    startActivity(intent);
+                }
+            });
+        }
+    }
+
+    private void loadImageResource(String url, ImageView imageView) {
+        if (!MainActivity.mIsLoadPhoto) {
+            Glide.with(getContext()).load(url).asBitmap()
+                    .error(R.drawable.photo_loaderror)
+                    .placeholder(R.drawable.main_load_bg)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .dontAnimate()
+                    .into(imageView);
+        } else {
+            if (MainActivity.mIsWIFIState) {
+                Glide.with(getContext()).load(url).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.main_load_bg)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .into(imageView);
+            } else {
+                imageView.setImageResource(R.drawable.main_load_bg);
+            }
         }
     }
 
     @Override
     public void onLoadDataNone() {
-        startRefreshData();
+        startRefreshDataWithHeader();
     }
 
     @Override
     protected void onRefreshFinish() {
         super.onRefreshFinish();
         loadData();
+    }
+
+    @Override
+    protected void onFragmentInvisible() {
+        super.onFragmentInvisible();
+        if (mHeaderAdapter != null) {
+            mHeaderAdapter.stopAutoScrolled();
+        }
+    }
+
+    @Override
+    protected void onFragmentVisible() {
+        super.onFragmentVisible();
+        if (mHeaderAdapter != null) {
+            mHeaderAdapter.startAutoScrolled();
+        }
     }
 }
 

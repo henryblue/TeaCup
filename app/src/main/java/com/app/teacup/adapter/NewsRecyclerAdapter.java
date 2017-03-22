@@ -26,7 +26,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private final Context mContext;
     private List<NewsInfo> mDatas;
-    private final List<ImageView> mHeaderList;
+    private final List<View> mHeaderList;
     private OnItemClickListener mListener;
     private final LayoutInflater mLayoutInflater;
     private HeaderViewHolder mHeaderViewHolder;
@@ -35,7 +35,7 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         void onItemClick(View view, int position);
     }
 
-    public NewsRecyclerAdapter(Context context, List<NewsInfo> datas, List<ImageView> headerData) {
+    public NewsRecyclerAdapter(Context context, List<NewsInfo> datas, List<View> headerData) {
         mContext = context;
         mDatas = datas;
         mLayoutInflater = LayoutInflater.from(context);

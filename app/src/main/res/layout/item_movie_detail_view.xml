@@ -4,16 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
-    <ImageView
-        android:id="@+id/movie_detail_iv_top"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/movie_detail_iv_top_height"
-        android:scaleType="centerCrop"
-        android:visibility="gone"/>
-
     <RelativeLayout
         android:id="@+id/movie_detail_top"
-        android:layout_below="@id/movie_detail_iv_top"
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_movie_detail_rl_top_height"
         android:background="?android:attr/selectableItemBackground"

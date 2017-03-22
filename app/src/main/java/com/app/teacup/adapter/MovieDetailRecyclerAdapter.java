@@ -31,6 +31,10 @@ public class MovieDetailRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     private OnItemClickListener mListener;
     private final LayoutInflater mLayoutInflater;
     private final int mItemWidth;
+    private View mHeaderView;
+
+    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_NORMAL = 1;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position, int itemPosition);
@@ -48,30 +52,27 @@ public class MovieDetailRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MovieDetailViewHolder(mLayoutInflater.inflate(R.layout.item_movie_detail_view, parent, false));
+        if(mHeaderView != null && viewType == TYPE_HEADER) {
+            return new MovieDetailViewHolder(mHeaderView);
+        }
+        return new MovieDetailViewHolder(mLayoutInflater.inflate(R.layout.item_movie_detail_view, parent, false));
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == TYPE_HEADER || position == 0) {
+            return;
+        }
         MovieDetailViewHolder viewHolder = (MovieDetailViewHolder) holder;
-        viewHolder.mImageViewTop.setVisibility(View.GONE);
-        viewHolder.mMovieTop.setVisibility(View.GONE);
-        MovieDetailInfo info = mDataList.get(position / ROW_NUM);
+        MovieDetailInfo info = mDataList.get((position - 1) / ROW_NUM);
         List<MovieItemInfo> infoList = info.getMovieInfoList();
 
-        if (position == 0) {
-            viewHolder.mImageViewTop.setVisibility(View.VISIBLE);
-            viewHolder.mImageViewTop.setImageResource(R.drawable.movie_top);
-        }
-        if (position % ROW_NUM == 0) {
-            String blockName = info.getMovieBlockName();
+        if ((position - 1) % ROW_NUM == 0) {
             viewHolder.mMovieTop.setVisibility(View.VISIBLE);
-            if (position == 0) {
-                blockName = blockName.substring(0, 5);
-            }
+            String blockName = info.getMovieBlockName();
             viewHolder.mBlockTip.setText(blockName);
         }
-        int i = position % ROW_NUM * 3;
+        int i = (position - 1) % ROW_NUM * 3;
         for (int j = 0; j < 3; i++, j++) {
             MovieItemInfo itemInfo = infoList.get(i);
             ImageView imageView = viewHolder.mImgViewList.get(j);
@@ -114,9 +115,33 @@ public class MovieDetailRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         notifyDataSetChanged();
     }
 
+    public void setHeaderView(View headerView) {
+        mHeaderView = headerView;
+        notifyItemInserted(0);
+    }
+
+    public View getHeaderView() {
+        return mHeaderView;
+    }
+
     @Override
     public int getItemCount() {
-        return mDataList.size() * ROW_NUM;
+        if (mHeaderView == null) {
+            return mDataList.size() * ROW_NUM;
+        } else {
+            return mDataList.size() * ROW_NUM + 1;
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (mHeaderView == null) {
+            return TYPE_NORMAL;
+        }
+        if (position == 0) {
+            return TYPE_HEADER;
+        }
+        return TYPE_NORMAL;
     }
 
     private class MovieDetailViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -124,13 +149,14 @@ public class MovieDetailRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         private final List<ImageView> mImgViewList = new ArrayList<>();
         private final List<TextView> mIndexList = new ArrayList<>();
         private final List<TextView> mNameList = new ArrayList<>();
-        private final TextView mBlockTip;
-        private final ImageView mImageViewTop;
-        private final RelativeLayout mMovieTop;
+        private TextView mBlockTip;
+        private RelativeLayout mMovieTop;
 
         MovieDetailViewHolder(View itemView) {
             super(itemView);
-            mImageViewTop = (ImageView) itemView.findViewById(R.id.movie_detail_iv_top);
+            if (itemView == mHeaderView) {
+                return;
+            }
             mBlockTip = (TextView) itemView.findViewById(R.id.movie_detail_block_tip);
             mMovieTop = (RelativeLayout) itemView.findViewById(R.id.movie_detail_top);
 
@@ -195,7 +221,7 @@ public class MovieDetailRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 default:
                     break;
             }
-            int pos = getLayoutPosition() - 1;
+            int pos = getLayoutPosition() - 2;
             if (mListener != null && itemPos >= 0) {
                 mListener.onItemClick(v, pos / ROW_NUM, pos % ROW_NUM * 3 + itemPos);
             } else if (mListener != null && itemPos == -1) {

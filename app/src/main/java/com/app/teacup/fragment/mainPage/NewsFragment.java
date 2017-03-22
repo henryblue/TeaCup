@@ -39,7 +39,7 @@ public class NewsFragment extends BaseFragment {
 
     private static final int IMAGE_VIEW_LEN = 4;
     private List<NewsInfo> mNewsDatas;
-    private List<ImageView> mHeaderList;
+    private List<View> mHeaderList;
     private NewsRecyclerAdapter mNewsRecyclerAdapter;
     private boolean mIsFirstEnter = true;
 
@@ -70,7 +70,7 @@ public class NewsFragment extends BaseFragment {
                         .placeholder(R.drawable.main_load_bg)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .dontAnimate()
-                        .into(mHeaderList.get(i));
+                        .into((ImageView) mHeaderList.get(i));
             } else {
                 if (MainActivity.mIsWIFIState) {
                     Glide.with(getContext()).load(url)
@@ -79,9 +79,9 @@ public class NewsFragment extends BaseFragment {
                             .placeholder(R.drawable.main_load_bg)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .dontAnimate()
-                            .into(mHeaderList.get(i));
+                            .into((ImageView)mHeaderList.get(i));
                 } else {
-                    mHeaderList.get(i).setImageResource(R.drawable.main_load_bg);
+                    ((ImageView)mHeaderList.get(i)).setImageResource(R.drawable.main_load_bg);
                 }
             }
 

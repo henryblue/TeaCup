@@ -78,7 +78,6 @@
     <string name="search_video_hint">搜索视频</string>
     <string name="share_photo">分享图片</string>
     <string name="save_photo">保存图片</string>
-    <string name="video_dir_name">concat.ffconcat</string>
 
     <string-array name="tab_name">
         <item>新鲜事</item>
@@ -105,8 +104,8 @@
     <string-array name="video_style">
         <item>电影</item>
         <item>电视剧</item>
-        <item>综艺</item>
         <item>动漫</item>
+        <item>综艺</item>
         <item>恐怖片</item>
     </string-array>
 </resources>
