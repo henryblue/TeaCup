@@ -84,7 +84,7 @@ public class MovieTestPlayActivity extends BaseActivity {
         mMoreDatas = new ArrayList<>();
         mTvListDatas = new ArrayList<>();
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.tv_srl_refresh);
-        mWebView = (WebView) findViewById(R.id.tv_base_webView);
+        mWebView = new WebView(getApplicationContext());
         mxVideoPlayerWidget = (MxVideoPlayerWidget) findViewById(R.id.tv_video_player);
         mTvText = (TextView) findViewById(R.id.tv_series_textView);
         mDependText = (TextView) findViewById(R.id.tv_depend_textview);
@@ -381,6 +381,9 @@ public class MovieTestPlayActivity extends BaseActivity {
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     private void parseVideoPlayUrl(String videoUrl) {
         if (!mIsInitData && !TextUtils.isEmpty(videoUrl) && mWebView != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            }
             mWebView.getSettings().setJavaScriptEnabled(true);
             mWebView.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
             mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
@@ -421,6 +424,8 @@ public class MovieTestPlayActivity extends BaseActivity {
     private void destroyWebView() {
         if (mWebView != null) {
             mWebView.clearHistory();
+            mWebView.stopLoading();
+            mWebView.removeAllViews();
             mWebView.clearFormData();
             mWebView.clearCache(true);
             mWebView.loadUrl("about:blank");
@@ -438,8 +443,13 @@ public class MovieTestPlayActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        destroyWebView();
         LogcatUtils.getInstance().stop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        destroyWebView();
+        super.onDestroy();
     }
 
     @Override
@@ -452,22 +462,29 @@ public class MovieTestPlayActivity extends BaseActivity {
 
     private void parseVideoUrlFinish(String htmlData) {
         Document document = Jsoup.parse(htmlData);
-        if (document != null) {
-            Elements videos = document.getElementsByTag("video");
-            String result = LogcatUtils.getInstance().getResult();
-            LogcatUtils.getInstance().stop();
-            if (videos != null) {
-                String tmpUrl = videos.first().attr("src");
-                if (tmpUrl.endsWith("format=mp4")) {
-                    if (!TextUtils.isEmpty(result)) {
-                        String[] splitInfo = result.split("url:");
-                        mVideoUrl = splitInfo[splitInfo.length - 1];
+        try {
+            if (document != null) {
+                Elements videos = document.getElementsByTag("video");
+                String result = LogcatUtils.getInstance().getResult();
+                LogcatUtils.getInstance().stop();
+                if (videos != null) {
+                    Element video = videos.first();
+                    String tmpUrl = video.attr("src");
+                    if (tmpUrl.endsWith("format=mp4")) {
+                        if (!TextUtils.isEmpty(result)) {
+                            String[] splitInfo = result.split("url:");
+                            mVideoUrl = splitInfo[splitInfo.length - 1];
+                        }
+                    } else {
+                        mVideoUrl = tmpUrl;
                     }
-                } else {
-                    mVideoUrl = tmpUrl;
                 }
             }
+        } catch (Exception e) {
+            mVideoUrl = "";
+            sendParseDataMessage(LOAD_DATA_FINISH);
         }
+        sendParseDataMessage(LOAD_DATA_FINISH);
     }
 
     class MyJavaScriptInterface {
@@ -475,7 +492,6 @@ public class MovieTestPlayActivity extends BaseActivity {
         @SuppressWarnings("unused")
         public void processHTML(String html) {
             parseVideoUrlFinish(html);
-            sendParseDataMessage(LOAD_DATA_FINISH);
         }
     }
 

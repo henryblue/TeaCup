@@ -13,11 +13,15 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.app.teacup.MainActivity;
 import com.app.teacup.R;
 import com.app.teacup.util.OkHttpUtils;
 import com.app.teacup.util.ToolUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.squareup.okhttp.Request;
@@ -218,6 +222,28 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
             mHandler.removeMessages(LOAD_DATA_FINISH);
             mHandler.removeMessages(LOAD_DATA_ERROR);
             mHandler = null;
+        }
+    }
+
+    protected void loadImageResource(String url, ImageView imageView) {
+        if (!MainActivity.mIsLoadPhoto) {
+            Glide.with(getContext()).load(url).asBitmap()
+                    .error(R.drawable.photo_loaderror)
+                    .placeholder(R.drawable.main_load_bg)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .dontAnimate()
+                    .into(imageView);
+        } else {
+            if (MainActivity.mIsWIFIState) {
+                Glide.with(getContext()).load(url).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.main_load_bg)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .into(imageView);
+            } else {
+                imageView.setImageResource(R.drawable.main_load_bg);
+            }
         }
     }
 

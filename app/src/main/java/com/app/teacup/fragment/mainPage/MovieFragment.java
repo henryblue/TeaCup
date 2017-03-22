@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.teacup.MainActivity;
 import com.app.teacup.MoreMovieShowActivity;
 import com.app.teacup.MovieTestPlayActivity;
 import com.app.teacup.R;
@@ -23,8 +22,6 @@ import com.app.teacup.fragment.BaseFragment;
 import com.app.teacup.util.OkHttpUtils;
 import com.app.teacup.util.ThreadPoolUtils;
 import com.app.teacup.util.urlUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.squareup.okhttp.Request;
 
 import org.apache.http.util.EncodingUtils;
@@ -142,7 +139,6 @@ public class MovieFragment extends BaseFragment {
 
     private View setupRecycleViewHeader() {
         View headView = View.inflate(getContext(), R.layout.item_movie_header, null);
-        headView.setVisibility(View.VISIBLE);
         ViewPager viewPager = (ViewPager) headView.findViewById(R.id.vp_movie);
         mHeaderList = new ArrayList<>();
         for (int i = 0; i < HEADER_LOAD_NUM; i++) {
@@ -299,24 +295,22 @@ public class MovieFragment extends BaseFragment {
         }
     }
 
-    private void loadImageResource(String url, ImageView imageView) {
-        if (!MainActivity.mIsLoadPhoto) {
-            Glide.with(getContext()).load(url).asBitmap()
-                    .error(R.drawable.photo_loaderror)
-                    .placeholder(R.drawable.main_load_bg)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .dontAnimate()
-                    .into(imageView);
-        } else {
-            if (MainActivity.mIsWIFIState) {
-                Glide.with(getContext()).load(url).asBitmap()
-                        .error(R.drawable.photo_loaderror)
-                        .placeholder(R.drawable.main_load_bg)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .dontAnimate()
-                        .into(imageView);
-            } else {
-                imageView.setImageResource(R.drawable.main_load_bg);
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!mIsInitData) {
+            if (mHeaderAdapter != null) {
+                mHeaderAdapter.startAutoScrolled();
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (!mIsInitData) {
+            if (mHeaderAdapter != null) {
+                mHeaderAdapter.stopAutoScrolled();
             }
         }
     }

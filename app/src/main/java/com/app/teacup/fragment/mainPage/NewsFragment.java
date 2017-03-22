@@ -3,22 +3,22 @@ package com.app.teacup.fragment.mainPage;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.teacup.MainActivity;
 import com.app.teacup.NewsDetailActivity;
 import com.app.teacup.R;
 import com.app.teacup.adapter.NewsRecyclerAdapter;
+import com.app.teacup.adapter.ReactViewPagerAdapter;
 import com.app.teacup.bean.News.NewsInfo;
 import com.app.teacup.fragment.BaseFragment;
 import com.app.teacup.util.ThreadPoolUtils;
 import com.app.teacup.util.urlUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.apache.http.util.EncodingUtils;
 import org.jsoup.Jsoup;
@@ -42,67 +42,20 @@ public class NewsFragment extends BaseFragment {
     private List<View> mHeaderList;
     private NewsRecyclerAdapter mNewsRecyclerAdapter;
     private boolean mIsFirstEnter = true;
+    private ReactViewPagerAdapter mHeaderAdapter;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mNewsDatas = new ArrayList<>();
         mHeaderList = new ArrayList<>();
-        for (int i = 0; i < IMAGE_VIEW_LEN; i++) {
-            ImageView view = new ImageView(getContext());
-            view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            mHeaderList.add(view);
-        }
         mRequestUrl = urlUtils.NEWS_JIANDAN_URL;
-    }
-
-    private void initHeaderData() {
-        if (mNewsDatas.size() <= 0) {
-            return;
-        }
-        for (int i = 0; i < IMAGE_VIEW_LEN; i++) {
-            String url = mNewsDatas.get(i).getImgUrl();
-            url = url.replace("square", "medium");
-            if (!MainActivity.mIsLoadPhoto) {
-                Glide.with(getContext()).load(url)
-                        .asBitmap()
-                        .error(R.drawable.photo_loaderror)
-                        .placeholder(R.drawable.main_load_bg)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .dontAnimate()
-                        .into((ImageView) mHeaderList.get(i));
-            } else {
-                if (MainActivity.mIsWIFIState) {
-                    Glide.with(getContext()).load(url)
-                            .asBitmap()
-                            .error(R.drawable.photo_loaderror)
-                            .placeholder(R.drawable.main_load_bg)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .dontAnimate()
-                            .into((ImageView)mHeaderList.get(i));
-                } else {
-                    ((ImageView)mHeaderList.get(i)).setImageResource(R.drawable.main_load_bg);
-                }
-            }
-
-            final int pos = i;
-            mHeaderList.get(i).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), NewsDetailActivity.class);
-                    intent.putExtra("newsDetailUrl", mNewsDatas.get(pos).getNextUrl());
-                    intent.putExtra("newsTitle", mNewsDatas.get(pos).getTitle());
-                    startActivity(intent);
-                }
-            });
-        }
-        mNewsRecyclerAdapter.setHeaderVisible(View.VISIBLE);
     }
 
     @Override
     protected void startRefreshData() {
         mNewsDatas.clear();
-        mNewsRecyclerAdapter.setHeaderVisible(View.INVISIBLE);
+        mNewsRecyclerAdapter.getHeaderView().setVisibility(View.INVISIBLE);
         if (mIsFirstEnter) {
             ThreadPoolUtils.getInstance().execute(new Runnable() {
                 @Override
@@ -142,8 +95,10 @@ public class NewsFragment extends BaseFragment {
 
     @Override
     protected void setupRecycleViewAndAdapter() {
-        mNewsRecyclerAdapter = new NewsRecyclerAdapter(getContext(), mNewsDatas, mHeaderList);
+        mNewsRecyclerAdapter = new NewsRecyclerAdapter(getContext(), mNewsDatas);
+        mNewsRecyclerAdapter.setHeaderView(setupRecycleViewHeader());
         mRecyclerView.setAdapter(mNewsRecyclerAdapter);
+
         mNewsRecyclerAdapter.setOnItemClickListener(new NewsRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -153,6 +108,30 @@ public class NewsFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+    }
+
+    private View setupRecycleViewHeader() {
+        View headView = View.inflate(getContext(), R.layout.item_news_header, null);
+        headView.setVisibility(View.VISIBLE);
+        ViewPager viewPager = (ViewPager) headView.findViewById(R.id.vp_news);
+        for (int i = 0; i < IMAGE_VIEW_LEN; i++) {
+            View itemView = View.inflate(getContext(), R.layout.item_movie_header_view, null);
+            mHeaderList.add(itemView);
+        }
+        mHeaderAdapter = new ReactViewPagerAdapter(viewPager, mHeaderList);
+        viewPager.setAdapter(mHeaderAdapter);
+        headView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                mHeaderAdapter.startAutoScrolled();
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                mHeaderAdapter.stopAutoScrolled();
+            }
+        });
+        return headView;
     }
 
     @Override
@@ -246,6 +225,29 @@ public class NewsFragment extends BaseFragment {
         mNewsRecyclerAdapter.reSetData(mNewsDatas);
     }
 
+    private void initHeaderData() {
+        mNewsRecyclerAdapter.getHeaderView().setVisibility(View.VISIBLE);
+        for (int i = 0; i < IMAGE_VIEW_LEN; i++) {
+            View view = mHeaderList.get(i);
+            String url = mNewsDatas.get(i).getImgUrl();
+            url = url.replace("square", "medium");
+            ImageView imgView = (ImageView) view.findViewById(R.id.movie_header_img);
+            loadImageResource(url, imgView);
+            TextView textView = (TextView) view.findViewById(R.id.movie_header_text);
+            textView.setText(mNewsDatas.get(i).getTitle());
+            final int pos = i;
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), NewsDetailActivity.class);
+                    intent.putExtra("newsDetailUrl", mNewsDatas.get(pos).getNextUrl());
+                    intent.putExtra("newsTitle", mNewsDatas.get(pos).getTitle());
+                    startActivity(intent);
+                }
+            });
+        }
+    }
+
     @Override
     protected void onRefreshFinish() {
         super.onRefreshFinish();
@@ -261,8 +263,8 @@ public class NewsFragment extends BaseFragment {
     @Override
     protected void onFragmentInvisible() {
         super.onFragmentInvisible();
-        if (mNewsRecyclerAdapter != null) {
-            mNewsRecyclerAdapter.stopHeaderAutoScrolled();
+        if (mHeaderAdapter != null) {
+            mHeaderAdapter.stopAutoScrolled();
         }
     }
 
@@ -273,13 +275,28 @@ public class NewsFragment extends BaseFragment {
             mIsInitData = true;
             super.onFragmentVisible();
         }
+        if (!mIsInitData) {
+            if (mHeaderAdapter != null) {
+                mHeaderAdapter.startAutoScrolled();
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (!mIsInitData) {
+            if (mHeaderAdapter != null) {
+                mHeaderAdapter.stopAutoScrolled();
+            }
+        }
     }
 
     @Override
     protected void onFragmentVisible() {
         super.onFragmentVisible();
-        if (mNewsRecyclerAdapter != null) {
-            mNewsRecyclerAdapter.startHeaderAutoScrolled();
+        if (mHeaderAdapter != null) {
+            mHeaderAdapter.startAutoScrolled();
         }
     }
 }

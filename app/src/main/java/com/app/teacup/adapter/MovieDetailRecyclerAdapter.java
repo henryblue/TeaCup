@@ -64,6 +64,7 @@ public class MovieDetailRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             return;
         }
         MovieDetailViewHolder viewHolder = (MovieDetailViewHolder) holder;
+        viewHolder.mMovieTop.setVisibility(View.GONE);
         MovieDetailInfo info = mDataList.get((position - 1) / ROW_NUM);
         List<MovieItemInfo> infoList = info.getMovieInfoList();
 

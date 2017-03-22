@@ -2,18 +2,16 @@ package com.app.teacup.adapter;
 
 
 import android.content.Context;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.app.teacup.bean.News.NewsInfo;
 import com.app.teacup.MainActivity;
 import com.app.teacup.R;
+import com.app.teacup.bean.News.NewsInfo;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -24,51 +22,39 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_NORMAL = 1;
 
+    private View mHeaderView;
     private final Context mContext;
     private List<NewsInfo> mDatas;
-    private final List<View> mHeaderList;
     private OnItemClickListener mListener;
     private final LayoutInflater mLayoutInflater;
-    private HeaderViewHolder mHeaderViewHolder;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
 
-    public NewsRecyclerAdapter(Context context, List<NewsInfo> datas, List<View> headerData) {
+    public NewsRecyclerAdapter(Context context, List<NewsInfo> dataList) {
         mContext = context;
-        mDatas = datas;
+        mDatas = dataList;
         mLayoutInflater = LayoutInflater.from(context);
-        mHeaderList = headerData;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_HEADER) {
-            if (mHeaderViewHolder == null) {
-                mHeaderViewHolder = new HeaderViewHolder(mLayoutInflater.inflate(R.layout.item_news_header, parent, false));
-            }
-            return mHeaderViewHolder;
-            } else {
-            return new NewsViewHolder(mLayoutInflater.inflate(R.layout.item_news_view, parent, false));
+        if(mHeaderView != null && viewType == TYPE_HEADER) {
+            return new NewsViewHolder(mHeaderView);
         }
+        return new NewsViewHolder(mLayoutInflater.inflate(R.layout.item_news_view, parent, false));
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof NewsViewHolder) {
-            onBindSingleItemViewHolder(holder, position);
-        } else if (holder instanceof HeaderViewHolder) {
-            onBindHeaderItemViewHolder(holder);
+        if (getItemViewType(position) == TYPE_HEADER || position == 0) {
+            return;
         }
+        onBindItemViewHolder(holder, position);
     }
 
-    private void onBindHeaderItemViewHolder(RecyclerView.ViewHolder holder) {
-        HeaderViewHolder myHolder = (HeaderViewHolder) holder;
-        myHolder.mAdapter.notifyDataSetChanged();
-    }
-
-    private void onBindSingleItemViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    private void onBindItemViewHolder(final RecyclerView.ViewHolder holder, int position) {
         NewsInfo info = mDatas.get(position - 1);
         String url = info.getImgUrl();
 
@@ -117,16 +103,13 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyDataSetChanged();
     }
 
-    public void stopHeaderAutoScrolled() {
-        if (mHeaderViewHolder != null) {
-            mHeaderViewHolder.stopAutoScrolled();
-        }
+    public void setHeaderView(View headerView) {
+        mHeaderView = headerView;
+        notifyItemInserted(0);
     }
 
-    public void startHeaderAutoScrolled() {
-        if (mHeaderViewHolder != null) {
-            mHeaderViewHolder.startAutoScrolled();
-        }
+    public View getHeaderView() {
+        return mHeaderView;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -135,11 +118,13 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            return TYPE_HEADER;
-        } else {
+        if (mHeaderView == null) {
             return TYPE_NORMAL;
         }
+        if (position == 0) {
+            return TYPE_HEADER;
+        }
+        return TYPE_NORMAL;
     }
 
     @Override
@@ -147,112 +132,23 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return mDatas.size() + 1;
     }
 
-    public void setHeaderVisible(int visible) {
-        mHeaderViewHolder.setHeaderVisible(visible);
-    }
 
     private class NewsViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView mTitle;
-        private final ImageView mPhotoImg;
-        private final TextView mLabel;
-        private final View mainView;
+        private TextView mTitle;
+        private ImageView mPhotoImg;
+        private TextView mLabel;
+        private View mainView;
 
         NewsViewHolder(View itemView) {
             super(itemView);
+            if (itemView == mHeaderView) {
+                return;
+            }
             mainView = itemView;
             mPhotoImg = (ImageView) itemView.findViewById(R.id.iv_news_img);
             mTitle = (TextView) itemView.findViewById(R.id.tv_news_title);
             mLabel = (TextView) itemView.findViewById(R.id.tv_news_label);
         }
     }
-
-    private class HeaderViewHolder extends RecyclerView.ViewHolder {
-
-        private ReactViewPagerAdapter mAdapter;
-        private final ViewPager mViewPager;
-        private final LinearLayout mGroup;
-        private final View mHeaderView;
-        private int mLastPos = 0;
-
-        HeaderViewHolder(View itemView) {
-            super(itemView);
-            mViewPager = (ViewPager) itemView.findViewById(R.id.vp_news);
-            mGroup = (LinearLayout) itemView.findViewById(R.id.ll_group);
-            mHeaderView = itemView;
-
-            if (mHeaderList.size() <= 0) {
-                return;
-            }
-
-            for (int i = 0; i < mHeaderList.size(); i++) {
-                ImageView point = new ImageView(mContext);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams
-                        (ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-
-                params.rightMargin = 16;
-                point.setLayoutParams(params);
-                point.setBackgroundResource(R.drawable.point_bg);
-                if (i == 0) {
-                    point.setEnabled(true);
-                } else {
-                    point.setEnabled(false);
-                }
-                mGroup.addView(point);
-            }
-
-            mAdapter = new ReactViewPagerAdapter(mViewPager, mHeaderList);
-            mViewPager.setAdapter(mAdapter);
-            mViewPager.setCurrentItem(Integer.MAX_VALUE / 2 -
-                    (Integer.MAX_VALUE / 2 % mHeaderList.size()));
-
-            mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-                    position = position % mHeaderList.size();
-                    mGroup.getChildAt(position).setEnabled(true);
-                    mGroup.getChildAt(mLastPos).setEnabled(false);
-                    mLastPos = position;
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-                }
-            });
-
-            mViewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-                @Override
-                public void onViewAttachedToWindow(View view) {
-                    startAutoScrolled();
-                }
-
-                @Override
-                public void onViewDetachedFromWindow(View view) {
-                    stopAutoScrolled();
-                }
-            });
-        }
-        void startAutoScrolled() {
-            if (mAdapter != null) {
-                mAdapter.startAutoScrolled();
-            }
-        }
-
-        void stopAutoScrolled() {
-            if (mAdapter != null) {
-                mAdapter.stopAutoScrolled();
-            }
-        }
-
-        void setHeaderVisible(int visible) {
-            mHeaderView.setVisibility(visible);
-            mGroup.setVisibility(visible);
-        }
-    }
-
 }

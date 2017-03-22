@@ -84,7 +84,7 @@ public class MoviePlayActivity extends BaseActivity {
         mDatas = new ArrayList<>();
         mTvDatas = new ArrayList<>();
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.tv_srl_refresh);
-        mWebView = (WebView) findViewById(R.id.tv_base_webView);
+        mWebView = new WebView(getApplicationContext());
         mxVideoPlayerWidget = (MxVideoPlayerWidget) findViewById(R.id.tv_video_player);
         mTvText = (TextView) findViewById(R.id.tv_series_textView);
         mDependText = (TextView) findViewById(R.id.tv_depend_textview);
