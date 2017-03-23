@@ -119,7 +119,7 @@ public class MoreMovieShowActivity extends BaseActivity {
                 mMoreRecyclerAdapter.setOnItemClickListener(new MoreMovieRecyclerAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        enterPlayPage(position, MovieTestPlayActivity.class);
+                        enterPlayPage(position, MoviePlayActivity.class);
                     }
                 });
             }

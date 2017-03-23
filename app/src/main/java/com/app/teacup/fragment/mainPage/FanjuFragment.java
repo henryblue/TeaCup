@@ -22,8 +22,6 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-import hb.xvideoplayer.MxVideoPlayer;
-
 /**
  * 数据来源于第一弹
  *
@@ -40,12 +38,6 @@ public class FanjuFragment extends BaseFragment {
         super.onAttach(context);
         mVideoDatas = new ArrayList<>();
         mRequestUrl = urlUtils.VIDEO_DIYIDAN_URL;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        MxVideoPlayer.releaseAllVideos();
     }
 
     @Override

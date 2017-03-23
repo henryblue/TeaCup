@@ -26,6 +26,7 @@ import com.app.teacup.bean.book.BookInfo;
 import com.app.teacup.bean.book.FindBookInfo;
 import com.app.teacup.util.JsonUtils;
 import com.app.teacup.util.OkHttpUtils;
+import com.app.teacup.util.ThreadPoolUtils;
 import com.app.teacup.util.ToolUtils;
 import com.app.teacup.util.urlUtils;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
@@ -123,12 +124,11 @@ public class FindBookActivity extends BaseActivity implements SwipeRefreshLayout
     }
 
     private void readDataFromFile() {
-        new Thread(new Runnable() {
+        ThreadPoolUtils.getInstance().execute(new Runnable() {
             @Override
             public void run() {
                 try {
-                    FileInputStream fis;
-                    fis = openFileInput(filename);
+                    FileInputStream fis = openFileInput(filename);
                     byte[] buffer = new byte[fis.available()];
                     fis.read(buffer);
                     fis.close();
@@ -139,7 +139,7 @@ public class FindBookActivity extends BaseActivity implements SwipeRefreshLayout
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
     }
 
     @Override

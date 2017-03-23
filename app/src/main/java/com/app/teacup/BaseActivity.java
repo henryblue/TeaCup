@@ -6,8 +6,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.app.teacup.util.ToolUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.lang.ref.WeakReference;
 
@@ -80,6 +83,28 @@ public abstract class BaseActivity extends AppCompatActivity {
             Message msg = Message.obtain();
             msg.what = message;
             mHandler.sendMessageDelayed(msg, delay);
+        }
+    }
+
+    protected void loadImageResource(ImageView videoImg, String imgUrl) {
+        if (!MainActivity.mIsLoadPhoto) {
+            Glide.with(this).load(imgUrl).asBitmap()
+                    .error(R.drawable.photo_loaderror)
+                    .placeholder(R.drawable.main_load_bg)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .dontAnimate()
+                    .into(videoImg);
+        } else {
+            if (MainActivity.mIsWIFIState) {
+                Glide.with(this).load(imgUrl).asBitmap()
+                        .error(R.drawable.photo_loaderror)
+                        .placeholder(R.drawable.main_load_bg)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontAnimate()
+                        .into(videoImg);
+            } else {
+                videoImg.setImageResource(R.drawable.main_load_bg);
+            }
         }
     }
 

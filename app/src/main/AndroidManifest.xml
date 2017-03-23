@@ -65,8 +65,6 @@
         <activity android:name=".SearchActivity" />
         <activity android:name=".MoviePlayActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".MovieTestPlayActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
             android:name=".FanjuVideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" />

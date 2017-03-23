@@ -11,10 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.app.teacup.MovieTestPlayActivity;
-import com.app.teacup.bean.movie.TvItemInfo;
 import com.app.teacup.MoviePlayActivity;
 import com.app.teacup.R;
+import com.app.teacup.bean.movie.TvItemInfo;
 
 import java.util.List;
 
@@ -48,8 +47,6 @@ public class TvPlayRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         int playIndex = 0;
         if (mContext instanceof MoviePlayActivity) {
             playIndex = ((MoviePlayActivity) mContext).mPlayIndex;
-        } else if (mContext instanceof MovieTestPlayActivity) {
-            playIndex = ((MovieTestPlayActivity) mContext).mPlayIndex;
         }
         if (position == playIndex) {
             viewHolder.mTextView.setTextColor(ContextCompat.getColor(mContext, R.color.deepYellow));

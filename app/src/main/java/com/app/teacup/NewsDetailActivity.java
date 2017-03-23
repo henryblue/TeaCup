@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,6 @@ import android.widget.Toast;
 
 import com.app.teacup.util.HttpUtils;
 import com.app.teacup.util.ToolUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -72,28 +69,7 @@ public class NewsDetailActivity extends BaseActivity {
                 view.setLayoutParams(imgParams);
                 tag = tag.replace("small", "medium");
                 view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                if (!MainActivity.mIsLoadPhoto) {
-                    Glide.with(this).load(tag)
-                            .asBitmap()
-                            .error(R.drawable.photo_loaderror)
-                            .placeholder(R.drawable.main_load_bg)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .dontAnimate()
-                            .into(view);
-                } else {
-                    if (MainActivity.mIsWIFIState) {
-                        Glide.with(this).load(tag)
-                                .asBitmap()
-                                .error(R.drawable.photo_loaderror)
-                                .placeholder(R.drawable.main_load_bg)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .dontAnimate()
-                                .into(view);
-                    } else {
-                        view.setImageResource(R.drawable.main_load_bg);
-                    }
-                }
-
+                loadImageResource(view, tag);
                 final String finalTag = tag;
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -160,7 +136,6 @@ public class NewsDetailActivity extends BaseActivity {
             HttpUtils.sendHttpRequest(newsUrl, new HttpUtils.HttpCallBackListener() {
                 @Override
                 public void onFinish(String response) {
-                    Log.i("NewsDetailActivity", response);
                     parseData(response);
                     sendParseDataMessage(LOAD_DATA_FINISH);
                 }

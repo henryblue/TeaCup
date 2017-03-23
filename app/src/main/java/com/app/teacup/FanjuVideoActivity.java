@@ -20,8 +20,6 @@ import android.widget.Toast;
 import com.app.teacup.bean.fanju.FanjuVideoInfo;
 import com.app.teacup.util.OkHttpUtils;
 import com.app.teacup.util.ToolUtils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.okhttp.Request;
 
@@ -214,28 +212,6 @@ public class FanjuVideoActivity extends BaseActivity {
                         startActivity(intent);
                 }
             });
-        }
-    }
-
-    private void loadImageResource(ImageView videoImg, String imgUrl) {
-        if (!MainActivity.mIsLoadPhoto) {
-            Glide.with(this).load(imgUrl).asBitmap()
-                    .error(R.drawable.photo_loaderror)
-                    .placeholder(R.drawable.main_load_bg)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .dontAnimate()
-                    .into(videoImg);
-        } else {
-            if (MainActivity.mIsWIFIState) {
-                Glide.with(this).load(imgUrl).asBitmap()
-                        .error(R.drawable.photo_loaderror)
-                        .placeholder(R.drawable.main_load_bg)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .dontAnimate()
-                        .into(videoImg);
-            } else {
-                videoImg.setImageResource(R.drawable.main_load_bg);
-            }
         }
     }
 

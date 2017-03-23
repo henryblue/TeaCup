@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.teacup.MoreMovieShowActivity;
-import com.app.teacup.MovieTestPlayActivity;
+import com.app.teacup.MoviePlayActivity;
 import com.app.teacup.R;
 import com.app.teacup.adapter.MovieDetailRecyclerAdapter;
 import com.app.teacup.adapter.ReactViewPagerAdapter;
@@ -122,7 +122,7 @@ public class MovieFragment extends BaseFragment {
         mMovieDetailAdapter.setOnItemClickListener(new MovieDetailRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, int itemPosition) {
-                    enterPlayPage(position, itemPosition, MovieTestPlayActivity.class);
+                    enterPlayPage(position, itemPosition, MoviePlayActivity.class);
             }
 
             @Override
@@ -285,7 +285,7 @@ public class MovieFragment extends BaseFragment {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), MovieTestPlayActivity.class);
+                    Intent intent = new Intent(getContext(), MoviePlayActivity.class);
                     intent.putExtra("moviePlayUrl", itemInfo.getNextUrl());
                     intent.putExtra("moviePlayName", itemInfo.getMovieName());
                     intent.putExtra("movieStyle", getString(R.string.video_from));

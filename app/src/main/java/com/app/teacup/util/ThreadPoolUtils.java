@@ -9,9 +9,16 @@ import java.util.concurrent.TimeUnit;
 public class ThreadPoolUtils {
 
     private ThreadPoolExecutor mExecutor;
-    private static ThreadPoolUtils mInstance = new ThreadPoolUtils();
+    private static ThreadPoolUtils mInstance;
 
     public static ThreadPoolUtils getInstance() {
+        if (mInstance == null) {
+            synchronized (ThreadPoolUtils.class) {
+                if (mInstance == null) {
+                    mInstance = new ThreadPoolUtils();
+                }
+            }
+        }
         return mInstance;
     }
 
@@ -33,9 +40,7 @@ public class ThreadPoolUtils {
     }
 
     public void remove(Runnable runnable){
-        if(runnable ==null)
-            return;
-
+        if(runnable ==null) return;
         mExecutor.remove(runnable);
     }
 }
