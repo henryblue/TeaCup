@@ -10,14 +10,16 @@
     <RelativeLayout
         android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_marginRight="@dimen/item_news_view_rl_marginRight"
-        android:layout_height="@dimen/item_news_view_rl_height">
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/item_news_view_rl_marginTop"
+        android:layout_marginBottom="@dimen/item_news_view_rl_marginBottom">
 
         <ImageView
             android:id="@+id/iv_news_img"
             android:layout_width="@dimen/item_news_view_rl_iv_width"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:layout_alignParentRight="true"/>
 
         <TextView
             android:id="@+id/tv_news_title"
@@ -26,8 +28,9 @@
             android:layout_marginLeft="@dimen/item_news_view_rl_tv_marginLeft"
             android:layout_marginTop="@dimen/item_news_view_rl_tv_marginTop"
             android:textColor="@color/black"
+            android:maxLines="3"
             android:textSize="@dimen/item_news_view_rl_tv_textSize"
-            android:layout_toRightOf="@id/iv_news_img" />
+            android:layout_toLeftOf="@id/iv_news_img"/>
 
         <TextView
             android:id="@+id/tv_news_label"
@@ -35,10 +38,10 @@
             android:layout_height="wrap_content"
             android:textColor="@color/gray"
             android:textSize="@dimen/item_news_view_rl_tv_label_textSize"
+            android:layout_marginLeft="@dimen/item_news_view_rl_tv_marginLeft"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/item_news_view_rl_tv_label_marginBottom"
-            android:maxLines="3"
-            android:layout_alignLeft="@id/tv_news_title"/>
+            android:maxLines="3" />
     </RelativeLayout>
 
 

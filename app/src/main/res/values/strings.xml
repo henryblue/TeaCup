@@ -68,7 +68,7 @@
     <string name="video_introduce">视频介绍</string>
     <string name="related_recommend">相关推荐</string>
     <string name="parse_url_error">解析地址失败, 请重试</string>
-    <string name="item_movie_more"><![CDATA[更多>>]]></string>
+    <string name="item_movie_more">更多 </string>
     <string name="tv_series">剧集</string>
     <string name="video_from">数据源</string>
     <string name="news_cache_name">newsPreloadFile.html</string>
@@ -93,12 +93,12 @@
     </string-array>
     <string-array name="theme_style">
         <item>胖次蓝</item>
-        <item>旱苗绿</item>
+        <item>雪碧绿</item>
         <item>少女粉</item>
         <item>骚气黑</item>
         <item>大叔灰</item>
         <item>水鸭青</item>
-        <item>姨妈红</item>
+        <item>珊瑚红</item>
         <item>基佬紫</item>
     </string-array>
     <string-array name="video_style">

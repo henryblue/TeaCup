@@ -3,7 +3,6 @@ package com.app.teacup.fragment.mainPage;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +16,8 @@ import com.app.teacup.adapter.NewsRecyclerAdapter;
 import com.app.teacup.adapter.ReactViewPagerAdapter;
 import com.app.teacup.bean.News.NewsInfo;
 import com.app.teacup.fragment.BaseFragment;
+import com.app.teacup.ui.ReactViewPager;
+import com.app.teacup.ui.ZoomOutPageTransformer;
 import com.app.teacup.util.ThreadPoolUtils;
 import com.app.teacup.util.urlUtils;
 
@@ -37,7 +38,7 @@ import java.util.List;
  */
 public class NewsFragment extends BaseFragment {
 
-    private static final int IMAGE_VIEW_LEN = 4;
+    private static final int IMAGE_VIEW_LEN = 5;
     private List<NewsInfo> mNewsDatas;
     private List<View> mHeaderList;
     private NewsRecyclerAdapter mNewsRecyclerAdapter;
@@ -111,15 +112,18 @@ public class NewsFragment extends BaseFragment {
     }
 
     private View setupRecycleViewHeader() {
-        View headView = View.inflate(getContext(), R.layout.item_news_header, null);
+        View headView = View.inflate(getContext(), R.layout.item_base_header, null);
         headView.setVisibility(View.VISIBLE);
-        ViewPager viewPager = (ViewPager) headView.findViewById(R.id.vp_news);
+        ReactViewPager viewPager = (ReactViewPager) headView.findViewById(R.id.base_view_pager);
         for (int i = 0; i < IMAGE_VIEW_LEN; i++) {
-            View itemView = View.inflate(getContext(), R.layout.item_movie_header_view, null);
+            View itemView = View.inflate(getContext(), R.layout.item_base_header_view, null);
             mHeaderList.add(itemView);
         }
         mHeaderAdapter = new ReactViewPagerAdapter(viewPager, mHeaderList);
         viewPager.setAdapter(mHeaderAdapter);
+        viewPager.enableCenterLockOfChilds();
+        viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        viewPager.setCurrentItem(Integer.MAX_VALUE / 2, true);
         headView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {

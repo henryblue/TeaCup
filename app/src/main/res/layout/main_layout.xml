@@ -13,7 +13,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/activity_main_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="@dimen/main_toolbar_layout_height"
             android:background="?attr/appBg"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:titleTextColor="@color/white"
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/appBg"
             app:tabIndicatorColor="@color/yellow"
-            app:tabIndicatorHeight="3dp"
+            app:tabIndicatorHeight="@dimen/main_tab_layout_indicator_height"
             app:tabSelectedTextColor="@color/white"
             app:tabTextColor="@color/alpha_white"
             tools:ignore="MissingPrefix" />

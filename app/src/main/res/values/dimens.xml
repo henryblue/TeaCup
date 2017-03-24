@@ -2,6 +2,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="toolbar_elevation">6dp</dimen>
+    <dimen name="main_toolbar_layout_height">45dp</dimen>
+    <dimen name="main_tab_layout_indicator_height">2dp</dimen>
 
     <dimen name="navigation_header_layout_padding">16dp</dimen>
     <dimen name="navigation_header_circleImageView_width">82dp</dimen>
@@ -79,8 +81,6 @@
     <dimen name="item_muisic_detail_user_textsize">14sp</dimen>
 
     <dimen name="item_music_view_height">310dp</dimen>
-    <dimen name="item_music_view_marginleft">3dp</dimen>
-    <dimen name="item_music_view_marginright">3dp</dimen>
     <dimen name="item_music_view_marginTop">2dp</dimen>
     <dimen name="item_music_view_marginBottom">8dp</dimen>
     <dimen name="item_music_view_elevation">1dp</dimen>
@@ -153,14 +153,15 @@
     <dimen name="activity_new_detail_margin">10dp</dimen>
     <dimen name="activity_new_detail_author_textSize">14sp</dimen>
 
-    <dimen name="item_news_header_height">150dp</dimen>
+    <dimen name="item_base_header_height">150dp</dimen>
     <dimen name="item_news_header_ll_marginBootm">16dp</dimen>
 
     <dimen name="item_news_view_cardView_margin">3dp</dimen>
     <dimen name="item_news_view_cardView_height">100dp</dimen>
-    <dimen name="item_news_view_rl_marginRight">8dp</dimen>
+    <dimen name="item_news_view_rl_marginTop">3dp</dimen>
+    <dimen name="item_news_view_rl_marginBottom">3dp</dimen>
     <dimen name="item_news_view_rl_height">85dp</dimen>
-    <dimen name="item_news_view_rl_iv_width">85dp</dimen>
+    <dimen name="item_news_view_rl_iv_width">95dp</dimen>
     <dimen name="item_news_view_rl_tv_marginLeft">8dp</dimen>
     <dimen name="item_news_view_rl_tv_marginTop">5dp</dimen>
     <dimen name="item_news_view_rl_tv_textSize">16sp</dimen>
@@ -257,7 +258,7 @@
     <dimen name="item_movie_play_tv_time_textSize">15sp</dimen>
 
     <dimen name="item_movie_detail_ll_height">190dp</dimen>
-    <dimen name="item_movie_detail_ll_marginRight">6dp</dimen>
+    <dimen name="item_movie_detail_ll_marginRight">3dp</dimen>
     <dimen name="item_movie_detail_ll_marginTop">4dp</dimen>
     <dimen name="item_movie_detail_ll_width">120dp</dimen>
     <dimen name="item_movie_detail_iv_height">150dp</dimen>
@@ -323,6 +324,6 @@
     <dimen name="item_fanju_view_videoContent_marginRight">10dp</dimen>
     <dimen name="item_fanju_view_videoContent_marginTop">12dp</dimen>
     <dimen name="item_fanju_view_videoContent_textSize">13sp</dimen>
-    <dimen name="item_movie_header_text_height">30dp</dimen>
+    <dimen name="item_movie_header_text_height">25dp</dimen>
 
 </resources>

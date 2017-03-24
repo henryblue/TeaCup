@@ -3,7 +3,6 @@ package com.app.teacup.fragment.mainPage;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +18,8 @@ import com.app.teacup.adapter.ReactViewPagerAdapter;
 import com.app.teacup.bean.movie.MovieDetailInfo;
 import com.app.teacup.bean.movie.MovieItemInfo;
 import com.app.teacup.fragment.BaseFragment;
+import com.app.teacup.ui.ReactViewPager;
+import com.app.teacup.ui.ZoomOutPageTransformer;
 import com.app.teacup.util.OkHttpUtils;
 import com.app.teacup.util.ThreadPoolUtils;
 import com.app.teacup.util.urlUtils;
@@ -138,15 +139,18 @@ public class MovieFragment extends BaseFragment {
     }
 
     private View setupRecycleViewHeader() {
-        View headView = View.inflate(getContext(), R.layout.item_movie_header, null);
-        ViewPager viewPager = (ViewPager) headView.findViewById(R.id.vp_movie);
+        View headView = View.inflate(getContext(), R.layout.item_base_header, null);
+        ReactViewPager viewPager = (ReactViewPager) headView.findViewById(R.id.base_view_pager);
         mHeaderList = new ArrayList<>();
         for (int i = 0; i < HEADER_LOAD_NUM; i++) {
-            View itemView = View.inflate(getContext(), R.layout.item_movie_header_view, null);
+            View itemView = View.inflate(getContext(), R.layout.item_base_header_view, null);
             mHeaderList.add(itemView);
         }
         mHeaderAdapter = new ReactViewPagerAdapter(viewPager, mHeaderList);
         viewPager.setAdapter(mHeaderAdapter);
+        viewPager.enableCenterLockOfChilds();
+        viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        viewPager.setCurrentItem(Integer.MAX_VALUE / 2 , true);
         headView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {

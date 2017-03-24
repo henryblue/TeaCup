@@ -25,15 +25,15 @@ public class PhotoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ToolUtils.onActivityCreateSetTheme(this);
-        setContentView(R.layout.activity_photo);
+        setContentView(R.layout.main_layout);
         initView();
         initToolBar();
     }
 
     private void initView() {
         List<Fragment> mFragmentLists = new ArrayList<>();
-        TabLayout mTabLayout = (TabLayout) findViewById(R.id.photo_tab_layout);
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.photo_view_pager);
+        TabLayout mTabLayout = (TabLayout) findViewById(R.id.main_tab_layout);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.main_view_pager);
 
         JiandanMeiziFragment jiandanMeiziFragment = new JiandanMeiziFragment();
         mFragmentLists.add(jiandanMeiziFragment);
@@ -58,7 +58,7 @@ public class PhotoActivity extends AppCompatActivity {
     }
 
     private void initToolBar() {
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.activity_navigation_toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
         if (mToolbar != null) {
             mToolbar.setTitle(getString(R.string.item_package));
         }

@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 
 import java.lang.reflect.Field;
 
-public class ReactViewPager extends ViewPager {
+public class ReactViewPager extends CenterViewPager {
 
     public ReactViewPager(Context context) {
         this(context, null);
@@ -28,7 +28,7 @@ public class ReactViewPager extends ViewPager {
             if (getAdapter() != null) {
                 getAdapter().notifyDataSetChanged();
             }
-            setCurrentItem(getCurrentItem());
+            setCurrentItem(getCurrentItem(), true);
         } catch (Exception e) {
             e.printStackTrace();
         }

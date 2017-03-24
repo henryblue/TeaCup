@@ -4,23 +4,25 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
+
+import com.app.teacup.ui.ReactViewPager;
 
 import java.util.List;
 
 public class ReactViewPagerAdapter extends PagerAdapter {
 
     private final List<View> mViewList;
-    private final ViewPager mViewPager;
+    private final ReactViewPager mViewPager;
     private boolean mIsAutoScroll = false;
 
     @SuppressLint("HandlerLeak")
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+            mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1, true);
             if (mIsAutoScroll) {
                 mHandler.sendEmptyMessageDelayed(0, 6000);
             }
@@ -28,7 +30,7 @@ public class ReactViewPagerAdapter extends PagerAdapter {
         }
     };
 
-    public ReactViewPagerAdapter(ViewPager viewPager, List<View> imageViews) {
+    public ReactViewPagerAdapter(ReactViewPager viewPager, List<View> imageViews) {
         mViewPager = viewPager;
         mViewList = imageViews;
     }
@@ -45,22 +47,28 @@ public class ReactViewPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
-        object = null;
+        //container.removeView((View) object);
+    }
+
+    @Override
+    public float getPageWidth(int position) {
+        return 0.9f;
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        if (mViewList.get(position % mViewList.size()).getParent() != null) {
-            ((ViewPager)mViewList.get(position % mViewList.size()).getParent()).
-                    removeView(mViewList.get(position % mViewList.size()));
+        position %= mViewList.size();
+        if (position < 0) {
+            position = mViewList.size() + position;
         }
-        try {
-            container.addView(mViewList.get(position % mViewList.size()));
-        } catch (Exception e) {
-            //
+        View view = mViewList.get(position);
+        ViewParent vp = view.getParent();
+        if (vp != null) {
+            ViewGroup parent = (ViewGroup) vp;
+            parent.removeView(view);
         }
-        return mViewList.get(position % mViewList.size());
+        container.addView(view);
+        return view;
     }
 
 
@@ -69,7 +77,7 @@ public class ReactViewPagerAdapter extends PagerAdapter {
             return;
         }
         mIsAutoScroll = true;
-        mHandler.sendEmptyMessageDelayed(0, 4000);
+        mHandler.sendEmptyMessageDelayed(0, 6000);
     }
 
     public void stopAutoScrolled() {
