@@ -78,6 +78,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void postDelayed(Runnable runnable, long millis) {
+        mHandler.postDelayed(runnable, millis);
+    }
+
     public void sendParseDataMessageDelayed(int message, long delay) {
         if (mHandler != null) {
             Message msg = Message.obtain();

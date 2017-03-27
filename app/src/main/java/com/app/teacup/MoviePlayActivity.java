@@ -366,6 +366,7 @@ public class MoviePlayActivity extends BaseActivity {
         try {
             Element video = document.getElementsByTag("iframe").first();
             String videoUrl = video.attr("src");
+            Log.i(TAG, "parseVideoUrl: ======videoUrl===" + videoUrl);
             parseVideoPlayUrl(videoUrl);
         } catch (Exception e) {
             sendParseDataMessage(LOAD_DATA_FINISH);
@@ -455,29 +456,41 @@ public class MoviePlayActivity extends BaseActivity {
         try {
             if (document != null) {
                 Elements videos = document.getElementsByTag("video");
-                String result = LogcatUtils.getInstance().getResult();
                 LogcatUtils.getInstance().stop();
                 if (videos != null) {
                     Element video = videos.first();
-                    String tmpUrl = video.attr("src");
-                    if (tmpUrl.endsWith("format=mp4")) {
-                        if (!TextUtils.isEmpty(result)) {
-                            String[] splitInfo = result.split("url:");
-                            mVideoUrl = splitInfo[splitInfo.length - 1];
-                        }
-                    } else {
-                        mVideoUrl = tmpUrl;
-                    }
+                    mVideoUrl = video.attr("src");
                 }
             }
         } catch (Exception e) {
             mVideoUrl = "";
-            sendParseDataMessage(LOAD_DATA_FINISH);
         }
+
+        if (TextUtils.isEmpty(mVideoUrl)) {
+            postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    String result = LogcatUtils.getInstance().getResult();
+                    if (!TextUtils.isEmpty(result)) {
+                        String[] splitInfo = result.split("url:");
+                        mVideoUrl = splitInfo[splitInfo.length - 1];
+                    }
+                }
+            }, 3000);
+        } else if (mVideoUrl.endsWith("format=mp4")) {
+            String result = LogcatUtils.getInstance().getResult();
+            if (!TextUtils.isEmpty(result)) {
+                String[] splitInfo = result.split("url:");
+                mVideoUrl = splitInfo[splitInfo.length - 1];
+            }
+        }
+
         // videoUrl maybe parse equal 'undefined' or 'unknown'
         if (!TextUtils.isEmpty(mVideoUrl) && !mVideoUrl.startsWith("http")) {
             mVideoUrl = "";
         }
+
+        LogcatUtils.getInstance().stop();
         sendParseDataMessage(LOAD_DATA_FINISH);
     }
 
