@@ -366,7 +366,6 @@ public class MoviePlayActivity extends BaseActivity {
         try {
             Element video = document.getElementsByTag("iframe").first();
             String videoUrl = video.attr("src");
-            Log.i(TAG, "parseVideoUrl: ======videoUrl===" + videoUrl);
             parseVideoPlayUrl(videoUrl);
         } catch (Exception e) {
             sendParseDataMessage(LOAD_DATA_FINISH);
@@ -456,7 +455,6 @@ public class MoviePlayActivity extends BaseActivity {
         try {
             if (document != null) {
                 Elements videos = document.getElementsByTag("video");
-                LogcatUtils.getInstance().stop();
                 if (videos != null) {
                     Element video = videos.first();
                     mVideoUrl = video.attr("src");
@@ -465,19 +463,8 @@ public class MoviePlayActivity extends BaseActivity {
         } catch (Exception e) {
             mVideoUrl = "";
         }
-
-        if (TextUtils.isEmpty(mVideoUrl)) {
-            postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    String result = LogcatUtils.getInstance().getResult();
-                    if (!TextUtils.isEmpty(result)) {
-                        String[] splitInfo = result.split("url:");
-                        mVideoUrl = splitInfo[splitInfo.length - 1];
-                    }
-                }
-            }, 3000);
-        } else if (mVideoUrl.endsWith("format=mp4")) {
+        if (TextUtils.isEmpty(mVideoUrl) || mVideoUrl.endsWith("format=mp4")
+                || !mVideoUrl.startsWith("http")) {
             String result = LogcatUtils.getInstance().getResult();
             if (!TextUtils.isEmpty(result)) {
                 String[] splitInfo = result.split("url:");
@@ -510,10 +497,15 @@ public class MoviePlayActivity extends BaseActivity {
         }
 
         @Override
-        public void onPageFinished(WebView view, String url) {
+        public void onPageFinished(final WebView view, String url) {
             if (!url.contains("about:blank")) {
-                view.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'" +
-                        "+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
+                mTvPlayActivity.get().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'" +
+                                "+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
+                    }
+                }, 1000);
             }
         }
 

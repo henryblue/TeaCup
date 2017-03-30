@@ -26,7 +26,7 @@ public class LogcatUtils {
     public void start() {
         mResult = null;
         if (mLogDumper == null)
-            mLogDumper = new LogDumper("MediaResourceGetter");
+            mLogDumper = new LogDumper();
         mLogDumper.start();
     }
 
@@ -47,13 +47,9 @@ public class LogcatUtils {
         private Process logcatProc;
         private BufferedReader mReader = null;
         private boolean mRunning = true;
-        String mCmds = null;
-        private String mGrep;
         private final ArrayList<String> mClearLog;
 
-        LogDumper(String grep) {
-            mGrep = grep;
-            mCmds = "logcat *:e *:i | grep \"(" + mGrep + ")\"";
+        LogDumper() {
             //设置命令  logcat -c 清除日志
             mClearLog = new ArrayList<>();
             mClearLog.add("logcat");
@@ -69,11 +65,11 @@ public class LogcatUtils {
                 e.printStackTrace();
             }
         }
-
+        
         @Override
         public void run() {
             try {
-                logcatProc = Runtime.getRuntime().exec(mCmds);
+                logcatProc = Runtime.getRuntime().exec(new String[] { "logcat","MediaResourceGetter:I *:S" });
                 mReader = new BufferedReader(new InputStreamReader(
                         logcatProc.getInputStream()), 1024);
                 String line;
@@ -84,8 +80,9 @@ public class LogcatUtils {
                     if (line.length() == 0) {
                         continue;
                     }
-                    if (line.contains(mGrep)) {
+                    if (line.indexOf("MediaResourceGetter") > 0) {
                         mResult = line;
+                        break;
                     }
                 }
 

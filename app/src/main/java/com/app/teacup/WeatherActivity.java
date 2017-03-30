@@ -216,7 +216,6 @@ public class WeatherActivity extends BaseActivity {
         public void onReceiveLocation(BDLocation bdLocation) {
             if (bdLocation != null && !TextUtils.isEmpty(bdLocation.getCity())) {
                 mCurrCity = bdLocation.getCity();
-                mCurrCity = mCurrCity.substring(0, mCurrCity.length() - 1);
                 sendParseDataMessage(LOAD_DATA_FINISH);
             } else {
                 sendParseDataMessage(LOAD_DATA_ERROR);
