@@ -1,7 +1,7 @@
 # TeaCup
 A Material Design app for entertainment
 
-##functional list
+## functional list
 
 - fine interface
 - read fresh news
@@ -10,7 +10,7 @@ A Material Design app for entertainment
 - listen to the radio
 - view picture
 
-##ScreenShot
+## ScreenShot
 <p><img src="screenshot/photo1.jpg" width="32%" />
 <img src="screenshot/photo2.jpg" width="32%" />
 <img src="screenshot/photo3.jpg" width="32%" />
@@ -70,7 +70,7 @@ Use Baidu maps to locate.
 You can download the APK file from [releases](/teacup-1.2_4.apk) of this project.
 
 
-##License
+## License
 
 ```
 Copyright 2016 henryblue
