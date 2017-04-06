@@ -43,6 +43,7 @@ public class FanjuFragment extends BaseFragment {
     @Override
     protected void startRefreshData() {
         mVideoDatas.clear();
+        mRecyclerView.removeAllViews();
         super.startRefreshData();
     }
 
