@@ -279,8 +279,8 @@
     <dimen name="layout_tv_play_player_height">218dp</dimen>
     <dimen name="layout_tv_play_srl_marginTop">8dp</dimen>
     <dimen name="layout_tv_play_tv_margin">8dp</dimen>
-    <dimen name="layout_tv_play_tv_textSize">18sp</dimen>
-    <dimen name="layout_tv_play_tv_depend_textSize">18sp</dimen>
+    <dimen name="layout_tv_play_tv_textSize">17sp</dimen>
+    <dimen name="layout_tv_play_tv_depend_textSize">17sp</dimen>
     <dimen name="layout_tv_play_ll_marginLeft">8dp</dimen>
 
     <dimen name="item_movie_more_rl_marginRight">2dp</dimen>

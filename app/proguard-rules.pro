@@ -16,3 +16,6 @@
 #   public *;
 #}
 -keepattributes EnclosingMethod
+-dontwarn org.apache.http.**
+-dontwarn okio.**
+-dontwarn uk.co.senab.**

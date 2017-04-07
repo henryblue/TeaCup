@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/background_color"
     android:clipChildren="false"
     android:clipToPadding="false"
@@ -32,7 +33,9 @@
                     android:id="@+id/tv_series_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/layout_tv_play_tv_margin"
+                    android:layout_marginLeft="@dimen/layout_tv_play_tv_margin"
+                    android:layout_marginRight="@dimen/layout_tv_play_tv_margin"
+                    android:layout_marginTop="@dimen/layout_tv_play_tv_margin"
                     android:text="@string/tv_series"
                     android:textColor="@color/deep_gray"
                     android:textSize="@dimen/layout_tv_play_tv_textSize"
@@ -43,6 +46,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
+                <com.app.teacup.ui.MoreTextView
+                    android:id="@+id/video_introduce_moreText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:maxLines="2"
+                    app:desc_textColor="@color/deepYellow"
+                    android:layout_marginLeft="@dimen/layout_tv_play_tv_margin"
+                    android:layout_marginRight="@dimen/layout_tv_play_tv_margin"
+                    app:textSize="14sp"
+                    app:desc_textSize="15sp"
+                    app:textColor="@color/deep_gray"/>
                 <TextView
                     android:id="@+id/tv_depend_textview"
                     android:layout_width="wrap_content"

@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.app.teacup.adapter.TvPlayRecyclerAdapter;
 import com.app.teacup.bean.movie.MoviePlayInfo;
 import com.app.teacup.bean.movie.TvItemInfo;
+import com.app.teacup.ui.MoreTextView;
 import com.app.teacup.util.LogcatUtils;
 import com.app.teacup.util.OkHttpUtils;
 import com.app.teacup.util.ToolUtils;
@@ -56,14 +57,13 @@ public class MoviePlayActivity extends BaseActivity {
     private SwipeRefreshLayout mRefreshLayout;
     private WebView mWebView;
     private MxVideoPlayerWidget mxVideoPlayerWidget;
-    private TextView mDependText;
     private TextView mTvText;
     private RecyclerView mRecyclerView;
-    private LinearLayout mMoreContainer;
     private boolean mIsInitData = false;
     public int mPlayIndex = 0;
     private boolean mIsChangeVideo = false;
     private String mVideoUrl;
+    private String mVideoIntroduce;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +86,6 @@ public class MoviePlayActivity extends BaseActivity {
         mWebView = new WebView(getApplicationContext());
         mxVideoPlayerWidget = (MxVideoPlayerWidget) findViewById(R.id.tv_video_player);
         mTvText = (TextView) findViewById(R.id.tv_series_textView);
-        mDependText = (TextView) findViewById(R.id.tv_depend_textview);
-        mMoreContainer = (LinearLayout) findViewById(R.id.tv_base_container);
         mRecyclerView = (RecyclerView) findViewById(R.id.tv_numbers_recyclerView);
 
         mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
@@ -124,11 +122,18 @@ public class MoviePlayActivity extends BaseActivity {
             mTvText.setVisibility(View.VISIBLE);
             setupRecyclerView();
         }
+        // show video's introduce
+        if (!TextUtils.isEmpty(mVideoIntroduce)) {
+            MoreTextView moreTextView = (MoreTextView) findViewById(R.id.video_introduce_moreText);
+            moreTextView.setContent(mVideoIntroduce);
+        }
         // load more videos
         if (!mMoreDatas.isEmpty()) {
-            mDependText.setVisibility(View.VISIBLE);
+            TextView dependText = (TextView) findViewById(R.id.tv_depend_textview);
+            dependText.setVisibility(View.VISIBLE);
+            LinearLayout moreContainer = (LinearLayout) findViewById(R.id.tv_base_container);
             for (int i = 0; i < mMoreDatas.size(); i++) {
-                loadViewToContainer(i);
+                loadViewToContainer(moreContainer, i);
             }
         }
     }
@@ -156,7 +161,7 @@ public class MoviePlayActivity extends BaseActivity {
         });
     }
 
-    private void loadViewToContainer(final int position) {
+    private void loadViewToContainer(LinearLayout container, final int position) {
         View itemView = View.inflate(MoviePlayActivity.this, R.layout.item_movie_play_view, null);
         ImageView imageView = (ImageView) itemView.findViewById(R.id.moive_play_img);
         TextView nameView = (TextView) itemView.findViewById(R.id.movie_play_name);
@@ -174,7 +179,7 @@ public class MoviePlayActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-        mMoreContainer.addView(itemView);
+        container.addView(itemView);
     }
 
     private void loadImageResource(String url, ImageView imageView) {
@@ -366,6 +371,7 @@ public class MoviePlayActivity extends BaseActivity {
         try {
             Element video = document.getElementsByTag("iframe").first();
             String videoUrl = video.attr("src");
+            mVideoIntroduce = document.getElementsByClass("tab-jq").first().text();
             parseVideoPlayUrl(videoUrl);
         } catch (Exception e) {
             sendParseDataMessage(LOAD_DATA_FINISH);
