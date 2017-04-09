@@ -9,6 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_movie_detail_rl_top_height"
         android:background="?android:attr/selectableItemBackground"
+        android:layout_marginLeft="@dimen/item_movie_detail_rl_margin"
+        android:layout_marginRight="@dimen/item_movie_detail_rl_margin"
         android:visibility="gone">
 
         <TextView

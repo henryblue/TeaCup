@@ -266,6 +266,7 @@
     <dimen name="item_movie_detail_tv_tip_marginTop">130dp</dimen>
     <dimen name="item_movie_detail_tv_textSize">14sp</dimen>
     <dimen name="item_movie_detail_rl_top_height">41dp</dimen>
+    <dimen name="item_movie_detail_rl_margin">5dp</dimen>
     <dimen name="item_movie_detail_tv_margin">4dp</dimen>
     <dimen name="item_movie_more_textSize">16sp</dimen>
     <dimen name="movie_detail_block_tip_textSize">17sp</dimen>
