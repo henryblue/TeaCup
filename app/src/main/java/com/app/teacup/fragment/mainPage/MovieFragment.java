@@ -123,7 +123,7 @@ public class MovieFragment extends BaseFragment {
         mMovieDetailAdapter.setOnItemClickListener(new MovieDetailRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, int itemPosition) {
-                    enterPlayPage(position, itemPosition, MoviePlayActivity.class);
+                enterPlayPage(position, itemPosition, MoviePlayActivity.class);
             }
 
             @Override

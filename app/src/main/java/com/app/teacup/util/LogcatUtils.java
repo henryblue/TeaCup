@@ -27,6 +27,7 @@ public class LogcatUtils {
         mResult = null;
         if (mLogDumper == null)
             mLogDumper = new LogDumper();
+        mLogDumper.clearLog();
         mLogDumper.start();
     }
 
@@ -59,13 +60,16 @@ public class LogcatUtils {
 
         void stopLogs() {
             mRunning = false;
+            clearLog();
+        }
+
+        void clearLog() {
             try {
                 Runtime.getRuntime().exec(mClearLog.toArray(new String[mClearLog.size()]));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        
         @Override
         public void run() {
             try {
