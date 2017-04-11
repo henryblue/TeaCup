@@ -46,6 +46,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import hb.xvideoplayer.MxVideoPlayer;
 import hb.xvideoplayer.MxVideoPlayerWidget;
@@ -362,19 +364,31 @@ public class MoviePlayActivity extends BaseActivity {
 
                         @Override
                         public void onResponse(String response) {
-                            parseVideoUrl(response, videoUrl);
+                            parsePlayerUrl(response, videoUrl);
                         }
                     });
         }
     }
 
-    private void parseVideoUrl(String response, String refUrl) {
+    private void parsePlayerUrl(String response, String refUrl) {
         Document document = Jsoup.parse(response);
         try {
-            Element video = document.getElementsByTag("iframe").first();
-            String videoUrl = video.attr("src");
             mVideoIntroduce = document.getElementsByClass("tab-jq").first().text();
-            parseVideoPlayUrl(videoUrl, refUrl);
+            Pattern pattern = Pattern.compile("\\biframe\\b.*\\biframe\\b");
+            Matcher matcher = pattern.matcher(response);
+            if (matcher.find()) {
+                String baseText = matcher.group(0);
+                pattern = Pattern.compile("http[\\w?:/.=&]*");
+                matcher = pattern.matcher(baseText);
+                if (matcher.find()) {
+                    String playerUrl = matcher.group(0);
+                    parseVideoPlayUrl(playerUrl, refUrl);
+                } else {
+                    sendParseDataMessage(LOAD_DATA_FINISH);
+                }
+            } else {
+                sendParseDataMessage(LOAD_DATA_FINISH);
+            }
         } catch (Exception e) {
             sendParseDataMessage(LOAD_DATA_FINISH);
         }
@@ -417,7 +431,7 @@ public class MoviePlayActivity extends BaseActivity {
 
                         @Override
                         public void onResponse(String response) {
-                            parseVideoUrl(response, nextUrl);
+                            parsePlayerUrl(response, nextUrl);
                         }
                     });
         }
