@@ -1,8 +1,32 @@
 apply plugin: 'com.android.application'
 
+def keystorePropertiesFile = rootProject.file("key/keystore.properties")
+def keystoreProperties = null
+boolean isKeyPropertiesExist = false
+if (keystorePropertiesFile != null && keystorePropertiesFile.exists()) {
+    keystoreProperties = new Properties()
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    isKeyPropertiesExist = true
+}
+
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    boolean isKeyExist = false
+    if (isKeyPropertiesExist) {
+        signingConfigs {
+            release {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                if (storeFile.exists()) {
+                    isKeyExist = true
+                }
+            }
+        }
+    }
+
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
 
     sourceSets {
         main {
@@ -11,16 +35,23 @@ android {
     }
     defaultConfig {
         multiDexEnabled true
-        applicationId "com.app.teacup"
-        minSdkVersion 16
-        targetSdkVersion 24
-        versionCode 1
-        versionName "1.2_5"
+        applicationId project.applicationId
+        minSdkVersion project.minSdkVersion
+        targetSdkVersion project.targetSdkVersion
+        versionCode project.versionCode
+        versionName project.versionName
     }
     buildTypes {
         release {
             minifyEnabled true
+            signingConfig signingConfigs.release
+            zipAlignEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [
+                    APP_NAME      : "@string/app_name",
+                    APPLICATION_ID: "@string/application_id"
+            ]
         }
     }
 }
@@ -34,10 +65,11 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile(name: 'circularMusicProgressbar', ext: 'aar')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.1.1'
-    compile 'com.android.support:support-v4:24.2.1'
-    compile 'com.android.support:design:24.2.0'
-    compile 'com.android.support:cardview-v7:24.1.1'
+    compile "com.android.support:appcompat-v7:$supportVersion"
+    compile "com.android.support:support-v4:$supportVersion"
+    compile "com.android.support:design:$supportVersion"
+    compile "com.android.support:cardview-v7:$supportVersion"
+
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.jcodecraeer:xrecyclerview:1.2.7'
