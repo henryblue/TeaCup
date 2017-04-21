@@ -193,6 +193,7 @@ public class SearchActivity extends BaseActivity {
 
     private void startRefreshData() {
         mDatas.clear();
+        mRecyclerView.removeAllViews();
         if (!TextUtils.isEmpty(mSearchName)) {
             OkHttpUtils.getAsyn(urlUtils.MOVIE_SEARCH_URL + mSearchName, new OkHttpUtils.ResultCallback<String>() {
 
