@@ -11,7 +11,8 @@
     <hb.xvideoplayer.MxVideoPlayerWidget
         android:id="@+id/tv_video_player"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_tv_play_player_height" />
+        android:layout_height="wrap_content"
+        app:showBottomProgress="false"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/tv_srl_refresh"

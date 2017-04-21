@@ -277,7 +277,6 @@
     <dimen name="tv_series_textView_item_max_width">85dp</dimen>
     <dimen name="tv_series_textView_item_height">45dp</dimen>
 
-    <dimen name="layout_tv_play_player_height">218dp</dimen>
     <dimen name="layout_tv_play_srl_marginTop">8dp</dimen>
     <dimen name="layout_tv_play_tv_margin">8dp</dimen>
     <dimen name="layout_tv_play_tv_textSize">17sp</dimen>
