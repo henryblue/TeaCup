@@ -234,6 +234,9 @@ public class FanjuNewsActivity extends BaseActivity {
                         Element img = imgs.get(0).getElementsByTag("img").get(0);
                         String userName = img.attr("alt");
                         String imgUrl = img.attr("src");
+                        if (!imgUrl.startsWith("http")) {
+                            imgUrl = "http:" + imgUrl;
+                        }
                         info.setUserName(userName);
                         info.setUserImgUrl(imgUrl);
 
@@ -273,7 +276,7 @@ public class FanjuNewsActivity extends BaseActivity {
             Elements as = p.getElementsByTag("a");
             String tmp;
             if (as.size() > 0) {
-                tmp = as.get(0).attr("href");
+                tmp = "http:" + as.get(0).attr("href");
             } else {
                 tmp = p.text();
             }

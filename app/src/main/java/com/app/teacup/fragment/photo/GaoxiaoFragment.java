@@ -100,7 +100,7 @@ public class GaoxiaoFragment extends BaseFragment {
                     for (Element e : img) {
                         String url = e.attr("src");
                         if (url.contains(".jpg") || url.contains(".gif")) {
-                            info.setImgUrl(url);
+                            info.setImgUrl("http:" + url);
                         }
                     }
                 }

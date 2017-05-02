@@ -106,7 +106,7 @@ public class FanjuFragment extends BaseFragment {
                     Element yuanImg = yuanTop.getElementsByClass("yuan_img").get(0);
                     Element imgInfo = yuanImg.getElementsByTag("img").get(0);
                     String authorName = imgInfo.attr("alt");
-                    String authorImgUrl = imgInfo.attr("src");
+                    String authorImgUrl = "http:" + imgInfo.attr("src");
                     fanjuInfo.setAuthorName(authorName);
                     fanjuInfo.setAuthorImgUrl(authorImgUrl);
 
@@ -124,6 +124,9 @@ public class FanjuFragment extends BaseFragment {
                     Element midImgInfo = shengImg.getElementsByTag("img").get(0);
                     String videoName = midImgInfo.attr("alt");
                     String videoImgUrl = midImgInfo.attr("src");
+                    if (!videoImgUrl.startsWith("http")) {
+                        videoImgUrl = "http:" + videoImgUrl;
+                    }
                     String videoContent = yuanMiddle.getElementsByClass("yuan_con").get(0)
                             .getElementsByClass("ie2").get(0).text();
                     fanjuInfo.setVideoName(videoName);
