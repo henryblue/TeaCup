@@ -19,24 +19,24 @@
         android:textSize="@dimen/activity_weather_tip_textsize" />
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_weather_local"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/activity_weather_content_margintop">
 
         <ImageView
             android:id="@+id/iv_weather_icon"
             android:layout_width="@dimen/activity_weather_image_width"
             android:layout_height="@dimen/activity_weather_image_height"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/activity_weather_image_marginleft" />
+            android:layout_centerVertical="true" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/iv_weather_icon"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/activity_weather_layout_marginright"
+            android:layout_marginLeft="@dimen/activity_weather_layout_marginright"
             android:orientation="vertical"
             tools:ignore="RtlHardcoded">
 

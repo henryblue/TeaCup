@@ -8,9 +8,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
+import com.app.teacup.R;
 import com.app.teacup.ShowPhotoListActivity;
-import com.app.teacup.adapter.PhotoDoubanRecyclerAdapter;
-import com.app.teacup.bean.PhotoInfo;
+import com.app.teacup.adapter.PhotoRecyclerAdapter;
 import com.app.teacup.fragment.BaseFragment;
 import com.app.teacup.util.urlUtils;
 
@@ -20,25 +20,22 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DoubanMeiziFragment extends BaseFragment {
 
-    private List<PhotoInfo> mImgUrl;
     private ArrayList<String> mImageUrls;
-    private PhotoDoubanRecyclerAdapter mPhotoRecyclerAdapter;
+    private PhotoRecyclerAdapter mPhotoRecyclerAdapter;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mImgUrl = new ArrayList<>();
         mImageUrls = new ArrayList<>();
         mRequestUrl = urlUtils.DOUBAN_MEINV_URL;
     }
 
     @Override
     protected void onRecycleViewResponseLoadMore() {
-        if (mImgUrl.size() <= 0) {
+        if (mImageUrls.size() <= 0) {
             mRecyclerView.loadMoreComplete();
         } else {
             startLoadData(urlUtils.DOUBAN_MEINV_NEXT_URL, 50);
@@ -47,14 +44,22 @@ public class DoubanMeiziFragment extends BaseFragment {
 
     @Override
     protected void setupRecycleViewAndAdapter() {
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        mPhotoRecyclerAdapter = new PhotoDoubanRecyclerAdapter(getContext(),
-                mImgUrl);
+        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,
+                StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        int itemSpace = getResources().
+                getDimensionPixelSize(R.dimen.item_photo_view_item_margin);
+        mPhotoRecyclerAdapter = new PhotoRecyclerAdapter(getContext(), mImageUrls);
+        mPhotoRecyclerAdapter.setHasStableIds(true);
+        mRecyclerView.addItemDecoration(mPhotoRecyclerAdapter.new SpaceItemDecoration(itemSpace));
         mRecyclerView.setAdapter(mPhotoRecyclerAdapter);
-        mPhotoRecyclerAdapter.setOnItemClickListener(new PhotoDoubanRecyclerAdapter.OnItemClickListener() {
+
+        mPhotoRecyclerAdapter.setOnItemClickListener(new PhotoRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                String url = mImgUrl.get(position).getImgUrl();
+                String url = mImageUrls.get(position);
                 if (!TextUtils.isEmpty(url)) {
                     Intent intent = new Intent(getContext(), ShowPhotoListActivity.class);
                     intent.putStringArrayListExtra("photoList", mImageUrls);
@@ -77,15 +82,10 @@ public class DoubanMeiziFragment extends BaseFragment {
                 for (Element a : aElements) {
                     Elements height_min = a.getElementsByClass("height_min");
                     for (Element height : height_min) {
-                        PhotoInfo info = new PhotoInfo();
                         String url = height.attr("src");
                         if (url.contains(".jpg")) {
-                            info.setImgUrl(url);
                             mImageUrls.add(url);
                         }
-                        String title = height.attr("title");
-                        info.setTitle(title);
-                        mImgUrl.add(info);
                     }
                 }
             }
@@ -96,7 +96,6 @@ public class DoubanMeiziFragment extends BaseFragment {
 
     @Override
     protected void startRefreshData() {
-        mImgUrl.clear();
         mImageUrls.clear();
         super.startRefreshData();
     }
@@ -104,12 +103,12 @@ public class DoubanMeiziFragment extends BaseFragment {
     @Override
     protected void onLoadDataFinish() {
         super.onLoadDataFinish();
-        mPhotoRecyclerAdapter.reSetData(mImgUrl);
+        mPhotoRecyclerAdapter.reSetData(mImageUrls);
     }
 
     @Override
     protected void onRefreshFinish() {
         super.onRefreshFinish();
-        mPhotoRecyclerAdapter.reSetData(mImgUrl);
+        mPhotoRecyclerAdapter.refreshData(mImageUrls);
     }
 }

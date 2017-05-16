@@ -29,6 +29,6 @@ project.ext {
     minSdkVersion = 16
     targetSdkVersion = 24
     versionCode = 1
-    versionName = '1.2_5'
+    versionName = '1.2_6'
     supportVersion = "24.2.1"
 }

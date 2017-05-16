@@ -3,10 +3,13 @@ package com.app.teacup.fragment.photo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
+import com.app.teacup.R;
 import com.app.teacup.ShowPhotoActivity;
 import com.app.teacup.adapter.PhotoGaoxiaoRecyclerAdapter;
 import com.app.teacup.bean.PhotoInfo;
@@ -44,6 +47,9 @@ public class GaoxiaoFragment extends BaseFragment {
 
     @Override
     protected void setupRecycleViewAndAdapter() {
+        int itemSpace = getResources().
+                getDimensionPixelSize(R.dimen.photo_gaoxiao_layout_margin);
+        mRecyclerView.addItemDecoration(new SpaceItemDecoration(itemSpace));
         mPhotoRecyclerAdapter = new PhotoGaoxiaoRecyclerAdapter(getContext(),
                 mImgUrl);
         mRecyclerView.setAdapter(mPhotoRecyclerAdapter);
@@ -121,5 +127,22 @@ public class GaoxiaoFragment extends BaseFragment {
     protected void onRefreshFinish() {
         super.onRefreshFinish();
         mPhotoRecyclerAdapter.reSetData(mImgUrl);
+    }
+
+    private class SpaceItemDecoration extends RecyclerView.ItemDecoration {
+
+        private int space;
+
+        SpaceItemDecoration(int space) {
+            this.space = space;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                                   RecyclerView.State state) {
+            outRect.bottom = space;
+            outRect.left = space / 2;
+            outRect.right = space / 2;
+        }
     }
 }

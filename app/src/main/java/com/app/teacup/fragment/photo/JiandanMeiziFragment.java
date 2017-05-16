@@ -3,7 +3,7 @@ package com.app.teacup.fragment.photo;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +13,7 @@ import com.app.teacup.R;
 import com.app.teacup.ShowPhotoListActivity;
 import com.app.teacup.adapter.PhotoRecyclerAdapter;
 import com.app.teacup.fragment.BaseFragment;
+import com.app.teacup.manager.WrapContentGridLayoutManager;
 import com.app.teacup.util.urlUtils;
 
 import org.jsoup.Jsoup;
@@ -64,9 +65,15 @@ public class JiandanMeiziFragment extends BaseFragment {
 
     @Override
     protected void setupRecycleViewAndAdapter() {
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        mPhotoRecyclerAdapter = new PhotoRecyclerAdapter(getContext(),
-                mImgUrl);
+        WrapContentGridLayoutManager manager = new WrapContentGridLayoutManager(getContext(), 2);
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(manager);
+        int itemSpace = getResources().
+                getDimensionPixelSize(R.dimen.item_photo_view_item_margin);
+
+        mPhotoRecyclerAdapter = new PhotoRecyclerAdapter(getContext(), mImgUrl);
+        mPhotoRecyclerAdapter.setHasStableIds(true);
+        mRecyclerView.addItemDecoration(mPhotoRecyclerAdapter.new SpaceItemDecoration(itemSpace));
         mRecyclerView.setAdapter(mPhotoRecyclerAdapter);
 
         mPhotoRecyclerAdapter.setOnItemClickListener(new PhotoRecyclerAdapter.OnItemClickListener() {
@@ -86,6 +93,7 @@ public class JiandanMeiziFragment extends BaseFragment {
     @Override
     protected void startRefreshData() {
         mImgUrl.clear();
+        mRecyclerView.removeAllViews();
         super.startRefreshData();
     }
 
@@ -138,7 +146,7 @@ public class JiandanMeiziFragment extends BaseFragment {
             Toast.makeText(getContext(), getString(R.string.screen_shield),
                     Toast.LENGTH_SHORT).show();
         } else {
-            mPhotoRecyclerAdapter.reSetData(mImgUrl);
+            mPhotoRecyclerAdapter.refreshData(mImgUrl);
         }
     }
 }

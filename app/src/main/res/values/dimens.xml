@@ -24,7 +24,7 @@
     <dimen name="activity_weather_image_width">80dp</dimen>
     <dimen name="activity_weather_image_height">80dp</dimen>
     <dimen name="activity_weather_image_marginleft">60dp</dimen>
-    <dimen name="activity_weather_layout_marginright">60dp</dimen>
+    <dimen name="activity_weather_layout_marginright">8dp</dimen>
     <dimen name="activity_weather_layout_temp_textsize">20sp</dimen>
     <dimen name="activity_weather_layout_wind_textsize">16sp</dimen>
     <dimen name="activity_weather_horizontal_marginbottom">40dp</dimen>
@@ -93,21 +93,21 @@
     <dimen name="item_music_view_info_marginleft">5dp</dimen>
 
     <dimen name="photo_gaoxiao_layout_height">290dp</dimen>
-    <dimen name="photo_gaoxiao_layout_margin">4dp</dimen>
+    <dimen name="photo_gaoxiao_layout_margin">8dp</dimen>
     <dimen name="photo_gaoxiao_tip_layout_height">30dp</dimen>
-    <dimen name="photo_gaoxiao_tip_layout_marginLeft">16dp</dimen>
+    <dimen name="photo_gaoxiao_tip_layout_marginLeft">8dp</dimen>
     <dimen name="photo_gaoxiao_tip_img_width">30dp</dimen>
     <dimen name="photo_gaoxiao_tip_img_height">30dp</dimen>
     <dimen name="photo_gaoxiao_tip_title_textSize">16sp</dimen>
-    <dimen name="photo_gaoxiao_content_marginLeft">16dp</dimen>
-    <dimen name="photo_gaoxiao_content_marginTop">5dp</dimen>
-    <dimen name="photo_gaoxiao_content_marginRight">16dp</dimen>
+    <dimen name="photo_gaoxiao_content_marginLeft">8dp</dimen>
+    <dimen name="photo_gaoxiao_content_marginTop">8dp</dimen>
+    <dimen name="photo_gaoxiao_content_marginRight">8dp</dimen>
     <dimen name="photo_gaoxiao_content_textSize">17sp</dimen>
     <dimen name="photo_gaoxiao_photo_height">220dp</dimen>
     <dimen name="photo_gaoxiao_photo_marginTop">8dp</dimen>
-    <dimen name="photo_gaoxiao_photo_marginBottom">8dp</dimen>
-    <dimen name="photo_gaoxiao_photo_marginLeft">16dp</dimen>
-    <dimen name="photo_gaoxiao_photo_marginRight">16dp</dimen>
+    <dimen name="photo_gaoxiao_photo_marginBottom">4dp</dimen>
+    <dimen name="photo_gaoxiao_photo_marginLeft">8dp</dimen>
+    <dimen name="photo_gaoxiao_photo_marginRight">8dp</dimen>
 
     <dimen name="photo_qiubai_layout_height">270dp</dimen>
     <dimen name="photo_qiubai_layout_margin">4dp</dimen>
@@ -124,7 +124,7 @@
     <dimen name="photo_qiubai_gif_height">50dp</dimen>
 
     <dimen name="item_photo_view_height">270dp</dimen>
-    <dimen name="item_photo_view_margin">3dp</dimen>
+    <dimen name="item_photo_view_item_margin">2dp</dimen>
     <dimen name="item_photo_view_img_margin">4dp</dimen>
     <dimen name="item_photo_view_img_height">225dp</dimen>
     <dimen name="item_photo_view_title_height">40dp</dimen>

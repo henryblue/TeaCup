@@ -3,15 +3,14 @@ package com.app.teacup.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.app.teacup.bean.PhotoInfo;
 import com.app.teacup.MainActivity;
 import com.app.teacup.R;
+import com.app.teacup.bean.PhotoInfo;
 import com.app.teacup.ui.MoreTextView;
 import com.bumptech.glide.Glide;
 
@@ -22,7 +21,6 @@ public class PhotoGaoxiaoRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private final Context mContext;
     private List<PhotoInfo> mDatas;
     private OnItemClickListener mListener;
-    private final LayoutInflater mLayoutInflater;
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
@@ -31,12 +29,11 @@ public class PhotoGaoxiaoRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     public PhotoGaoxiaoRecyclerAdapter(Context context, List<PhotoInfo> datas) {
         mContext = context;
         mDatas = datas;
-        mLayoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new PhotoViewHolder(mLayoutInflater.inflate(R.layout.item_photo_gaoxiao_view, parent, false));
+            return new PhotoViewHolder(View.inflate(mContext, R.layout.item_photo_gaoxiao_view, null));
     }
 
     @Override
@@ -84,8 +81,10 @@ public class PhotoGaoxiaoRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public void reSetData(List<PhotoInfo> list) {
+        int start = mDatas.size();
+        int end = list.size();
         mDatas = list;
-        notifyDataSetChanged();
+        notifyItemRangeInserted(start, end);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -104,7 +103,7 @@ public class PhotoGaoxiaoRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         private final MoreTextView mContent;
         private final ImageView mPhotoImg;
 
-        public PhotoViewHolder(View itemView) {
+        PhotoViewHolder(View itemView) {
             super(itemView);
             mPhotoImg = (ImageView) itemView.findViewById(R.id.iv_photo);
             mContent = (MoreTextView) itemView.findViewById(R.id.tv_content);
