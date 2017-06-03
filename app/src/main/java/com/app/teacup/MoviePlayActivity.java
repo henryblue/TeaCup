@@ -323,7 +323,7 @@ public class MoviePlayActivity extends BaseActivity {
                     mTvListDatas.add(tvItemInfo);
                 }
                 //parse more video info
-                Element row = container.getElementsByClass("row").get(1);
+                Element row = container.getElementsByClass("row").get(0);
                 Elements moreMovies = row.getElementsByClass("movie-item-out");
                 for (Element movie : moreMovies) {
                     Elements movieItem = movie.getElementsByClass("movie-item");
@@ -384,6 +384,7 @@ public class MoviePlayActivity extends BaseActivity {
         try {
             Element video = document.getElementsByTag("iframe").first();
             String videoUrl = video.attr("src");
+            Log.i(TAG, "parseVideoUrl: ====videoUrl==" + videoUrl);
             mVideoIntroduce = document.getElementsByClass("tab-jq").first().text();
             parseVideoPlayUrl(videoUrl);
         } catch (Exception e) {
