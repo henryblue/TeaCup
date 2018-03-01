@@ -15,10 +15,11 @@ import com.app.teacup.bean.Music.MusicDetail;
 import com.app.teacup.bean.Music.MusicDetailInfo;
 import com.app.teacup.bean.Music.MusicInfo;
 import com.app.teacup.ui.MoreTextView;
-import com.app.teacup.util.HttpUtils;
+import com.app.teacup.util.OkHttpUtils;
 import com.app.teacup.util.urlUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.squareup.okhttp.Request;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -188,48 +189,48 @@ public class MusicDetailActivity extends BaseActivity {
     }
 
     private void startLoadData() {
-        HttpUtils.sendHttpRequest(mMusicInfo.getNextUrl(),
-                new HttpUtils.HttpCallBackListener() {
+        OkHttpUtils.getAsyn(mMusicInfo.getNextUrl(), new OkHttpUtils.ResultCallback<String>() {
             @Override
-            public void onFinish(String response) {
-                parseMusicData(response);
-                sendParseDataMessage(LOAD_DATA_FINISH);
+            public void onError(Request request, Exception e) {
+                sendParseDataMessage(LOAD_DATA_ERROR);
             }
 
             @Override
-            public void onError(Exception e) {
-                e.printStackTrace();
-                sendParseDataMessage(LOAD_DATA_ERROR);
+            public void onResponse(String response) {
+                parseMusicData(response);
+                sendParseDataMessage(LOAD_DATA_FINISH);
             }
         });
     }
 
     private void parseMusicData(String response) {
         Document document = Jsoup.parse(response);
-        Element playlist = document.getElementById("luooPlayerPlaylist");
-        Element element = playlist.getElementsByClass("w").get(0);
-        Element head = element.getElementsByClass("vol-head").get(0);
-        Element meta = head.getElementsByClass("vol-meta").get(1);
-        mDetailInfo.setType(meta.text());
-        Element content = playlist.getElementsByClass("w").get(1);
-        mDetailInfo.setContent(content.text());
+        Element name = document.getElementsByClass("vol-name").get(0);
+        Element title = name.getElementsByClass("vol-title").get(0);
+        Element dec = document.getElementsByClass("vol-desc").get(0);
+        mDetailInfo.setType(title.text());
+        mDetailInfo.setContent(dec.text());
 
+        Element playlist = document.getElementById("luooPlayerPlaylist");
         List<MusicDetail> musicList = new ArrayList<>();
 
-        Element playList = playlist.getElementsByClass("w").get(2);
-        Elements lis = playList.getElementsByTag("li");
-        for (Element li : lis) {
-            MusicDetail music = new MusicDetail();
-            Element trackCover = li.getElementsByClass("track-cover").get(0);
-            String musicImg = trackCover.getElementsByTag("img").get(0).attr("src");
-            music.setImgUrl(musicImg);
-            Element trackName = li.getElementsByClass("track-name").get(0);
-            music.setMusicName(trackName.text());
-            Element trackMeta = li.getElementsByClass("track-meta").get(0);
-            String[] split = trackMeta.text().split("-");
-            music.setMusicPlayer(split[0]);
-            musicList.add(music);
+        Elements lis = playlist.getElementsByTag("li");
+        try {
+            for (Element wrapper : lis) {
+                Element li = wrapper.getElementsByClass("track-wrapper").get(0);
+                MusicDetail music = new MusicDetail();
+                Element trackCover = li.getElementsByClass("btn-action-share").get(0);
+                music.setImgUrl(trackCover.attr("data-img"));
+                Element trackName = li.getElementsByClass("trackname").get(0);
+                music.setMusicName(trackName.text());
+                Element trackMeta = li.getElementsByClass("artist").get(0);
+                music.setMusicPlayer(trackMeta.text());
+                musicList.add(music);
+            }
+        } catch (Exception e) {
+            // do not process
         }
+
 
         String id = mMusicInfo.getTitle().substring(4, 7);
         for (int i = 1; i <= musicList.size(); i++) {

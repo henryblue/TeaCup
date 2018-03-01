@@ -1,16 +1,20 @@
 package com.app.teacup.fragment.photo;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.app.teacup.R;
 import com.app.teacup.ShowPhotoActivity;
 import com.app.teacup.adapter.PhotoQiubaiRecyclerAdapter;
 import com.app.teacup.bean.PhotoInfo;
 import com.app.teacup.fragment.BaseFragment;
+import com.app.teacup.util.HttpUtils;
 import com.app.teacup.util.urlUtils;
 
 import org.jsoup.Jsoup;
@@ -67,7 +71,25 @@ public class QiubaiFragment extends BaseFragment {
     @Override
     protected void startRefreshData() {
         mImgUrl.clear();
-        super.startRefreshData();
+        mPageNum = 1;
+        if (TextUtils.isEmpty(mRequestUrl)) {
+            throw new RuntimeException(
+                    "Can't start request data that has not set RequestUrl");
+        }
+
+        HttpUtils.sendHttpRequestWithCharset(mRequestUrl, "GBK", new HttpUtils.HttpCallBackListener() {
+
+            @Override
+            public void onFinish(String response) {
+                parseLoadData(response);
+                sendParseDataMessage(REFRESH_FINISH);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                sendParseDataMessage(REFRESH_ERROR);
+            }
+        });
     }
 
     @Override
@@ -75,8 +97,37 @@ public class QiubaiFragment extends BaseFragment {
         if (mImgUrl.size() <= 0) {
             mRecyclerView.loadMoreComplete();
         } else {
-            startLoadData(urlUtils.QIUBAI18_NEXT_URL, 50);
+            startLoadData(50);
         }
+    }
+
+    @SuppressLint("DefaultLocale")
+    private void startLoadData(int maxLoadNum) {
+        String loadUrl = urlUtils.QIUBAI18_URL;
+        if (maxLoadNum > 0) {
+            mPageNum++;
+            if (mPageNum > maxLoadNum) {
+                mRecyclerView.loadMoreComplete();
+                Toast.makeText(getContext(), getString(R.string.not_have_more_data),
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+            loadUrl = String.format("http://m.qiubaichengren.net/gif/list_%d.html", mPageNum);
+        }
+
+        HttpUtils.sendHttpRequestWithCharset(loadUrl, "GBK", new HttpUtils.HttpCallBackListener() {
+
+            @Override
+            public void onFinish(String response) {
+                parseLoadData(response);
+                sendParseDataMessage(LOAD_DATA_FINISH);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                sendParseDataMessage(LOAD_DATA_ERROR);
+            }
+        });
     }
 
     @Override
@@ -84,17 +135,11 @@ public class QiubaiFragment extends BaseFragment {
         Document document = Jsoup.parse(response);
         try {
             if (document != null) {
-                Elements g = document.getElementsByClass("g");
-                Element gif = g.get(1);
-                Element main = gif.getElementById("main");
-                Elements articles = main.getElementsByClass("row")
-                        .get(0).getElementsByTag("article");
-
-                for (Element e : articles) {
+                Element article = document.getElementsByClass("article").get(0);
+                Elements lis = article.getElementsByTag("li");
+                for (Element li : lis) {
                     PhotoInfo info = new PhotoInfo();
-                    Element img = e.getElementsByClass("card-bg").get(0)
-                            .getElementsByClass("thumbnail-container")
-                            .get(0).getElementsByTag("img").get(0);
+                    Element img = li.getElementsByTag("img").get(0);
                     String gifUrl = img.attr("src");
                     String title = img.attr("alt");
                     info.setTitle(title);

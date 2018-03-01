@@ -18,8 +18,10 @@ import com.app.teacup.bean.News.NewsInfo;
 import com.app.teacup.fragment.BaseFragment;
 import com.app.teacup.ui.ReactViewPager;
 import com.app.teacup.ui.ZoomOutPageTransformer;
+import com.app.teacup.util.OkHttpUtils;
 import com.app.teacup.util.ThreadPoolUtils;
 import com.app.teacup.util.urlUtils;
+import com.squareup.okhttp.Request;
 
 import org.apache.http.util.EncodingUtils;
 import org.jsoup.Jsoup;
@@ -80,9 +82,54 @@ public class NewsFragment extends BaseFragment {
                 }
             });
         } else {
-            super.startRefreshData();
+            mPageNum = 1;
+            if (TextUtils.isEmpty(mRequestUrl)) {
+                throw new RuntimeException(
+                        "Can't start request data that has not set RequestUrl");
+            }
+            OkHttpUtils.getAsynHeader(mRequestUrl, new OkHttpUtils.ResultCallback<String>() {
+
+                @Override
+                public void onError(Request request, Exception e) {
+                    sendParseDataMessage(REFRESH_ERROR);
+                }
+
+                @Override
+                public void onResponse(String response) {
+                    parseData(response);
+                    sendParseDataMessage(REFRESH_FINISH);
+                }
+            });
         }
         mIsFirstEnter = false;
+    }
+
+    @Override
+    protected void startLoadData(String loadUrl, int maxLoadNum) {
+        if (maxLoadNum > 0) {
+            mPageNum++;
+            if (mPageNum > maxLoadNum) {
+                mRecyclerView.loadMoreComplete();
+                Toast.makeText(getContext(), getString(R.string.not_have_more_data),
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+            loadUrl = loadUrl + mPageNum;
+        }
+
+        OkHttpUtils.getAsynHeader(loadUrl, new OkHttpUtils.ResultCallback<String>() {
+
+            @Override
+            public void onError(Request request, Exception e) {
+                sendParseDataMessage(LOAD_DATA_ERROR);
+            }
+
+            @Override
+            public void onResponse(String response) {
+                parseLoadData(response);
+                sendParseDataMessage(LOAD_DATA_FINISH);
+            }
+        });
     }
 
     @Override

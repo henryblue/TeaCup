@@ -157,8 +157,8 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
             throw new RuntimeException(
                     "Can't start request data that has not set RequestUrl");
         }
-        OkHttpUtils.getAsyn(mRequestUrl, new OkHttpUtils.ResultCallback<String>() {
 
+        OkHttpUtils.getAsyn(mRequestUrl, new OkHttpUtils.ResultCallback<String>() {
             @Override
             public void onError(Request request, Exception e) {
                 sendParseDataMessage(REFRESH_ERROR);
@@ -169,7 +169,7 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
                 parseData(response);
                 sendParseDataMessage(REFRESH_FINISH);
             }
-        });
+         });
     }
 
     protected void startLoadData(String loadUrl, int maxLoadNum) {

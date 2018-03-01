@@ -95,6 +95,17 @@ public class OkHttpUtils {
         deliveryResult(callback, request);
     }
 
+    private void _getAsynHeader(String url, final ResultCallback callback) {
+        final Request request = new Request.Builder()
+                .removeHeader("User-Agent")
+                .addHeader("User-Agent", "Mozilla/5.0 (Linux; U; Android 7.0; zh-CN; SM-G9550 Build/NRD90M) " +
+                        "AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/40.0.2214.89 UCBrowser/11.7.0.953 " +
+                        "Mobile Safari/537.36")
+                .url(url)
+                .build();
+        deliveryResult(callback, request);
+    }
+
     public static Response getAsyn(String url) throws IOException {
         return getInstance()._getAsyn(url);
     }
@@ -105,6 +116,10 @@ public class OkHttpUtils {
 
     public static void getAsyn(String url, ResultCallback callback) {
         getInstance()._getAsyn(url, callback);
+    }
+
+    public static void getAsynHeader(String url, ResultCallback callback) {
+        getInstance()._getAsynHeader(url, callback);
     }
 
     public static void getAsynWithHeader(Context context, String url, ResultCallback callback) {

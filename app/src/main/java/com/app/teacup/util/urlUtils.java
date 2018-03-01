@@ -20,7 +20,7 @@ public class urlUtils {
     public static final String JIANDAN_URL = "http://jandan.net/ooxx";
     public static final String JIANDAN_NEXT_URL = "http://jandan.net/ooxx/page-";
 
-    public static final String QIUBAI18_URL = "http://www.qiushibaike18.com/gif/";
+    public static final String QIUBAI18_URL = "http://m.qiubaichengren.net/gif/";
     public static final String QIUBAI18_NEXT_URL = "http://www.qiushibaike18.com/gif/page/";
 
     public static final String MOVIE_URL = "http://www.15yc.com";
