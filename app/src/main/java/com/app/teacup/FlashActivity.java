@@ -59,7 +59,7 @@ public class FlashActivity extends Activity {
     }
 
     private void preloadNewsData() {
-        OkHttpUtils.getAsyn(urlUtils.NEWS_JIANDAN_URL, new OkHttpUtils.ResultCallback<String>() {
+        OkHttpUtils.getAsynHeader(urlUtils.NEWS_JIANDAN_URL, new OkHttpUtils.ResultCallback<String>() {
 
             @Override
             public void onError(Request request, Exception e) {
