@@ -2,6 +2,7 @@ package com.app.teacup;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,14 +14,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +31,6 @@ import com.app.teacup.adapter.TvPlayRecyclerAdapter;
 import com.app.teacup.bean.movie.MoviePlayInfo;
 import com.app.teacup.bean.movie.TvItemInfo;
 import com.app.teacup.ui.MoreTextView;
-import com.app.teacup.util.LogcatUtils;
 import com.app.teacup.util.OkHttpUtils;
 import com.app.teacup.util.ToolUtils;
 import com.app.teacup.util.urlUtils;
@@ -45,9 +47,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import hb.xvideoplayer.MxVideoPlayer;
-import hb.xvideoplayer.MxVideoPlayerWidget;
-
 
 public class MoviePlayActivity extends BaseActivity {
 
@@ -56,19 +55,20 @@ public class MoviePlayActivity extends BaseActivity {
     private List<TvItemInfo> mTvListDatas;
     private SwipeRefreshLayout mRefreshLayout;
     private WebView mWebView;
-    private MxVideoPlayerWidget mxVideoPlayerWidget;
     private TextView mTvText;
     private RecyclerView mRecyclerView;
-    private boolean mIsInitData = false;
     public int mPlayIndex = 0;
-    private boolean mIsChangeVideo = false;
-    private String mVideoUrl;
     private String mVideoIntroduce;
+    private RelativeLayout mTmpLayout;
+    private FrameLayout mFullscreenLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_tv_play_view);
+        mTmpLayout = (RelativeLayout) findViewById(R.id.tv_video_tmp_rl);
+        mFullscreenLayout = (FrameLayout) findViewById(R.id.tv_fullscreen_fl);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -80,29 +80,28 @@ public class MoviePlayActivity extends BaseActivity {
         setupRefreshLayout();
     }
 
-    @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
+    @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
-        mWebView = new WebView(getApplicationContext());
+        mWebView = (WebView) findViewById(R.id.tv_video_webView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
+        mWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
+        mWebView.getSettings().setGeolocationEnabled(true);
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
         mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         mWebView.getSettings().setAllowFileAccess(false);
-        mWebView.setWebViewClient(new MyTvWebViewClient(MoviePlayActivity.this));
+        mWebView.setWebViewClient(new MyTvWebViewClient(this));
+        mWebView.setWebChromeClient(new MyWebChromeClient());
     }
 
     private void initView() {
         mMoreDatas = new ArrayList<>();
         mTvListDatas = new ArrayList<>();
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.tv_srl_refresh);
-        mxVideoPlayerWidget = (MxVideoPlayerWidget) findViewById(R.id.tv_video_player);
         mTvText = (TextView) findViewById(R.id.tv_series_textView);
         mRecyclerView = (RecyclerView) findViewById(R.id.tv_numbers_recyclerView);
 
-        mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
-                View.INVISIBLE, View.INVISIBLE, View.INVISIBLE);
         if (getIntent() != null) {
             String style = getIntent().getStringExtra("movieStyle");
             if (!TextUtils.isEmpty(style)) {
@@ -112,24 +111,6 @@ public class MoviePlayActivity extends BaseActivity {
     }
 
     private void initData() {
-        if (mIsInitData) { //WebView onPageFinished maybe call two
-            return;
-        }
-        if (mMoreDatas.isEmpty() && TextUtils.isEmpty(mVideoUrl)) {
-            Toast.makeText(MoviePlayActivity.this, getString(R.string.refresh_net_error),
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            mRefreshLayout.setEnabled(false);
-        }
-
-        if (!TextUtils.isEmpty(mVideoUrl)) {
-            String videoName = getIntent().getStringExtra("moviePlayName");
-            mxVideoPlayerWidget.startPlay(mVideoUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL, videoName);
-        } else {
-            Toast.makeText(MoviePlayActivity.this, getString(R.string.parse_url_error),
-                    Toast.LENGTH_SHORT).show();
-        }
-
         // show video's source or episode
         if (!mTvListDatas.isEmpty()) {
             mTvText.setVisibility(View.VISIBLE);
@@ -161,13 +142,9 @@ public class MoviePlayActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, int position) {
                 if (mPlayIndex != position) {
-                    mIsChangeVideo = true;
                     mPlayIndex = position;
                     adapter.notifyDataSetChanged();
                     final String nextUrl = mTvListDatas.get(position).getNextUrl();
-                    MxVideoPlayer.releaseAllVideos();
-                    mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE,
-                            View.INVISIBLE, View.VISIBLE, View.INVISIBLE, View.INVISIBLE);
                     parseNextPlayUrl(nextUrl);
                 }
             }
@@ -219,37 +196,18 @@ public class MoviePlayActivity extends BaseActivity {
 
     @Override
     protected void onLoadDataError() {
-        mWebView.loadUrl("about:blank");
-        LogcatUtils.getInstance().stop();
         Toast.makeText(MoviePlayActivity.this, getString(R.string.not_have_more_data),
                 Toast.LENGTH_SHORT).show();
-        mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
-                View.INVISIBLE, View.INVISIBLE, View.INVISIBLE);
         mRefreshLayout.setRefreshing(false);
-        mIsChangeVideo = false;
     }
 
     @Override
     protected void onLoadDataFinish() {
-        mWebView.loadUrl("about:blank");
-        LogcatUtils.getInstance().stop();
-        mRefreshLayout.setRefreshing(false);
-        initData();
-        mIsInitData = true;
-        if (mIsChangeVideo) {
-            if (!TextUtils.isEmpty(mVideoUrl)) {
-                String videoName = getIntent().getStringExtra("moviePlayName") +
-                        "-" + mTvListDatas.get(mPlayIndex).getName();
-                mxVideoPlayerWidget.startPlay(mVideoUrl, MxVideoPlayer.SCREEN_LAYOUT_NORMAL, videoName);
-            } else {
-                mxVideoPlayerWidget.setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
-                        View.INVISIBLE, View.INVISIBLE, View.INVISIBLE);
-                Toast.makeText(MoviePlayActivity.this, getString(R.string.parse_url_error),
-                        Toast.LENGTH_SHORT).show();
-            }
-            mIsChangeVideo = false;
+        if (mTmpLayout.getVisibility() == View.VISIBLE) {
+            mTmpLayout.setVisibility(View.GONE);
         }
-        mVideoUrl = "";
+        initData();
+        mRefreshLayout.setEnabled(false);
     }
 
     @Override
@@ -394,7 +352,6 @@ public class MoviePlayActivity extends BaseActivity {
 
     private void parseVideoPlayUrl(String videoUrl) {
         if (!TextUtils.isEmpty(videoUrl)) {
-            LogcatUtils.getInstance().start();
             mWebView.loadUrl(videoUrl);
         } else {
             sendParseDataMessage(LOAD_DATA_FINISH);
@@ -433,67 +390,11 @@ public class MoviePlayActivity extends BaseActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        MxVideoPlayer.releaseAllVideos();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        LogcatUtils.getInstance().stop();
-    }
-
-    @Override
     protected void onDestroy() {
         destroyWebView();
         super.onDestroy();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (MxVideoPlayer.backPress()) {
-            return;
-        }
-        super.onBackPressed();
-    }
-
-    private void parseVideoUrlFinish(String htmlData) {
-        Document document = Jsoup.parse(htmlData);
-        try {
-            if (document != null) {
-                Elements videos = document.getElementsByTag("video");
-                if (videos != null) {
-                    Element video = videos.first();
-                    mVideoUrl = video.attr("src");
-                }
-            }
-        } catch (Exception e) {
-            mVideoUrl = "";
-        }
-        if (TextUtils.isEmpty(mVideoUrl) || !mVideoUrl.startsWith("http")) {
-            String result = LogcatUtils.getInstance().getResult();
-            if (!TextUtils.isEmpty(result)) {
-                String[] splitInfo = result.split("url:");
-                mVideoUrl = splitInfo[splitInfo.length - 1];
-            }
-        }
-
-        // videoUrl maybe parse equal 'undefined' or 'unknown'
-        if (!TextUtils.isEmpty(mVideoUrl) && !mVideoUrl.startsWith("http")) {
-            mVideoUrl = "";
-        }
-
-        sendParseDataMessage(LOAD_DATA_FINISH);
-    }
-
-    class MyJavaScriptInterface {
-        @JavascriptInterface
-        @SuppressWarnings("unused")
-        public void processHTML(String html) {
-            parseVideoUrlFinish(html);
-        }
-    }
 
     private static class MyTvWebViewClient extends WebViewClient {
         private WeakReference<MoviePlayActivity> mTvPlayActivity;
@@ -504,14 +405,8 @@ public class MoviePlayActivity extends BaseActivity {
 
         @Override
         public void onPageFinished(final WebView view, String url) {
-            if (!url.contains("about:blank")) {
-                mTvPlayActivity.get().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        view.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'" +
-                                "+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
-                    }
-                }, 1000);
+            if (mTvPlayActivity.get() != null) {
+                mTvPlayActivity.get().sendParseDataMessage(LOAD_DATA_FINISH);
             }
         }
 
@@ -522,6 +417,54 @@ public class MoviePlayActivity extends BaseActivity {
             if (mTvPlayActivity.get() != null) {
                 mTvPlayActivity.get().sendParseDataMessage(LOAD_DATA_ERROR);
             }
+        }
+    }
+
+    private class MyWebChromeClient extends WebChromeClient {
+        private CustomViewCallback customViewCallback;
+        private View mVideoView = null;
+
+        @Override
+        public void onShowCustomView(View view, CustomViewCallback callback) {
+            super.onShowCustomView(view,callback);
+            if (mVideoView != null) {
+                callback.onCustomViewHidden();
+                return;
+            }
+            mVideoView = view;
+            mVideoView.setVisibility(View.VISIBLE);
+            customViewCallback = callback;
+            mFullscreenLayout.addView(mVideoView);
+            mFullscreenLayout.setVisibility(View.VISIBLE);
+            mFullscreenLayout.bringToFront();
+            //设置横屏
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            //设置全屏
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+
+        // 退出全屏调用此函数
+        @Override
+        public void onHideCustomView() {
+            if (mVideoView == null) {
+                return;
+            }
+            try {
+                customViewCallback.onCustomViewHidden();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            mVideoView.setVisibility(View.GONE);
+            mFullscreenLayout.removeView(mVideoView);
+            mVideoView = null;
+            mFullscreenLayout.setVisibility(View.GONE);
+            // 设置竖屏
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            // 取消全屏
+            final WindowManager.LayoutParams attrs = getWindow().getAttributes();
+            attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getWindow().setAttributes(attrs);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
     }
 }
